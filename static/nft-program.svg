@@ -1,0 +1,20 @@
+<svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect x="0.55" y="0.55" width="108.9" height="108.9" rx="26.95" fill="url(#paint0_linear_118_37)" stroke="url(#paint1_linear_118_37)" stroke-width="1.1"/>
+<rect x="9.35005" y="9.35005" width="91.3" height="91.3" stroke="#FCFCFC" stroke-opacity="0.15" stroke-width="1.1"/>
+<circle cx="54.4501" cy="55.55" r="45.15" stroke="#FCFCFC" stroke-opacity="0.15"/>
+<circle cx="55" cy="55" r="27" stroke="#FCFCFC" stroke-opacity="0.05"/>
+<line x1="8.4465" y1="100.846" x2="100.846" y2="8.44641" stroke="#FCFCFC" stroke-opacity="0.02"/>
+<line x1="9.1536" y1="8.44643" x2="101.554" y2="100.846" stroke="#FCFCFC" stroke-opacity="0.02"/>
+<line x1="1.09998" y1="54.5" x2="110" y2="54.5" stroke="#FCFCFC" stroke-opacity="0.02"/>
+<line x1="55.05" y1="109.45" x2="55.05" y2="0.54995" stroke="#FCFCFC" stroke-opacity="0.02"/>
+<defs>
+<linearGradient id="paint0_linear_118_37" x1="55" y1="0" x2="55" y2="110" gradientUnits="userSpaceOnUse">
+<stop stop-color="#8A54FE"/>
+<stop offset="1" stop-color="#2A0A6E"/>
+</linearGradient>
+<linearGradient id="paint1_linear_118_37" x1="55" y1="0" x2="55" y2="110" gradientUnits="userSpaceOnUse">
+<stop stop-color="#C2A6FF"/>
+<stop offset="1" stop-color="#B08BFF" stop-opacity="0.2"/>
+</linearGradient>
+</defs>
+</svg>
