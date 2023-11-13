@@ -1,26 +1,6 @@
-import { writable } from 'svelte/store';
-import { browser } from '$app/environment';
+import { persisted } from './persisted';
 
-let initialWorkspace = false;
-
-// Check if there is data in localStorage
-if(browser) {
-  const persistedState = localStorage.getItem('workspace');
-  initialWorkspace = persistedState ? JSON.parse(persistedState) : '';
-}
-// Create a store with initial values
-export const workspace = writable(initialWorkspace || false);
-
-export const selectedWallet = writable(null)
-
-// Subscribe to changes in store's state
-if(browser) {
-workspace.subscribe(($workspace) => {
-  localStorage.setItem('workspace', JSON.stringify($workspace));
-});
-}
-
-
+export const workspace = persisted('workspaces', false);
 
 program: "pCrLE3Ygn9efmpn6HC6ZDd9PKJHZEuebVERnFQ2JjXB"
 wallets:
