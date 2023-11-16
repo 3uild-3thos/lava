@@ -4,6 +4,7 @@
     import { fade, fly, blur } from "svelte/transition";
     import Select from "svelte-select/no-styles/Select.svelte";
     import Icon from "../../components/avatars/index.svelte";
+    import {workspace} from "../../stores/store";
 
     let dummyTokens = [
         {
