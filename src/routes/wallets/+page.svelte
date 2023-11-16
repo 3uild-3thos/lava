@@ -87,7 +87,6 @@
     openedWallet = dummyWallets[index];
   }
 
-  import { selectedWallet } from "../../stores/store";
   import Popover from "../../components/Popover.svelte";
 
   // function selectWallet(wallet) {
