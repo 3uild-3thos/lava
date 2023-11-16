@@ -2,6 +2,8 @@
   import { createEventDispatcher, onMount } from "svelte";
   import TokenIcon from "../../components/avatars/index.svelte";
   import { fade, fly, blur } from "svelte/transition";
+  import {workspace} from "../../stores/store";
+
   let dummyWallets = [
     {
       name: "New Wallet",
@@ -69,10 +71,38 @@
       color: ["#30DCB2", "#30DCB2"],
     },
   ];
-
+  let colors= ["#FEBC2E", "#FEBC2E"]
   let ready = false;
   onMount(() => {
     ready = true;
+    $workspace = {
+  program: "pCrLE3Ygn9efmpn6HC6ZDd9PKJHZEuebVERnFQ2JjXB",
+  wallets: [
+    {
+      name: "maker",
+      address: "Hejznrp39zCfcmq4WpihfAeyhzhqeFtj4PURHFqMaHSS",
+      tokens: [
+        { symbol: "SOL", amount: 1000000000 },
+        { symbol: "USDC", amount: 1000000000 },
+        { symbol: "BONK", amount: 1000000000 },
+      ],
+    },
+    {
+      name: "taker",
+      address: "Q3jFZ4DxU7qU8cdmHV4nEFSDAj9DYtAcoyFJe2mnbxTM",
+      tokens: [
+        {
+          symbol: "SOL",
+          amount: 1000000000,
+        },
+        { symbol: "USDC", amount: 1000000000 },
+        { symbol: "BONK", amount: 1000000000 },
+      ],
+    },
+  ],
+  tokens: { USDC: { creator: "*" }, BONK: { creator: "*" } },
+}
+    //console.log($workspace)
   });
 
   import Modal from "../../components/Modal.svelte";
@@ -214,13 +244,13 @@
       </div>
       {#if dummyWallets && !hideWallets}
         <div class="wallet--list">
-          {#each dummyWallets as wallet, index}
+          {#each $workspace?.wallets ?? [] as wallet, index}
             <div
               class="wallet--list--item"
               on:click={() => openWalletModal(index)}
               on:mousemove={handleMousemove}
               in:fade|global={{ delay: index * 100, duration: 100 }}
-              style={`--color: ${wallet.color[0]}; --color2: ${wallet.color[1]};  --bgColor: ${wallet.color[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
+              style={`--color: ${colors[0]}; --color2: ${colors[1]};  --bgColor: ${colors[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
             >
               <div class="token--list--item--shimmer" />
               <div class="wallet--list--content">
@@ -228,7 +258,7 @@
                   <TokenIcon
                     value={wallet.name}
                     size={32}
-                    color={wallet.color[0]}
+                    color={colors[0]}
                     border={true}
                     radius={7}
                   />
@@ -237,11 +267,11 @@
                 <div class="wallet--address">
                   {wallet.address}
                 </div>
-                {#if wallet.tokensOwned && wallet.tokensOwned.length > 0}
+                {#if wallet?.tokens?.length > 0}
                   <div class="wallet--footer">
                     <span>TOKENS</span>
                     <div class="wallet--tokens--list">
-                      {#each wallet.tokensOwned as ownedToken, index}
+                      {#each wallet.tokens as ownedToken, index}
                         {#if index < 4}
                           <div
                             class="wallet--token"
@@ -256,17 +286,18 @@
                               <Popover
                                 xOffset={25 * index}
                                 yOffset={-65}
-                                title={ownedToken.name}
+                                title={ownedToken.symbol}
                               >
+                              <!--color: ${ownedToken.color}; -->
                                 <span
-                                  style={`color: ${ownedToken.color}; height:26px;`}
+                                  style={`height:26px;`}
                                   >{ownedToken.amount} owned</span
                                 >
                               </Popover>
                             {/if}
-                            {#if !ownedToken.userAdded}
+                            <!--{#if !ownedToken.userAdded}
                             <img src={`${ownedToken.ticker}.svg`} alt={ownedToken.name} style="width:24px;height:24px;display:flex;align-self:center">
-                            {:else}
+                            {:else}-->
                             <TokenIcon
                               value={ownedToken.name}
                               style="shape"
@@ -275,7 +306,7 @@
                               border={true}
                               radius={7}
                             />
-                            {/if}
+                            <!--{/if}-->
                           </div>
                         {/if}
                       {/each}
