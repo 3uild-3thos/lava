@@ -136,6 +136,26 @@
         assignedList = assignedList;
         console.log(assignedList);
     }
+
+    let supply = 1000000000;
+    let symbol = "";
+    let creator = "";
+    const addToken = () => {
+        if (symbol.length != 0 && supply > 0) {
+        $workspace.tokens = [
+            ...$workspace.tokens,
+            {
+                symbol,
+                supply,
+                creator
+            },
+        ];
+        }    
+        isCreateModalOpen = false;
+        symbol = "";
+        supply = 1000000000;
+
+    };
 </script>
 
 {#if ready}
@@ -146,17 +166,14 @@
     >
         <h1 class="modal--title">Create a new Token</h1>
         <div class="modal--form">
-            <div class="modal--form-title">Name</div>
-            <input class="input--primary" placeholder="My New Token" />
-            <div class="modal--form-title">Ticker</div>
-            <input class="input--primary" placeholder="$TKN" />
-            <div class="modal--form-title">Decimals</div>
+            <div class="modal--form-title">Symbol</div>
+            <input class="input--primary" placeholder="SOL" bind:value={symbol} />
+            <div class="modal--form-title">Supply</div>
             <input
                 class="input--primary"
                 type="number"
-                max="10"
-                value={6}
-                placeholder="1-10"
+                bind:value={supply}
+                placeholder="1000000000"
             />
             <div class="modal--form--group">
                 <div class="modal--form-title">Authority (Optional)</div>
@@ -175,7 +192,7 @@
         <div class="btns--modal">
             <button
                 class="btn btn--lava"
-                on:click={() => (isCreateModalOpen = false)}>Create</button
+                on:click={() => addToken()}>Create</button
             >
         </div>
     </Modal>
