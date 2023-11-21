@@ -156,6 +156,10 @@
         supply = 1000000000;
 
     };
+    const deleteToken = (index) => {
+        console.log(index);
+        $workspace.tokens = $workspace.tokens.filter((token, i) => i !== index);
+    };
 </script>
 
 {#if ready}
@@ -340,6 +344,7 @@
             {#if dummyTokens && !hideTokens}
                 <div class="token--list">
                     {#each $workspace.tokens as token, index}
+                    <div class="relative">
                         <div
                             class="wallet--list--item"
                             on:click={() => openViewModal(index)}
@@ -373,6 +378,13 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="trash" on:click={()=>{deleteToken(index)}}>
+                            <img
+                            src="./trash.svg"
+                            alt="Delete Icon"
+                        />
+                        </div>
+                    </div>
                     {/each}
                 </div>
             {:else}
