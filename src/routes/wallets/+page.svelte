@@ -2,7 +2,7 @@
   import { createEventDispatcher, onMount } from "svelte";
   import TokenIcon from "../../components/avatars/index.svelte";
   import { fade, fly, blur } from "svelte/transition";
-  import {workspace} from "../../stores/store";
+  import { workspace } from "../../stores/store";
 
   let dummyWallets = [
     {
@@ -10,18 +10,18 @@
       id: "generateMe",
       tokensOwned: [
         {
-            name: "USDCoin",
-            ticker: "USDC",
-            amount: 500,
-            color: "#2775CA",
-            userAdded: false
+          name: "USDCoin",
+          ticker: "USDC",
+          amount: 500,
+          color: "#2775CA",
+          userAdded: false,
         },
         {
-            name: "Solana",
-            ticker: "SOL",
-            amount: 10,
-            color: "#9945FF",
-            userAdded: false
+          name: "Solana",
+          ticker: "SOL",
+          amount: 10,
+          color: "#9945FF",
+          userAdded: false,
         },
       ],
       address: "Hejznrp39zCfcmq4WpihfAeyhzhqeFtj4PURHFqMaHSS",
@@ -32,18 +32,18 @@
       id: "generateMe2",
       tokensOwned: [
         {
-            name: "USDCoin",
-            ticker: "USDC",
-            amount: 500,
-            color: "#2775CA",
-            userAdded: false
+          name: "USDCoin",
+          ticker: "USDC",
+          amount: 500,
+          color: "#2775CA",
+          userAdded: false,
         },
         {
-            name: "Solana",
-            ticker: "SOL",
-            amount: 10,
-            color: "#9945FF",
-            userAdded: false
+          name: "Solana",
+          ticker: "SOL",
+          amount: 10,
+          color: "#9945FF",
+          userAdded: false,
         },
         {
           name: "EpicMarz",
@@ -71,7 +71,7 @@
       color: ["#30DCB2", "#30DCB2"],
     },
   ];
-  let colors= ["#FEBC2E", "#FEBC2E"]
+  let colors = ["#FEBC2E", "#FEBC2E"];
   let ready = false;
   onMount(() => {
     ready = true;
@@ -95,14 +95,14 @@
           symbol: "SOL",
           amount: 1000000000,
         },
-        { symbol: "USDC", amount: 1000000000 },
-        { symbol: "BONK", amount: 1000000000 },
       ],
     },
   ],
-  tokens: { USDC: { creator: "*" }, BONK: { creator: "*" } },
-}
-    //console.log($workspace)
+  tokens: [
+    { symbol: "USDC", supply: 1000000000, creator: "" },
+    { symbol: "BONK", supply: 1000000000, creator: "" },
+  ],
+};
   });
 
   import Modal from "../../components/Modal.svelte";
@@ -138,14 +138,14 @@
   }
 
   let popOverOpened = false;
-  
-    let walletName = "";
-    let walletAddress = "";
-    /**
+
+  let walletName = "";
+  let walletAddress = "";
+  /**
    * @type {any[]}
    */
-    let walletTokens = [];
-  
+  let walletTokens = [];
+
   const addWallet = () => {
     if (walletName) {
       $workspace.wallets = [
@@ -176,8 +176,11 @@
       ];
       symbol = "";
       amount = 1000000000;
+      showMoreTokens = false;
     }
   };
+
+  let showMoreTokens = false;
 </script>
 
 {#if ready}
@@ -190,29 +193,74 @@
     <h1 class="modal--title">Create a new Wallet</h1>
     <div class="modal--form">
       <div class="modal--form-title">Wallet Name</div>
-      <input class="input--primary" placeholder="Main Wallet" bind:value={walletName} />
-      <input class="input--primary" placeholder="Assing an Address" bind:value={walletAddress} />
-
+      <input
+        class="input--primary"
+        placeholder="Main Wallet"
+        bind:value={walletName}
+      />
+      <input
+        class="input--primary"
+        placeholder="Assing an Address"
+        bind:value={walletAddress}
+      />
     </div>
     <div class="modal--form">
+      <div class="bordered-container">
       <div class="modal--form-title">Wallet's Tokens</div>
       {#each walletTokens as Token, index}
         <div class="modal--form-title">Token {index + 1}</div>
-        <input class="input--primary" placeholder="Symbol" value={Token.symbol} readonly/>
-        <input class="input--primary" placeholder="Amount" value={Token.amount} readonly/>
+        <input
+          class="input--primary"
+          placeholder="Symbol"
+          value={Token.symbol}
+          readonly
+        />
+        <input
+          class="input--primary"
+          placeholder="Amount"
+          value={Token.amount}
+          readonly
+        />
       {/each}
-      <input class="input--primary" placeholder="symbol" bind:value={symbol} />
-      <input class="input--primary" placeholder="Assing an Address" bind:value={amount} />
-      <div class="btns--modal">
-      <button class="btn btn--lava" on:click={() => {addToken()}}
-        >Create</button
-      >
+
+          <button
+            class="btn btn--lava"
+            on:click={() => {
+              showMoreTokens = !showMoreTokens
+            }}>{showMoreTokens ? "-" : "+"}</button
+          >
+      
+      {#if showMoreTokens}
+        <input
+          class="input--primary"
+          placeholder="symbol"
+          bind:value={symbol}
+        />
+        <input
+          class="input--primary"
+          placeholder="Assing an Address"
+          bind:value={amount}
+        />
+        <div class="btns--modal">
+          <button
+            class="btn btn--lava"
+            on:click={() => {
+              addToken();
+            }}>Save</button
+          >
+        </div>
+
+      {/if}
+
     </div>
     </div>
-    
+
     <div class="btns--modal">
-      <button class="btn btn--lava" on:click={() => {addWallet()}}
-        >Create</button
+      <button
+        class="btn btn--lava"
+        on:click={() => {
+          addWallet();
+        }}>Create</button
       >
     </div>
   </Modal>
@@ -346,9 +394,8 @@
                                 yOffset={-65}
                                 title={ownedToken.symbol}
                               >
-                              <!--color: ${ownedToken.color}; -->
-                                <span
-                                  style={`height:26px;`}
+                                <!--color: ${ownedToken.color}; -->
+                                <span style={`height:26px;`}
                                   >{ownedToken.amount} owned</span
                                 >
                               </Popover>

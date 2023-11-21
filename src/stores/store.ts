@@ -20,10 +20,11 @@ export const workspace = persisted("workspace", {
           symbol: "SOL",
           amount: 1000000000,
         },
-        { symbol: "USDC", supply: 1000000000 },
-        { symbol: "BONK", supply: 1000000000 },
       ],
     },
   ],
-  tokens: { USDC: { creator: "*" }, BONK: { creator: "*" } },
+  tokens: [
+    { symbol: "USDC", supply: 1000000000, creator: "" },
+    { symbol: "BONK", supply: 1000000000, creator: "" },
+  ],
 });

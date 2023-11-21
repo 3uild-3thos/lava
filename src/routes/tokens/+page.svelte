@@ -66,7 +66,7 @@
             color: "#CEDC30",
         },
     ];
-
+    let color = ["#9945FF","#19FB9B"];
     let assignedList = [];
 
     let ready = false;
@@ -322,7 +322,7 @@
             </div>
             {#if dummyTokens && !hideTokens}
                 <div class="token--list">
-                    {#each dummyTokens as token, index}
+                    {#each $workspace.tokens as token, index}
                         <div
                             class="wallet--list--item"
                             on:click={() => openViewModal(index)}
@@ -331,28 +331,19 @@
                                 delay: index * 100,
                                 duration: 100,
                             }}
-                            style={`--color: ${token.color[0]}; --color2: ${token.color[1]}; --bgColor: ${token.color[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
+                            style={`--color: ${color[0]}; --color2: ${color[1]}; --bgColor: ${color[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
                         >
                             <div class="token--list--item--shimmer" />
                             <div class="wallet--list--content">
                                 <div class="token--header">
-                                    {#if !token.userAdded}
-                                        <img src={`/${token.ticker}.svg`} alt={`${token.name} Icon`} style="width:32px;height:32px">
-                                     {:else}
-                                        <TokenIcon
-                                        value={token.name}
-                                        style="shape"
-                                        size={32}
-                                        color={token.color[0]}
-                                        border={true}
-                                        radius={7}
-                                        />
-                                    {/if}
+                                 
+                                        <img src={`/SOL.svg`} alt={`${token.symbol} Icon`} style="width:32px;height:32px">
+                                   
                                     <div class="token--ticker">
-                                        ${token.ticker}
+                                        {token.symbol}
                                     </div>
                                 </div>
-                                <div class="token--name">{token.name}</div>
+                                <div class="token--name">{token.symbol}</div>
                                 <div class="token--supply">
                                     {token.supply.toLocaleString()}
                                 </div>
@@ -361,7 +352,7 @@
                                         src="./owner.svg"
                                         class="token--owner-icon"
                                         alt="Fingerprint Icon"
-                                    />{token.owner}
+                                    />{token.creator}
                                 </div>
                             </div>
                         </div>

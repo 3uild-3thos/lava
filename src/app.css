@@ -1145,3 +1145,10 @@ body {
   .result--selected {
     @apply opacity-100 hover:!opacity-100
   }
+
+  .bordered-container {
+    border: rgb(38, 39, 43) solid 1px;
+    padding: 1rem;
+    margin: 1rem;
+    border-radius: 1rem;
+  }
