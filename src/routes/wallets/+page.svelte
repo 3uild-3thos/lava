@@ -161,6 +161,10 @@
   };
 
   let showMoreTokens = false;
+
+  const deleteWallet = (index) => {
+    $workspace.wallets = $workspace.wallets.filter((wallet, i) => i !== index);
+  };
 </script>
 
 {#if ready}
@@ -331,6 +335,7 @@
       {#if dummyWallets && !hideWallets}
         <div class="wallet--list">
           {#each $workspace?.wallets ?? [] as wallet, index}
+          <div class="relative">
             <div
               class="wallet--list--item"
               on:click={() => openWalletModal(index)}
@@ -400,6 +405,13 @@
                 {/if}
               </div>
             </div>
+            <div class="trash" on:click={()=>{deleteWallet(index)}}>
+              <img
+              src="./trash.svg"
+              alt="Delete Icon"
+          />
+          </div>
+          </div>
           {/each}
         </div>
       {:else}
