@@ -162,6 +162,22 @@
       isCreateModalOpen = false;
     }
   };
+
+  let symbol = "";
+  let amount = 1000000000;
+  const addToken = () => {
+    if (symbol) {
+      walletTokens = [
+        ...walletTokens,
+        {
+          symbol,
+          amount,
+        },
+      ];
+      symbol = "";
+      amount = 1000000000;
+    }
+  };
 </script>
 
 {#if ready}
@@ -178,6 +194,22 @@
       <input class="input--primary" placeholder="Assing an Address" bind:value={walletAddress} />
 
     </div>
+    <div class="modal--form">
+      <div class="modal--form-title">Wallet's Tokens</div>
+      {#each walletTokens as Token, index}
+        <div class="modal--form-title">Token {index + 1}</div>
+        <input class="input--primary" placeholder="Symbol" value={Token.symbol} readonly/>
+        <input class="input--primary" placeholder="Amount" value={Token.amount} readonly/>
+      {/each}
+      <input class="input--primary" placeholder="symbol" bind:value={symbol} />
+      <input class="input--primary" placeholder="Assing an Address" bind:value={amount} />
+      <div class="btns--modal">
+      <button class="btn btn--lava" on:click={() => {addToken()}}
+        >Create</button
+      >
+    </div>
+    </div>
+    
     <div class="btns--modal">
       <button class="btn btn--lava" on:click={() => {addWallet()}}
         >Create</button
