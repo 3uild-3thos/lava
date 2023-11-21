@@ -2,24 +2,26 @@
   import { createEventDispatcher, onMount } from "svelte";
   import TokenIcon from "../../components/avatars/index.svelte";
   import { fade, fly, blur } from "svelte/transition";
+  import { workspace } from "../../stores/store";
+
   let dummyWallets = [
     {
       name: "New Wallet",
       id: "generateMe",
       tokensOwned: [
         {
-            name: "USDCoin",
-            ticker: "USDC",
-            amount: 500,
-            color: "#2775CA",
-            userAdded: false
+          name: "USDCoin",
+          ticker: "USDC",
+          amount: 500,
+          color: "#2775CA",
+          userAdded: false,
         },
         {
-            name: "Solana",
-            ticker: "SOL",
-            amount: 10,
-            color: "#9945FF",
-            userAdded: false
+          name: "Solana",
+          ticker: "SOL",
+          amount: 10,
+          color: "#9945FF",
+          userAdded: false,
         },
       ],
       address: "Hejznrp39zCfcmq4WpihfAeyhzhqeFtj4PURHFqMaHSS",
@@ -30,18 +32,18 @@
       id: "generateMe2",
       tokensOwned: [
         {
-            name: "USDCoin",
-            ticker: "USDC",
-            amount: 500,
-            color: "#2775CA",
-            userAdded: false
+          name: "USDCoin",
+          ticker: "USDC",
+          amount: 500,
+          color: "#2775CA",
+          userAdded: false,
         },
         {
-            name: "Solana",
-            ticker: "SOL",
-            amount: 10,
-            color: "#9945FF",
-            userAdded: false
+          name: "Solana",
+          ticker: "SOL",
+          amount: 10,
+          color: "#9945FF",
+          userAdded: false,
         },
         {
           name: "EpicMarz",
@@ -69,10 +71,18 @@
       color: ["#30DCB2", "#30DCB2"],
     },
   ];
-
+  let colors = ["#FEBC2E", "#FEBC2E"];
   let ready = false;
   onMount(() => {
     ready = true;
+    if ($workspace === undefined) {
+    $workspace = {
+  programs: [],
+  wallets: [],
+  tokens: [],
+    
+    };
+    }
   });
 
   import Modal from "../../components/Modal.svelte";
@@ -87,7 +97,6 @@
     openedWallet = dummyWallets[index];
   }
 
-  import { selectedWallet } from "../../stores/store";
   import Popover from "../../components/Popover.svelte";
 
   // function selectWallet(wallet) {
@@ -109,6 +118,53 @@
   }
 
   let popOverOpened = false;
+
+  let walletName = "";
+  let walletAddress = "";
+  /**
+   * @type {any[]}
+   */
+  let walletTokens = [];
+
+  const addWallet = () => {
+    if (walletName) {
+      $workspace.wallets = [
+        ...$workspace.wallets,
+        {
+          name: walletName,
+          address: walletAddress,
+          tokens: walletTokens,
+        },
+      ];
+      walletName = "";
+      walletAddress = "";
+      walletTokens = [];
+      isCreateModalOpen = false;
+    }
+  };
+
+  let symbol = "";
+  let amount = 1000000000;
+  const addToken = () => {
+    if (symbol) {
+      walletTokens = [
+        ...walletTokens,
+        {
+          symbol,
+          amount,
+        },
+      ];
+      symbol = "";
+      amount = 1000000000;
+      showMoreTokens = false;
+    }
+  };
+
+  let showMoreTokens = false;
+
+  const deleteWallet = (index) => {
+    $workspace.wallets = $workspace.wallets.filter((wallet, i) => i !== index);
+  };
 </script>
 
 {#if ready}
@@ -121,11 +177,74 @@
     <h1 class="modal--title">Create a new Wallet</h1>
     <div class="modal--form">
       <div class="modal--form-title">Wallet Name</div>
-      <input class="input--primary" placeholder="Main Wallet" />
+      <input
+        class="input--primary"
+        placeholder="Main Wallet"
+        bind:value={walletName}
+      />
+      <input
+        class="input--primary"
+        placeholder="Assing an Address"
+        bind:value={walletAddress}
+      />
     </div>
+    <div class="modal--form">
+      <div class="bordered-container">
+      <div class="modal--form-title">Wallet's Tokens</div>
+      {#each walletTokens as Token, index}
+        <div class="modal--form-title">Token {index + 1}</div>
+        <input
+          class="input--primary"
+          placeholder="Symbol"
+          value={Token.symbol}
+          readonly
+        />
+        <input
+          class="input--primary"
+          placeholder="Amount"
+          value={Token.amount}
+          readonly
+        />
+      {/each}
+
+          <button
+            class="btn btn--lava"
+            on:click={() => {
+              showMoreTokens = !showMoreTokens
+            }}>{showMoreTokens ? "-" : "+"}</button
+          >
+      
+      {#if showMoreTokens}
+        <input
+          class="input--primary"
+          placeholder="symbol"
+          bind:value={symbol}
+        />
+        <input
+          class="input--primary"
+          placeholder="Assing an Address"
+          bind:value={amount}
+        />
+        <div class="btns--modal">
+          <button
+            class="btn btn--lava"
+            on:click={() => {
+              addToken();
+            }}>Save</button
+          >
+        </div>
+
+      {/if}
+
+    </div>
+    </div>
+
     <div class="btns--modal">
-      <button class="btn btn--lava" on:click={() => (isCreateModalOpen = false)}
-        >Create</button
+      <button
+        class="btn btn--lava"
+        on:click={() => {
+          addWallet();
+        }}>Create</button
       >
     </div>
   </Modal>
@@ -215,13 +334,14 @@
       </div>
       {#if dummyWallets && !hideWallets}
         <div class="wallet--list">
-          {#each dummyWallets as wallet, index}
+          {#each $workspace?.wallets ?? [] as wallet, index}
+          <div class="relative">
             <div
               class="wallet--list--item"
               on:click={() => openWalletModal(index)}
               on:mousemove={handleMousemove}
               in:fade|global={{ delay: index * 100, duration: 100 }}
-              style={`--color: ${wallet.color[0]}; --color2: ${wallet.color[1]};  --bgColor: ${wallet.color[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
+              style={`--color: ${colors[0]}; --color2: ${colors[1]};  --bgColor: ${colors[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
             >
               <div class="token--list--item--shimmer" />
               <div class="wallet--list--content">
@@ -229,7 +349,7 @@
                   <TokenIcon
                     value={wallet.name}
                     size={32}
-                    color={wallet.color[0]}
+                    color={colors[0]}
                     border={true}
                     radius={7}
                   />
@@ -238,11 +358,11 @@
                 <div class="wallet--address">
                   {wallet.address}
                 </div>
-                {#if wallet.tokensOwned && wallet.tokensOwned.length > 0}
+                {#if wallet?.tokens?.length > 0}
                   <div class="wallet--footer">
                     <span>TOKENS</span>
                     <div class="wallet--tokens--list">
-                      {#each wallet.tokensOwned as ownedToken, index}
+                      {#each wallet.tokens as ownedToken, index}
                         {#if index < 4}
                           <div
                             class="wallet--token"
@@ -257,17 +377,17 @@
                               <Popover
                                 xOffset={25 * index}
                                 yOffset={-65}
-                                title={ownedToken.name}
+                                title={ownedToken.symbol}
                               >
-                                <span
-                                  style={`color: ${ownedToken.color}; height:26px;`}
+                                <!--color: ${ownedToken.color}; -->
+                                <span style={`height:26px;`}
                                   >{ownedToken.amount} owned</span
                                 >
                               </Popover>
                             {/if}
-                            {#if !ownedToken.userAdded}
+                            <!--{#if !ownedToken.userAdded}
                             <img src={`${ownedToken.ticker}.svg`} alt={ownedToken.name} style="width:24px;height:24px;display:flex;align-self:center">
-                            {:else}
+                            {:else}-->
                             <TokenIcon
                               value={ownedToken.name}
                               style="shape"
@@ -276,7 +396,7 @@
                               border={true}
                               radius={7}
                             />
-                            {/if}
+                            <!--{/if}-->
                           </div>
                         {/if}
                       {/each}
@@ -285,6 +405,13 @@
                 {/if}
               </div>
             </div>
+            <div class="trash" on:click={()=>{deleteWallet(index)}}>
+              <img
+              src="./trash.svg"
+              alt="Delete Icon"
+          />
+          </div>
+          </div>
           {/each}
         </div>
       {:else}

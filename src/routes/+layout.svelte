@@ -1,10 +1,9 @@
 <script>
-    import { onMount } from "svelte";
     import Sidebar from "../components/Sidebar.svelte";
-    import { workspace } from "../stores/store";
     import { page } from "$app/stores";
     import { fade, fly, blur } from "svelte/transition";
     import Gradient from "../components/Gradient.svelte";
+  import { onMount } from "svelte";
     let angle = 180;
     $: path = $page.url.pathname;
 
@@ -40,27 +39,24 @@
     }
 
     let ready = false;
-    let workspaceCreated = false;
     let templateSelected = false;
-    onMount(() => {
-        ready = true;
-        workspace.set(false);
-    });
-
-    workspace.subscribe((value) => {
-        workspaceCreated = value;
-    });
+    let creatingNewWorkspace = false;
 
     function newWorkspace() {
-        workspace.set(true);
+        console.log("new workspace");
+        creatingNewWorkspace =true;
     }
 
     function selectTemplate() {
         templateSelected = true;
     }
+
+    onMount(() => {
+        ready = true;
+    });
 </script>
 
-{#if !workspaceCreated}
+{#if !creatingNewWorkspace}
     {#if ready}
         <div class="welcome--page">
             <img
@@ -117,7 +113,7 @@
             </div>
         </div>
     {/if}
-{:else if workspaceCreated && !templateSelected}
+{:else if creatingNewWorkspace && !templateSelected}
     <div class="welcome--page">
         {#key hoveredType}
             <div

@@ -4,6 +4,7 @@
     import { fade, fly, blur } from "svelte/transition";
     import Select from "svelte-select/no-styles/Select.svelte";
     import Icon from "../../components/avatars/index.svelte";
+    import {workspace} from "../../stores/store";
 
     let dummyTokens = [
         {
@@ -65,7 +66,7 @@
             color: "#CEDC30",
         },
     ];
-
+    let color = ["#9945FF","#19FB9B"];
     let assignedList = [];
 
     let ready = false;
@@ -135,6 +136,30 @@
         assignedList = assignedList;
         console.log(assignedList);
     }
+
+    let supply = 1000000000;
+    let symbol = "";
+    let creator = "";
+    const addToken = () => {
+        if (symbol.length != 0 && supply > 0) {
+        $workspace.tokens = [
+            ...$workspace.tokens,
+            {
+                symbol,
+                supply,
+                creator
+            },
+        ];
+        }    
+        isCreateModalOpen = false;
+        symbol = "";
+        supply = 1000000000;
+
+    };
+    const deleteToken = (index) => {
+        console.log(index);
+        $workspace.tokens = $workspace.tokens.filter((token, i) => i !== index);
+    };
 </script>
 
 {#if ready}
@@ -145,17 +170,14 @@
     >
         <h1 class="modal--title">Create a new Token</h1>
         <div class="modal--form">
-            <div class="modal--form-title">Name</div>
-            <input class="input--primary" placeholder="My New Token" />
-            <div class="modal--form-title">Ticker</div>
-            <input class="input--primary" placeholder="$TKN" />
-            <div class="modal--form-title">Decimals</div>
+            <div class="modal--form-title">Symbol</div>
+            <input class="input--primary" placeholder="SOL" bind:value={symbol} />
+            <div class="modal--form-title">Supply</div>
             <input
                 class="input--primary"
                 type="number"
-                max="10"
-                value={6}
-                placeholder="1-10"
+                bind:value={supply}
+                placeholder="1000000000"
             />
             <div class="modal--form--group">
                 <div class="modal--form-title">Authority (Optional)</div>
@@ -174,7 +196,7 @@
         <div class="btns--modal">
             <button
                 class="btn btn--lava"
-                on:click={() => (isCreateModalOpen = false)}>Create</button
+                on:click={() => addToken()}>Create</button
             >
         </div>
     </Modal>
@@ -321,7 +343,8 @@
             </div>
             {#if dummyTokens && !hideTokens}
                 <div class="token--list">
-                    {#each dummyTokens as token, index}
+                    {#each $workspace.tokens as token, index}
+                    <div class="relative">
                         <div
                             class="wallet--list--item"
                             on:click={() => openViewModal(index)}
@@ -330,28 +353,19 @@
                                 delay: index * 100,
                                 duration: 100,
                             }}
-                            style={`--color: ${token.color[0]}; --color2: ${token.color[1]}; --bgColor: ${token.color[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
+                            style={`--color: ${color[0]}; --color2: ${color[1]}; --bgColor: ${color[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
                         >
                             <div class="token--list--item--shimmer" />
                             <div class="wallet--list--content">
                                 <div class="token--header">
-                                    {#if !token.userAdded}
-                                        <img src={`/${token.ticker}.svg`} alt={`${token.name} Icon`} style="width:32px;height:32px">
-                                     {:else}
-                                        <TokenIcon
-                                        value={token.name}
-                                        style="shape"
-                                        size={32}
-                                        color={token.color[0]}
-                                        border={true}
-                                        radius={7}
-                                        />
-                                    {/if}
+                                 
+                                        <img src={`/SOL.svg`} alt={`${token.symbol} Icon`} style="width:32px;height:32px">
+                                   
                                     <div class="token--ticker">
-                                        ${token.ticker}
+                                        {token.symbol}
                                     </div>
                                 </div>
-                                <div class="token--name">{token.name}</div>
+                                <div class="token--name">{token.symbol}</div>
                                 <div class="token--supply">
                                     {token.supply.toLocaleString()}
                                 </div>
@@ -360,10 +374,17 @@
                                         src="./owner.svg"
                                         class="token--owner-icon"
                                         alt="Fingerprint Icon"
-                                    />{token.owner}
+                                    />{token.creator}
                                 </div>
                             </div>
                         </div>
+                        <div class="trash" on:click={()=>{deleteToken(index)}}>
+                            <img
+                            src="./trash.svg"
+                            alt="Delete Icon"
+                        />
+                        </div>
+                    </div>
                     {/each}
                 </div>
             {:else}
