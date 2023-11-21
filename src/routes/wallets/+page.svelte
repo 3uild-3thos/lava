@@ -138,6 +138,30 @@
   }
 
   let popOverOpened = false;
+  
+    let walletName = "";
+    let walletAddress = "";
+    /**
+   * @type {any[]}
+   */
+    let walletTokens = [];
+  
+  const addWallet = () => {
+    if (walletName) {
+      $workspace.wallets = [
+        ...$workspace.wallets,
+        {
+          name: walletName,
+          address: walletAddress,
+          tokens: walletTokens,
+        },
+      ];
+      walletName = "";
+      walletAddress = "";
+      walletTokens = [];
+      isCreateModalOpen = false;
+    }
+  };
 </script>
 
 {#if ready}
@@ -150,10 +174,12 @@
     <h1 class="modal--title">Create a new Wallet</h1>
     <div class="modal--form">
       <div class="modal--form-title">Wallet Name</div>
-      <input class="input--primary" placeholder="Main Wallet" />
+      <input class="input--primary" placeholder="Main Wallet" bind:value={walletName} />
+      <input class="input--primary" placeholder="Assing an Address" bind:value={walletAddress} />
+
     </div>
     <div class="btns--modal">
-      <button class="btn btn--lava" on:click={() => (isCreateModalOpen = false)}
+      <button class="btn btn--lava" on:click={() => {addWallet()}}
         >Create</button
       >
     </div>
