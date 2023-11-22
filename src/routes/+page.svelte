@@ -1,19 +1,41 @@
 <script>
-    let workspaces = [
-        {
-            name: "Q2 Workspace",
-            location: "~/Desktop",
-            active: true,
-        },
-        {
-            name: "Q1 Old Workspace",
-            location: "~/Desktop",
-            active: false,
-        },
-    ];
+  import Modal from "../components/Modal.svelte";
+    import {workspaces, selectedWorkspace} from "../stores/store";
+    let createModal = false;
+    let name = "";
+    const addWorkspace = () => {
+        $workspaces = [...$workspaces, {name, programs: [], wallets: [], tokens: []}];
+        $selectedWorkspace= $workspaces.length - 1;
+        createModal = false;
+    };
 </script>
 
 <div class="workspace--home">
+    {#if createModal}
+    <Modal
+    bind:isOpen={createModal}
+    on:close={() => (createModal = false)}
+  >
+    <h1 class="modal--title">Create a new Workspace</h1>
+    <div class="modal--form">
+      <div class="modal--form-title">Workspace Name</div>
+      <input
+        class="input--primary"
+        placeholder="Workspace Name"
+        bind:value={name}
+      />
+    </div>
+
+    <div class="btns--modal">
+      <button
+        class="btn btn--lava"
+        on:click={() => {
+          addWorkspace();
+        }}>Create</button
+      >
+    </div>
+  </Modal>
+    {/if}
     <div class="workspace--left">
         <div class="workspace--home--header">
             <img
@@ -45,6 +67,7 @@
                         </div>
                     </div>
                     <button class="btn btn--lava workspace--option-btn"
+                    on:click={() => {createModal=true;}}
                         >Create</button
                     >
                 </div>
@@ -64,6 +87,7 @@
                         </div>
                     </div>
                     <button class="btn btn--primary workspace--option-btn"
+                    on:click={() => {alert("Not implemented yet");}}
                         >Import</button
                     >
                 </div>
@@ -73,26 +97,40 @@
 
     <div class="workspace--right">
         <div class="workspace--home--recents">
-            <div class="workspace--create--title">Recent Workspaces</div>
+            <div class="workspace--create--title">Workspaces</div>
             <div class="workspace--create--options">
-                {#each workspaces as workspace, index}
+                {#each $workspaces as workspace, index}
                     <div class="workspace--create--option">
                         <div class="workspace--create--text">
                             <div class="workspace--create--text--title">
                                 {workspace.name}
                             </div>
-                            <div class="workspace--create--text--subtitle">
-                                {workspace.location}
-                            </div>
+
                         </div>
-                        {#if workspace.active}
+                        {#if $selectedWorkspace === index}
                             <div class="workspace--active">Active</div>
                         {/if}
                         <button
-                            class="btn btn--primary workspace--option-btn {workspace.active
-                                ? 'btn--disabled disabled--workspace'
-                                : ''}"
-                            disabled={workspace.active}>Open</button
+                            class="btn btn--primary workspace--option-btn"
+                            on:click={() => {
+                                if($selectedWorkspace === index){
+                                    // download a json file with the workspace data
+                                    const data = JSON.stringify(workspace);                                    const blob = new Blob([data], {type: 'text/plain'});
+                                    const url = window.URL.createObjectURL(blob);
+                                    const a = document.createElement('a');
+                                    a.setAttribute('hidden', '');
+                                    a.setAttribute('href', url);
+                                    a.setAttribute('download', `${workspace.name}.json`);
+                                    document.body.appendChild(a);
+                                    a.click();
+                                    document.body.removeChild(a);
+                                    window.URL.revokeObjectURL(url);
+                                }
+                                else{
+                                $selectedWorkspace = index;
+                                }
+                            }}
+                            >{$selectedWorkspace === index?"Save":"Select"}</button
                         >
                     </div>
                     {#if index < workspaces.length - 1}

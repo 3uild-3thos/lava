@@ -4,7 +4,7 @@
     import { fade, fly, blur } from "svelte/transition";
     import Select from "svelte-select/no-styles/Select.svelte";
     import Icon from "../../components/avatars/index.svelte";
-    import {workspace} from "../../stores/store";
+    import {workspaces, selectedWorkspace} from "../../stores/store";
 
     let dummyTokens = [
         {
@@ -142,8 +142,8 @@
     let creator = "";
     const addToken = () => {
         if (symbol.length != 0 && supply > 0) {
-        $workspace.tokens = [
-            ...$workspace.tokens,
+        $workspaces[$selectedWorkspace].tokens = [
+            ...$workspaces[$selectedWorkspace].tokens,
             {
                 symbol,
                 supply,
@@ -158,7 +158,7 @@
     };
     const deleteToken = (index) => {
         console.log(index);
-        $workspace.tokens = $workspace.tokens.filter((token, i) => i !== index);
+        $workspaces[$selectedWorkspace].tokens = $workspaces[$selectedWorkspace].tokens.filter((token, i) => i !== index);
     };
 </script>
 
@@ -179,19 +179,8 @@
                 bind:value={supply}
                 placeholder="1000000000"
             />
-            <div class="modal--form--group">
-                <div class="modal--form-title">Authority (Optional)</div>
-
-                <Select
-                    items={wallets}
-                    focused={true}
-                    placeholder="Wallet Name"
-                >
-                    <div slot="item" class="select--option" let:item>
-                        <div class="select--text">{item.label}</div>
-                    </div>
-                </Select>
-            </div>
+            <div class="modal--form-title">Creator</div>
+            <input class="input--primary" placeholder="Creator" bind:value={creator} />
         </div>
         <div class="btns--modal">
             <button
@@ -343,7 +332,7 @@
             </div>
             {#if dummyTokens && !hideTokens}
                 <div class="token--list">
-                    {#each $workspace.tokens as token, index}
+                    {#each $workspaces[$selectedWorkspace].tokens as token, index}
                     <div class="relative">
                         <div
                             class="wallet--list--item"

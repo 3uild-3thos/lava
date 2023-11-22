@@ -2,7 +2,7 @@
   import { createEventDispatcher, onMount } from "svelte";
   import TokenIcon from "../../components/avatars/index.svelte";
   import { fade, fly, blur } from "svelte/transition";
-  import { workspace } from "../../stores/store";
+  import { workspaces, selectedWorkspace } from "../../stores/store";
 
   let dummyWallets = [
     {
@@ -75,13 +75,18 @@
   let ready = false;
   onMount(() => {
     ready = true;
-    if ($workspace === undefined) {
-    $workspace = {
-  programs: [],
-  wallets: [],
-  tokens: [],
-    
-    };
+    if ($workspaces === undefined) {
+      $workspaces = [
+        {
+          name: "Empty Workspace",
+          programs: [],
+          wallets: [],
+          tokens: [],
+        },
+      ];
+    }
+    if ($selectedWorkspace === undefined) {
+      $selectedWorkspace = 0;
     }
   });
 
@@ -128,8 +133,8 @@
 
   const addWallet = () => {
     if (walletName) {
-      $workspace.wallets = [
-        ...$workspace.wallets,
+      $workspaces[$selectedWorkspace].wallets = [
+        ...$workspaces[$selectedWorkspace].wallets,
         {
           name: walletName,
           address: walletAddress,
@@ -163,7 +168,9 @@
   let showMoreTokens = false;
 
   const deleteWallet = (index) => {
-    $workspace.wallets = $workspace.wallets.filter((wallet, i) => i !== index);
+    $workspaces[$selectedWorkspace].wallets = $workspaces[
+      $selectedWorkspace
+    ].wallets.filter((wallet, i) => i !== index);
   };
 </script>
 
@@ -190,53 +197,51 @@
     </div>
     <div class="modal--form">
       <div class="bordered-container">
-      <div class="modal--form-title">Wallet's Tokens</div>
-      {#each walletTokens as Token, index}
-        <div class="modal--form-title">Token {index + 1}</div>
-        <input
-          class="input--primary"
-          placeholder="Symbol"
-          value={Token.symbol}
-          readonly
-        />
-        <input
-          class="input--primary"
-          placeholder="Amount"
-          value={Token.amount}
-          readonly
-        />
-      {/each}
+        <div class="modal--form-title">Wallet's Tokens</div>
+        {#each walletTokens as Token, index}
+          <div class="modal--form-title">Token {index + 1}</div>
+          <input
+            class="input--primary"
+            placeholder="Symbol"
+            value={Token.symbol}
+            readonly
+          />
+          <input
+            class="input--primary"
+            placeholder="Amount"
+            value={Token.amount}
+            readonly
+          />
+        {/each}
 
-          <button
-            class="btn btn--lava"
-            on:click={() => {
-              showMoreTokens = !showMoreTokens
-            }}>{showMoreTokens ? "-" : "+"}</button
-          >
-      
-      {#if showMoreTokens}
-        <input
-          class="input--primary"
-          placeholder="symbol"
-          bind:value={symbol}
-        />
-        <input
-          class="input--primary"
-          placeholder="Assing an Address"
-          bind:value={amount}
-        />
-        <div class="btns--modal">
-          <button
-            class="btn btn--lava"
-            on:click={() => {
-              addToken();
-            }}>Save</button
-          >
-        </div>
+        <button
+          class="btn btn--lava"
+          on:click={() => {
+            showMoreTokens = !showMoreTokens;
+          }}>{showMoreTokens ? "-" : "+"}</button
+        >
 
-      {/if}
-
-    </div>
+        {#if showMoreTokens}
+          <input
+            class="input--primary"
+            placeholder="symbol"
+            bind:value={symbol}
+          />
+          <input
+            class="input--primary"
+            placeholder="Assing an Address"
+            bind:value={amount}
+          />
+          <div class="btns--modal">
+            <button
+              class="btn btn--lava"
+              on:click={() => {
+                addToken();
+              }}>Save</button
+            >
+          </div>
+        {/if}
+      </div>
     </div>
 
     <div class="btns--modal">
@@ -334,84 +339,86 @@
       </div>
       {#if dummyWallets && !hideWallets}
         <div class="wallet--list">
-          {#each $workspace?.wallets ?? [] as wallet, index}
-          <div class="relative">
-            <div
-              class="wallet--list--item"
-              on:click={() => openWalletModal(index)}
-              on:mousemove={handleMousemove}
-              in:fade|global={{ delay: index * 100, duration: 100 }}
-              style={`--color: ${colors[0]}; --color2: ${colors[1]};  --bgColor: ${colors[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
-            >
-              <div class="token--list--item--shimmer" />
-              <div class="wallet--list--content">
-                <div class="wallet--info">
-                  <TokenIcon
-                    value={wallet.name}
-                    size={32}
-                    color={colors[0]}
-                    border={true}
-                    radius={7}
-                  />
-                  <div class="wallet--name">{wallet.name}</div>
-                </div>
-                <div class="wallet--address">
-                  {wallet.address}
-                </div>
-                {#if wallet?.tokens?.length > 0}
-                  <div class="wallet--footer">
-                    <span>TOKENS</span>
-                    <div class="wallet--tokens--list">
-                      {#each wallet.tokens as ownedToken, index}
-                        {#if index < 4}
-                          <div
-                            class="wallet--token"
-                            on:mouseover={() => (
-                              setHoveredToken(index), (popOverOpened = true)
-                            )}
-                            on:mouseleave={() => (
-                              setHoveredToken(null), (popOverOpened = false)
-                            )}
-                          >
-                            {#if hoveredToken === index && popOverOpened}
-                              <Popover
-                                xOffset={25 * index}
-                                yOffset={-65}
-                                title={ownedToken.symbol}
-                              >
-                                <!--color: ${ownedToken.color}; -->
-                                <span style={`height:26px;`}
-                                  >{ownedToken.amount} owned</span
+          {#each $workspaces[$selectedWorkspace]?.wallets ?? [] as wallet, index}
+            <div class="relative">
+              <div
+                class="wallet--list--item"
+                on:click={() => openWalletModal(index)}
+                on:mousemove={handleMousemove}
+                in:fade|global={{ delay: index * 100, duration: 100 }}
+                style={`--color: ${colors[0]}; --color2: ${colors[1]};  --bgColor: ${colors[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
+              >
+                <div class="token--list--item--shimmer" />
+                <div class="wallet--list--content">
+                  <div class="wallet--info">
+                    <TokenIcon
+                      value={wallet.name}
+                      size={32}
+                      color={colors[0]}
+                      border={true}
+                      radius={7}
+                    />
+                    <div class="wallet--name">{wallet.name}</div>
+                  </div>
+                  <div class="wallet--address">
+                    {wallet.address}
+                  </div>
+                  {#if wallet?.tokens?.length > 0}
+                    <div class="wallet--footer">
+                      <span>TOKENS</span>
+                      <div class="wallet--tokens--list">
+                        {#each wallet.tokens as ownedToken, index}
+                          {#if index < 4}
+                            <div
+                              class="wallet--token"
+                              on:mouseover={() => (
+                                setHoveredToken(index), (popOverOpened = true)
+                              )}
+                              on:mouseleave={() => (
+                                setHoveredToken(null), (popOverOpened = false)
+                              )}
+                            >
+                              {#if hoveredToken === index && popOverOpened}
+                                <Popover
+                                  xOffset={25 * index}
+                                  yOffset={-65}
+                                  title={ownedToken.symbol}
                                 >
-                              </Popover>
-                            {/if}
-                            <!--{#if !ownedToken.userAdded}
+                                  <!--color: ${ownedToken.color}; -->
+                                  <span style={`height:26px;`}
+                                    >{ownedToken.amount} owned</span
+                                  >
+                                </Popover>
+                              {/if}
+                              <!--{#if !ownedToken.userAdded}
                             <img src={`${ownedToken.ticker}.svg`} alt={ownedToken.name} style="width:24px;height:24px;display:flex;align-self:center">
                             {:else}-->
-                            <TokenIcon
-                              value={ownedToken.name}
-                              style="shape"
-                              size={26}
-                              color={ownedToken.color}
-                              border={true}
-                              radius={7}
-                            />
-                            <!--{/if}-->
-                          </div>
-                        {/if}
-                      {/each}
+                              <TokenIcon
+                                value={ownedToken.name}
+                                style="shape"
+                                size={26}
+                                color={ownedToken.color}
+                                border={true}
+                                radius={7}
+                              />
+                              <!--{/if}-->
+                            </div>
+                          {/if}
+                        {/each}
+                      </div>
                     </div>
-                  </div>
-                {/if}
+                  {/if}
+                </div>
+              </div>
+              <div
+                class="trash"
+                on:click={() => {
+                  deleteWallet(index);
+                }}
+              >
+                <img src="./trash.svg" alt="Delete Icon" />
               </div>
             </div>
-            <div class="trash" on:click={()=>{deleteWallet(index)}}>
-              <img
-              src="./trash.svg"
-              alt="Delete Icon"
-          />
-          </div>
-          </div>
           {/each}
         </div>
       {:else}
