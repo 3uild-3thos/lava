@@ -103,6 +103,7 @@
   }
 
   import Popover from "../../components/Popover.svelte";
+  import { PublicKey } from "@solana/web3.js";
 
   // function selectWallet(wallet) {
   //   selectedWallet.set(wallet)
@@ -154,13 +155,25 @@
   let symbol = "";
   let amount = 1000000000;
 
-
   let showMoreTokens = false;
 
   const deleteWallet = (index) => {
     $workspaces[$selectedWorkspace].wallets = $workspaces[
       $selectedWorkspace
     ].wallets.filter((wallet, i) => i !== index);
+  };
+
+  const isValidAddress = (address) => {
+    if (address.trim() === "") {
+      return true;
+    } else {
+      try {
+        new PublicKey(address);
+        return true;
+      } catch (err) {
+        return false;
+      }
+    }
   };
 </script>
 
@@ -180,23 +193,20 @@
         bind:value={walletName}
       />
       <input
-        class="input--primary"
+        class={`input--primary${isValidAddress(walletAddress) ? "" : " border-lava-error"}`}
         placeholder="Assing an Address"
         bind:value={walletAddress}
       />
     </div>
     <div class="modal--form">
-        <div class="modal--form-title">SOL amount</div>
-          <input
-            class="input--primary"
-            placeholder="0"
-            bind:value={sol_balance}
-          />
+      <div class="modal--form-title">SOL amount</div>
+      <input class="input--primary" placeholder="0" bind:value={sol_balance} />
     </div>
 
     <div class="btns--modal">
       <button
-        class="btn btn--lava"
+        class={`btn btn--lava${isValidAddress(walletAddress) ? "" : " btn--disabled"}`}
+        disabled={!isValidAddress(walletAddress)}
         on:click={() => {
           addWallet();
         }}>Create</button
