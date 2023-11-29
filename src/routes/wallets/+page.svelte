@@ -103,6 +103,7 @@
   }
 
   import Popover from "../../components/Popover.svelte";
+  import { PublicKey } from "@solana/web3.js";
 
   // function selectWallet(wallet) {
   //   selectedWallet.set(wallet)
@@ -130,6 +131,7 @@
    * @type {any[]}
    */
   let walletTokens = [];
+  let sol_balance = 0;
 
   const addWallet = () => {
     if (walletName) {
@@ -138,32 +140,20 @@
         {
           name: walletName,
           address: walletAddress,
-          tokens: walletTokens,
+          tokens: [],
+          sol_balance,
         },
       ];
       walletName = "";
       walletAddress = "";
       walletTokens = [];
       isCreateModalOpen = false;
+      sol_balance = 0;
     }
   };
 
   let symbol = "";
   let amount = 1000000000;
-  const addToken = () => {
-    if (symbol) {
-      walletTokens = [
-        ...walletTokens,
-        {
-          symbol,
-          amount,
-        },
-      ];
-      symbol = "";
-      amount = 1000000000;
-      showMoreTokens = false;
-    }
-  };
 
   let showMoreTokens = false;
 
@@ -171,6 +161,19 @@
     $workspaces[$selectedWorkspace].wallets = $workspaces[
       $selectedWorkspace
     ].wallets.filter((wallet, i) => i !== index);
+  };
+
+  const isValidAddress = (address) => {
+    if (address.trim() === "") {
+      return true;
+    } else {
+      try {
+        new PublicKey(address);
+        return true;
+      } catch (err) {
+        return false;
+      }
+    }
   };
 </script>
 
@@ -190,63 +193,20 @@
         bind:value={walletName}
       />
       <input
-        class="input--primary"
+        class={`input--primary${isValidAddress(walletAddress) ? "" : " border-lava-error"}`}
         placeholder="Assing an Address"
         bind:value={walletAddress}
       />
     </div>
     <div class="modal--form">
-      <div class="bordered-container">
-        <div class="modal--form-title">Wallet's Tokens</div>
-        {#each walletTokens as Token, index}
-          <div class="modal--form-title">Token {index + 1}</div>
-          <input
-            class="input--primary"
-            placeholder="Symbol"
-            value={Token.symbol}
-            readonly
-          />
-          <input
-            class="input--primary"
-            placeholder="Amount"
-            value={Token.amount}
-            readonly
-          />
-        {/each}
-
-        <button
-          class="btn btn--lava"
-          on:click={() => {
-            showMoreTokens = !showMoreTokens;
-          }}>{showMoreTokens ? "-" : "+"}</button
-        >
-
-        {#if showMoreTokens}
-          <input
-            class="input--primary"
-            placeholder="symbol"
-            bind:value={symbol}
-          />
-          <input
-            class="input--primary"
-            placeholder="Assing an Address"
-            bind:value={amount}
-          />
-          <div class="btns--modal">
-            <button
-              class="btn btn--lava"
-              on:click={() => {
-                addToken();
-              }}>Save</button
-            >
-          </div>
-        {/if}
-      </div>
+      <div class="modal--form-title">SOL amount</div>
+      <input class="input--primary" placeholder="0" bind:value={sol_balance} />
     </div>
 
     <div class="btns--modal">
       <button
-        class="btn btn--lava"
+        class={`btn btn--lava${isValidAddress(walletAddress) ? "" : " btn--disabled"}`}
+        disabled={!isValidAddress(walletAddress)}
         on:click={() => {
           addWallet();
         }}>Create</button

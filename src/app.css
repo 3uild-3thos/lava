@@ -1177,3 +1177,7 @@ body {
   .relative {
     position: relative;
   }
+
+  .border-lava-error{
+    @apply border-lava-error
+  }
