@@ -54,18 +54,8 @@
         },
     ];
 
-    let wallets = [
-        {
-            label: "yes",
-            value: 0,
-            color: "#DC30C0",
-        },
-        {
-            label: "yesBUTINCAPS",
-            value: 1,
-            color: "#CEDC30",
-        },
-    ];
+    let wallets = $workspaces[$selectedWorkspace].wallets.map(wallet=>{return {label: wallet.name, value: wallet.address, color: "#DC30C0"}});
+        
     let color = ["#9945FF","#19FB9B"];
     let assignedList = [];
 
@@ -82,11 +72,11 @@
     let isDropdownOpen = false;
     let selectedOption = "None";
     let hideTokens = false;
-    let openedToken = dummyTokens[0];
+    let openedToken = $workspaces[$selectedWorkspace].tokens[0];
 
     function openViewModal(index) {
         isViewModalOpen = true;
-        openedToken = dummyTokens[index];
+        openedToken = $workspaces[$selectedWorkspace].tokens[index];
     }
 
     let m = { x: 0, y: 0 };
@@ -160,6 +150,25 @@
         console.log(index);
         $workspaces[$selectedWorkspace].tokens = $workspaces[$selectedWorkspace].tokens.filter((token, i) => i !== index);
     };
+
+    function onAssign() {
+        isViewModalOpen = false;
+        assignedList.forEach((assigned) => {
+            const index = $workspaces[$selectedWorkspace].wallets.findIndex((wallet) => wallet.address === assigned.selectedWallet.value)
+            $workspaces[$selectedWorkspace].wallets[index].tokens = [
+                ...$workspaces[$selectedWorkspace].wallets[index].tokens,
+                {
+                    symbol: openedToken.symbol,
+                    amount: assigned.tokenAmount,
+                    decimals: openedToken.decimals,
+                    color: openedToken.color,
+                },
+            ];
+        assignedList = [];
+    }
+    );
+    
+}
 </script>
 
 {#if ready}
@@ -196,12 +205,12 @@
         bind:isOpen={isViewModalOpen}
         on:close={() => (isViewModalOpen = false)}
         modalVariant={true}
-        color={openedToken.color}
+        color={color[0]}
         width={400}
     >
         <h1 class="modal--title">
-            Assign <span style={`color: ${openedToken.color[0]}`}
-                >{openedToken.name}</span
+            Assign <span style={`color: ${color[0]}`}
+                >{openedToken.symbol}</span
             > to Wallets
         </h1>
         <div class="assign--tokens--wrapper">
@@ -303,7 +312,7 @@
         <div class="btns--modal">
             <button
                 class="btn btn--primary"
-                on:click={() => (isViewModalOpen = false)}>Assign</button
+                on:click={() => onAssign()}>Assign</button
             >
         </div>
     </Modal>

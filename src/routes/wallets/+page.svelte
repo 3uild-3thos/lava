@@ -130,6 +130,7 @@
    * @type {any[]}
    */
   let walletTokens = [];
+  let sol_balance = 0;
 
   const addWallet = () => {
     if (walletName) {
@@ -138,32 +139,21 @@
         {
           name: walletName,
           address: walletAddress,
-          tokens: walletTokens,
+          tokens: [],
+          sol_balance,
         },
       ];
       walletName = "";
       walletAddress = "";
       walletTokens = [];
       isCreateModalOpen = false;
+      sol_balance = 0;
     }
   };
 
   let symbol = "";
   let amount = 1000000000;
-  const addToken = () => {
-    if (symbol) {
-      walletTokens = [
-        ...walletTokens,
-        {
-          symbol,
-          amount,
-        },
-      ];
-      symbol = "";
-      amount = 1000000000;
-      showMoreTokens = false;
-    }
-  };
+
 
   let showMoreTokens = false;
 
@@ -196,52 +186,12 @@
       />
     </div>
     <div class="modal--form">
-      <div class="bordered-container">
-        <div class="modal--form-title">Wallet's Tokens</div>
-        {#each walletTokens as Token, index}
-          <div class="modal--form-title">Token {index + 1}</div>
-          <input
-            class="input--primary"
-            placeholder="Symbol"
-            value={Token.symbol}
-            readonly
-          />
-          <input
-            class="input--primary"
-            placeholder="Amount"
-            value={Token.amount}
-            readonly
-          />
-        {/each}
-
-        <button
-          class="btn btn--lava"
-          on:click={() => {
-            showMoreTokens = !showMoreTokens;
-          }}>{showMoreTokens ? "-" : "+"}</button
-        >
-
-        {#if showMoreTokens}
-          <input
-            class="input--primary"
-            placeholder="symbol"
-            bind:value={symbol}
-          />
+        <div class="modal--form-title">SOL amount</div>
           <input
             class="input--primary"
             placeholder="Assing an Address"
-            bind:value={amount}
+            bind:value={sol_balance}
           />
-          <div class="btns--modal">
-            <button
-              class="btn btn--lava"
-              on:click={() => {
-                addToken();
-              }}>Save</button
-            >
-          </div>
-        {/if}
-      </div>
     </div>
 
     <div class="btns--modal">
