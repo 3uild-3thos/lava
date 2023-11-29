@@ -108,6 +108,13 @@
         isAssignedButtonDisabled = true;
     }
 
+    function clearCreatorWallet(e) {
+        creator = "";
+    }
+    function updateCreatorWallet(e) {
+        creator = e.detail.value;
+    }
+    
     function addWallet() {
         for (let i = 0; i < assignedList.length; i++) {
             if (assignedList[i].selectedWallet.value === selectedWallet.value) {
@@ -189,8 +196,42 @@
                 placeholder="1000000000"
             />
             <div class="modal--form-title">Creator</div>
-            <input class="input--primary" placeholder="Creator" bind:value={creator} />
-        </div>
+            <div class="assign--tokens--wallet">
+                <Select
+                    items={[...wallets, {label:"", value:"", color:"#DC30C0"}]}
+                    focused={true}
+                    placeholder="Select Wallet"
+                    on:change={updateCreatorWallet}
+                    on:clear={clearCreatorWallet}
+                >
+                    <div
+                        slot="selection"
+                        class="select--option"
+                        let:selection
+                    >
+                        <Icon
+                            size={24}
+                            value={selection.label}
+                            color={selection.color}
+                            border={true}
+                            radius={7}
+                        />
+                        <div class="select--text">{selection.label}</div>
+                    </div>
+
+                    <div slot="item" class="select--option" let:item>
+                        <Icon
+                            size={24}
+                            value={item.label}
+                            color={item.color}
+                            border={true}
+                            radius={7}
+                        />
+                        <div class="select--text">{item.label}</div>
+                    </div>
+                </Select>
+            </div>
+                </div>
         <div class="btns--modal">
             <button
                 class="btn btn--lava"

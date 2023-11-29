@@ -189,7 +189,7 @@
         <div class="modal--form-title">SOL amount</div>
           <input
             class="input--primary"
-            placeholder="Assing an Address"
+            placeholder="0"
             bind:value={sol_balance}
           />
     </div>
