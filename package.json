@@ -11,7 +11,9 @@
 		"tauri": "tauri"
 	},
 	"dependencies": {
-		"@jridgewell/sourcemap-codec": "^1.4.15",
+		"@tauri-apps/cli": "^1.5.6",
+		"avvvatars-react": "^0.4.2",
+		"rollup-plugin-dynamic-import-variables": "^1.1.0",
 		"svelte-select": "^5.8.1",
 		"svelte-windicss-preprocess": "^4.2.8",
 		"vite-plugin-windicss": "^1.9.2"
