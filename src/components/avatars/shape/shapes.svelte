@@ -1,10 +1,9 @@
-<script>
-    export let name;
+<script lang="ts">
+    export let name: string;
     export let size = 24;
     export let color = 'currentColor';
-  </script>
+</script>
   
-
 {#if name === 'Shape1'}
     <svg viewBox='0 0 32 32' fill='none' width={size} color={`#${color}`}>
     <path d="M16 0L19.856 9.32122L29.8565 8L23.712 16L29.8565 24L19.856 22.6787L16 32L12.144 22.6787L2.14359 24L8.28799 16L2.14359 8L12.144 9.32122L16 0Z" fill="currentColor"/>
