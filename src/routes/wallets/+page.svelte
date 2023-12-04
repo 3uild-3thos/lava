@@ -95,11 +95,11 @@
   let isCreateModalOpen = false;
   let isViewModalOpen = false;
   let hideWallets = false;
-  let openedWallet = dummyWallets[0];
+  let openedWallet = $workspaces[$selectedWorkspace].wallets[0];
 
   function openWalletModal(index) {
     isViewModalOpen = true;
-    openedWallet = dummyWallets[index];
+    openedWallet = $workspaces[$selectedWorkspace].wallets[index];
   }
 
   import Popover from "../../components/Popover.svelte";
@@ -221,37 +221,37 @@
     on:close={() => (isViewModalOpen = false)}
     width={400}
     modalVariant={true}
-    color={openedWallet.color}
+    color={colors[0]}
   >
     <div class="wallet--info">
       <TokenIcon
         value={openedWallet.name}
         size={32}
-        color={openedWallet.color}
+        color={colors[0]}
         border={true}
         radius={7}
       />
       <div class="wallet--name">{openedWallet.name}</div>
     </div>
-    {#if openedWallet.tokensOwned && openedWallet.tokensOwned.length > 0}
+    {#if openedWallet.tokens && openedWallet.tokens.length > 0}
       <div class="wallet--tokens">Tokens Owned</div>
       <div class="wallet--modal--list">
-        {#each openedWallet.tokensOwned as ownedToken, index}
+        {#each openedWallet.tokens as ownedToken, index}
           <div class="wallet--modal--item">
             <div class="wallet--modal--item--header">
               <TokenIcon
-                value={ownedToken.name}
+                value={ownedToken.symbol}
                 style="shape"
                 size={26}
-                color={ownedToken.color}
+                color={colors[0]}
                 border={true}
                 radius={7}
               />
-              <div class="wallet--modal--name">{ownedToken.name}</div>
+              <div class="wallet--modal--name">{ownedToken.symbol}</div>
             </div>
             <div class="wallet--modal--item--amount">
               <span>Owned:</span>
-              <div class="token--supply" style={`color: ${ownedToken.color};`}>
+              <div class="token--supply" style={`color: ${colors[0]};`}>
                 {ownedToken.amount.toLocaleString()}
               </div>
             </div>
@@ -320,6 +320,7 @@
                     />
                     <div class="wallet--name">{wallet.name}</div>
                   </div>
+                  <div class="wallet--address">{`SOL Balance:${wallet.sol_balance}`}</div>
                   <div class="wallet--address">
                     {wallet.address}
                   </div>
