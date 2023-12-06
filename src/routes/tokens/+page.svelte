@@ -77,6 +77,7 @@
     function openViewModal(index) {
         isViewModalOpen = true;
         openedToken = $workspaces[$selectedWorkspace].tokens[index];
+        assignedList = $workspaces[$selectedWorkspace].wallets.filter((wallet) => wallet.tokens.some((token) => token.symbol === openedToken.symbol)) ?? []
     }
 
     let m = { x: 0, y: 0 };
@@ -104,7 +105,7 @@
 
     function updateSelectedWallet(e) {
         selectedWallet = e.detail;
-        selectedWallet = selectedWallet;
+       tokenAmount = $workspaces[$selectedWorkspace].wallets.find((wallet) => wallet.address === selectedWallet.value)?.tokens?.find((token) => token.symbol === openedToken.symbol)?.amount??1000;
         isAssignedButtonDisabled = true;
     }
 
@@ -116,22 +117,34 @@
     }
     
     function addWallet() {
-        for (let i = 0; i < assignedList.length; i++) {
-            if (assignedList[i].selectedWallet.value === selectedWallet.value) {
-                console.log("This wallet has already been added.");
-                isAssignedButtonDisabled = true;
-                return;
-            }
+        const index = $workspaces[$selectedWorkspace].wallets.findIndex((wallet) => wallet.address === selectedWallet.value);
+        if (index !== -1) {
+            if ($workspaces[$selectedWorkspace].wallets[index].tokens.some((token) => token.symbol === openedToken.symbol)) {
+                $workspaces[$selectedWorkspace].wallets[index].tokens = $workspaces[$selectedWorkspace].wallets[index].tokens.map((token) => {
+                    if (token.symbol === openedToken.symbol) {
+                        token.amount = tokenAmount;
+                    }
+                    return token;
+                });
+            } else {
+                $workspaces[$selectedWorkspace].wallets[index].tokens = [
+                    ...$workspaces[$selectedWorkspace].wallets[index].tokens,
+                    {
+                        symbol: openedToken.symbol,
+                        amount: tokenAmount,
+                    },
+                ];
+            };
         }
-        assignedList.push({ selectedWallet, tokenAmount });
-        assignedList = assignedList;
-        console.log(assignedList);
+        assignedList = $workspaces[$selectedWorkspace].wallets.filter((wallet) => wallet.tokens.some((token) => token.symbol === openedToken.symbol)) ?? []
+        selectedWallet = {};
+        tokenAmount = 1000;
+        isAssignedButtonDisabled = true;
     }
 
     function removeWallet(index) {
         assignedList.splice(index, 1);
         assignedList = assignedList;
-        console.log(assignedList);
     }
 
     let supply = 1000000000;
@@ -154,28 +167,10 @@
 
     };
     const deleteToken = (index) => {
-        console.log(index);
         $workspaces[$selectedWorkspace].tokens = $workspaces[$selectedWorkspace].tokens.filter((token, i) => i !== index);
     };
 
-    function onAssign() {
-        isViewModalOpen = false;
-        assignedList.forEach((assigned) => {
-            const index = $workspaces[$selectedWorkspace].wallets.findIndex((wallet) => wallet.address === assigned.selectedWallet.value)
-            $workspaces[$selectedWorkspace].wallets[index].tokens = [
-                ...$workspaces[$selectedWorkspace].wallets[index].tokens,
-                {
-                    symbol: openedToken.symbol,
-                    amount: assigned.tokenAmount,
-                    decimals: openedToken.decimals,
-                    color: openedToken.color,
-                },
-            ];
-        assignedList = [];
-    }
-    );
-    
-}
+   
 </script>
 
 {#if ready}
@@ -324,16 +319,16 @@
                     >
                         <Icon
                             size={24}
-                            value={assigned.selectedWallet.label}
-                            color={assigned.selectedWallet.color}
+                            value={assigned.name}
+                            color={color[0]}
                             border={true}
                             radius={7}
                         />
                         <div class="assigned--wallet--name">
-                            {assigned.selectedWallet.label}
+                            {assigned.name}
                         </div>
                         <div class="assigned--wallet--amount">
-                            {assigned.tokenAmount}
+                            {assigned?.tokens?.find((token) => token.symbol === openedToken.symbol)?.amount??""}
                         </div>
                         <button
                             class="assign--button"
@@ -350,12 +345,6 @@
             </div>
         {/if}
 
-        <div class="btns--modal">
-            <button
-                class="btn btn--primary"
-                on:click={() => onAssign()}>Assign</button
-            >
-        </div>
     </Modal>
 
     <div class="common--wrapper">

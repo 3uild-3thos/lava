@@ -95,15 +95,16 @@
   let isCreateModalOpen = false;
   let isViewModalOpen = false;
   let hideWallets = false;
-  let openedWallet = dummyWallets[0];
+  let openedWallet = $workspaces[$selectedWorkspace].wallets[0];
 
   function openWalletModal(index) {
     isViewModalOpen = true;
-    openedWallet = dummyWallets[index];
+    openedWallet = $workspaces[$selectedWorkspace].wallets[index];
   }
 
   import Popover from "../../components/Popover.svelte";
   import { PublicKey } from "@solana/web3.js";
+  import Select from "svelte-select/no-styles/Select.svelte";
 
   // function selectWallet(wallet) {
   //   selectedWallet.set(wallet)
@@ -175,6 +176,68 @@
       }
     }
   };
+
+  let editingWallet = -1;
+  const editWallet = (index) => {
+    editingWallet = index;
+    walletName = $workspaces[$selectedWorkspace].wallets[index].name;
+    walletAddress = $workspaces[$selectedWorkspace].wallets[index].address;
+    sol_balance = $workspaces[$selectedWorkspace].wallets[index].sol_balance;
+    isCreateModalOpen = true;
+  };
+
+  const onEditWallet = () => {
+    if (walletName) {
+      $workspaces[$selectedWorkspace].wallets[editingWallet] = {
+        name: walletName,
+        address: walletAddress,
+        tokens: $workspaces[$selectedWorkspace].wallets[editingWallet].tokens,
+        sol_balance,
+      };
+      walletName = "";
+      walletAddress = "";
+      walletTokens = [];
+      isCreateModalOpen = false;
+      sol_balance = 0;
+      editingWallet = -1;
+    }
+  };
+
+  let isAddTokenModalOpen = false;
+
+  const addToken = () => {
+    console.log(symbol, amount);
+    if (symbol?.value && editingWallet !== -1) {
+      const index = $workspaces[$selectedWorkspace].wallets[
+        editingWallet
+      ].tokens.findIndex((token) => token.symbol === symbol?.value);
+      if (index !== -1) {
+        $workspaces[$selectedWorkspace].wallets[editingWallet].tokens[
+          index
+        ].amount = amount;
+      } else {
+        $workspaces[$selectedWorkspace].wallets[editingWallet].tokens= [
+          ...$workspaces[$selectedWorkspace].wallets[editingWallet].tokens,
+          {
+            symbol: symbol?.value,
+            amount,
+          },
+        ];
+      }
+      symbol = "";
+      amount = 1000000000;
+      isAddTokenModalOpen = false;
+      openedWallet = $workspaces[$selectedWorkspace].wallets[editingWallet];
+    }
+  };
+
+  const updateToken = (e) => {
+    symbol = e.detail;
+    amount = $workspaces[$selectedWorkspace]?.wallets[editingWallet]?.tokens?.find(
+      (token) => token.symbol === symbol?.value
+    )?.amount ?? 1000000000;
+    isViewModalOpen = false;
+  };
 </script>
 
 {#if ready}
@@ -184,7 +247,9 @@
     bind:isOpen={isCreateModalOpen}
     on:close={() => (isCreateModalOpen = false)}
   >
-    <h1 class="modal--title">Create a new Wallet</h1>
+    <h1 class="modal--title">
+      {editingWallet == -1 ? "Create a new Wallet": "Edit Wallet"}
+    </h1>
     <div class="modal--form">
       <div class="modal--form-title">Wallet Name</div>
       <input
@@ -193,7 +258,9 @@
         bind:value={walletName}
       />
       <input
-        class={`input--primary${isValidAddress(walletAddress) ? "" : " border-lava-error"}`}
+        class={`input--primary${
+          isValidAddress(walletAddress) ? "" : " border-lava-error"
+        }`}
         placeholder="Assing an Address"
         bind:value={walletAddress}
       />
@@ -205,11 +272,13 @@
 
     <div class="btns--modal">
       <button
-        class={`btn btn--lava${isValidAddress(walletAddress) ? "" : " btn--disabled"}`}
+        class={`btn btn--lava${
+          isValidAddress(walletAddress) ? "" : " btn--disabled"
+        }`}
         disabled={!isValidAddress(walletAddress)}
         on:click={() => {
-          addWallet();
-        }}>Create</button
+          editingWallet == -1 ? addWallet() : onEditWallet();
+        }}>Save Wallet</button
       >
     </div>
   </Modal>
@@ -221,37 +290,37 @@
     on:close={() => (isViewModalOpen = false)}
     width={400}
     modalVariant={true}
-    color={openedWallet.color}
+    color={colors[0]}
   >
     <div class="wallet--info">
       <TokenIcon
         value={openedWallet.name}
         size={32}
-        color={openedWallet.color}
+        color={colors[0]}
         border={true}
         radius={7}
       />
       <div class="wallet--name">{openedWallet.name}</div>
     </div>
-    {#if openedWallet.tokensOwned && openedWallet.tokensOwned.length > 0}
+    {#if openedWallet.tokens && openedWallet.tokens.length > 0}
       <div class="wallet--tokens">Tokens Owned</div>
       <div class="wallet--modal--list">
-        {#each openedWallet.tokensOwned as ownedToken, index}
+        {#each openedWallet.tokens as ownedToken, index}
           <div class="wallet--modal--item">
             <div class="wallet--modal--item--header">
               <TokenIcon
-                value={ownedToken.name}
+                value={ownedToken.symbol}
                 style="shape"
                 size={26}
-                color={ownedToken.color}
+                color={colors[0]}
                 border={true}
                 radius={7}
               />
-              <div class="wallet--modal--name">{ownedToken.name}</div>
+              <div class="wallet--modal--name">{ownedToken.symbol}</div>
             </div>
             <div class="wallet--modal--item--amount">
               <span>Owned:</span>
-              <div class="token--supply" style={`color: ${ownedToken.color};`}>
+              <div class="token--supply" style={`color: ${colors[0]};`}>
                 {ownedToken.amount.toLocaleString()}
               </div>
             </div>
@@ -273,6 +342,33 @@
         </div>
       </div>
     {/if}
+  </Modal>
+
+  <!-- Add token modal -->
+  <Modal
+    bind:isOpen={isAddTokenModalOpen}
+    on:close={() => (isAddTokenModalOpen = false)}
+  >
+    <Select
+      on:change={updateToken}
+      placeholder="Select a token"
+      items={$workspaces[$selectedWorkspace]?.tokens.map(
+        ({ symbol }) => symbol
+      ) ?? []}
+    />
+    <input
+      class="input--primary"
+      placeholder="Assing an Address"
+      bind:value={amount}
+    />
+    <div class="btns--modal">
+      <button
+        class="btn btn--lava"
+        on:click={() => {
+          addToken();
+        }}>Save</button
+      >
+    </div>
   </Modal>
 
   <div class="common--wrapper">
@@ -321,11 +417,23 @@
                     <div class="wallet--name">{wallet.name}</div>
                   </div>
                   <div class="wallet--address">
+                    {`SOL Balance:${wallet.sol_balance}`}
+                  </div>
+                  <div class="wallet--address">
                     {wallet.address}
                   </div>
-                  {#if wallet?.tokens?.length > 0}
+
                     <div class="wallet--footer">
                       <span>TOKENS</span>
+                      <button
+                        class="tokens-button"
+                        type="button"
+                        on:click={() => {
+                          editingWallet = index;
+                          isAddTokenModalOpen = true;
+                        }}>+</button
+                      >
+                      {#if wallet?.tokens?.length > 0}
                       <div class="wallet--tokens--list">
                         {#each wallet.tokens as ownedToken, index}
                           {#if index < 4}
@@ -366,8 +474,9 @@
                           {/if}
                         {/each}
                       </div>
+                      {/if}
                     </div>
-                  {/if}
+
                 </div>
               </div>
               <div
@@ -377,6 +486,14 @@
                 }}
               >
                 <img src="./trash.svg" alt="Delete Icon" />
+              </div>
+              <div
+                class="edit"
+                on:click={() => {
+                  editWallet(index);
+                }}
+              >
+                <img src="./edit.svg" alt="Edit Icon" />
               </div>
             </div>
           {/each}
