@@ -1,122 +1,122 @@
 html {
-    @apply w-full h-full m-0 text-lava-white relative;
-    background:linear-gradient(180deg, #131316, #18181B)
-  }
-  
+  @apply w-full h-full m-0 text-lava-white relative;
+  background: linear-gradient(180deg, #131316, #18181B)
+}
+
 body {
-    @apply w-full h-full overflow-hidden m-0 font-sans relative;
-    font-synthesis: none;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-text-size-adjust: 100%;
-    user-select:none;
-    -webkit-user-select: none;
+  @apply w-full h-full overflow-hidden m-0 font-sans relative;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 
 .btn--fit {
-    width:max-content !important;
-    @apply !px-4;
+  width: max-content !important;
+  @apply !px-4;
 }
 
 .btn--end {
-    @apply ml-auto
+  @apply ml-auto
 }
 
 .btn {
-    @apply flex items-center justify-center rounded-xl outline-none border-none w-full;
+  @apply flex items-center justify-center rounded-xl outline-none border-none w-full;
 }
 
 .btn--disabled {
-    @apply !cursor-auto !opacity-40 hover:!opacity-30 hover:shadow-none
+  @apply !cursor-auto !opacity-40 hover: !opacity-30 hover:shadow-none
 }
 
 .btn--lava {
-    @apply outline-none relative rounded-xl text-lava-white text-base p-2.5 transition duration-200;
-    border-radius: 10px;
-    border: 1.25px solid #18181B;
-    background: radial-gradient(75.92% 147.00% at 58.61% -47.00%, #FE9154 0%, #FE6054 100%);
-    box-shadow: 0px 4px 1px 0px rgba(209, 209, 214, 0.15) inset, 0px 0px 10px 0px rgba(254, 96, 84, 0.25);
+  @apply outline-none relative rounded-xl text-lava-white text-base p-2.5 transition duration-200;
+  border-radius: 10px;
+  border: 1.25px solid #18181B;
+  background: radial-gradient(75.92% 147.00% at 58.61% -47.00%, #FE9154 0%, #FE6054 100%);
+  box-shadow: 0px 4px 1px 0px rgba(209, 209, 214, 0.15) inset, 0px 0px 10px 0px rgba(254, 96, 84, 0.25);
 }
-  
+
 
 .btn--lava:hover {
-    @apply cursor-pointer;
+  @apply cursor-pointer;
 }
 
 .btn--primary {
-    @apply outline-none font-medium relative rounded-xl text-lava-white text-base p-2.5 transition duration-200;
-    border-radius: 10px;
-    background: radial-gradient(75.92% 147.00% at 58.61% -47.00%, #383A41 0%, #26272B 100%);
+  @apply outline-none font-medium relative rounded-xl text-lava-white text-base p-2.5 transition duration-200;
+  border-radius: 10px;
+  background: radial-gradient(75.92% 147.00% at 58.61% -47.00%, #383A41 0%, #26272B 100%);
 }
 
 .btn--dropdown {
-    @apply cursor-pointer flex !justify-start outline-none font-medium relative rounded-xl text-lava-white text-sm p-2.5 px-4 bg-lava-bg border border-solid border-lava-800 focus:border-lava-700 focus:border-opacity-100 transition duration-200
-    border-radius: 10px;
+  @apply cursor-pointer flex !justify-start outline-none font-medium relative rounded-xl text-lava-white text-sm p-2.5 px-4 bg-lava-bg border border-solid border-lava-800 focus:border-lava-700 focus:border-opacity-100 transition duration-200 border-radius: 10px;
 }
-  
+
 .btn--dropdown-open {
-    @apply !rounded-b-none
+  @apply !rounded-b-none
 }
 
 .btn--dropdown:hover {
-    @apply border-lava-700 transition duration-200
+  @apply border-lava-700 transition duration-200
 }
 
 .btn--primary:hover {
-    @apply shadow-inner shadow-lava-900 cursor-pointer filter brightness-120 transition duration-200;
+  @apply shadow-inner shadow-lava-900 cursor-pointer filter brightness-120 transition duration-200;
 }
 
 .btn--primary::after {
-    background:linear-gradient(180deg, #F4F4F533, #F4F4F500);
-    border-radius: inherit;
-    content: "";
-    inset: 0;
-    -webkit-mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask-composite: xor;
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    padding: 1px;
-    pointer-events: none;
-    position: absolute;
+  background: linear-gradient(180deg, #F4F4F533, #F4F4F500);
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
+  position: absolute;
 }
 
 .input--primary {
-    @apply relative w-full font-medium h-[42px] text-lg text-[14px] text-lava-white p-4 box-border outline-none rounded-[10px] bg-lava-bg border border-solid border-lava-800 focus:border-lava-700 focus:border-opacity-100 transition duration-200;
+  @apply relative w-full font-medium h-[42px] text-lg text-[14px] text-lava-white p-4 box-border outline-none rounded-[10px] bg-lava-bg border border-solid border-lava-800 focus:border-lava-700 focus:border-opacity-100 transition duration-200;
 }
 
 .input--primary::placeholder {
-    @apply text-lava-mute
+  @apply text-lava-mute
 }
 
 .sidebar {
-    @apply w-[75px] box-border h-100vh bg-lava-900 border-solid border-t-0 border-b-0 border-l-0 border-r border-lava-800 relative;
+  @apply w-[75px] box-border h-100vh bg-lava-900 border-solid border-t-0 border-b-0 border-l-0 border-r border-lava-800 relative;
 }
 
 .sidebar--logo-box {
-    @apply relative flex
+  @apply relative flex
 }
 
 .sidebar--active-link {
-    @apply w-[4px] h-[25px] rounded-l-none rounded-r-full absolute -left-[10px] mt-3;
-    background: linear-gradient(0deg, rgba(255, 255, 255, 0.40) 0%, rgba(255, 255, 255, 0.40) 100%), linear-gradient(135deg, #8A54FE 18.75%, #FF5F57 58.85%, #FEBC2E 100%);
-  }
-
-
-  .sidebar--link-wrapper {
-    position:relative;
+  @apply w-[4px] h-[25px] rounded-l-none rounded-r-full absolute -left-[10px] mt-3;
+  background: linear-gradient(0deg, rgba(255, 255, 255, 0.40) 0%, rgba(255, 255, 255, 0.40) 100%), linear-gradient(135deg, #8A54FE 18.75%, #FF5F57 58.85%, #FEBC2E 100%);
 }
+
+
+.sidebar--link-wrapper {
+  position: relative;
+}
+
 .sidebar--logo {
-    @apply w-[42px] mt-8 mb-6 cursor-pointer;
+  @apply w-[42px] mt-8 mb-6 cursor-pointer;
 }
-  
+
 .sidebar--nav {
-    @apply flex flex-col items-center w-full h-full relative gap-[12px] box-border;
+  @apply flex flex-col items-center w-full h-full relative gap-[12px] box-border;
 }
 
 .sidebar--link {
-    @apply p-3 rounded-lg flex items-center justify-center hover:cursor-pointer relative overflow-hidden hover:bg-lava-800 hover:!bg-opacity-50 transition ease duration-200;
+  @apply p-3 rounded-lg flex items-center justify-center hover:cursor-pointer relative overflow-hidden hover:bg-lava-800 hover: !bg-opacity-50 transition ease duration-200;
 }
 
 /* .sidebar--link .sidebar--link-bg {
@@ -126,265 +126,265 @@ body {
 } */
 
 .sidebar--link:hover .sidebar--link-icon {
-    filter:brightness(1.25)
+  filter: brightness(1.25)
 }
 
 .sidebar--link::after {
-        content: "";
-        position: absolute;
-        top: calc(var(--top, 0) * 1px - 40px);
-        left: calc(var(--left, 0) * 1px - 40px);
-        width: 100px;
-        height: 100px;
-        background: radial-gradient(#8A54FE, #FF5F57 20%,#FEBC2E 40%, rgb(0,0,0,0) 100%);
-        z-index:0;
-        opacity: 0;
-        mix-blend-mode:darken
+  content: "";
+  position: absolute;
+  top: calc(var(--top, 0) * 1px - 40px);
+  left: calc(var(--left, 0) * 1px - 40px);
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(#8A54FE, #FF5F57 20%, #FEBC2E 40%, rgb(0, 0, 0, 0) 100%);
+  z-index: 0;
+  opacity: 0;
+  mix-blend-mode: darken
 }
 
 .sidebar--link:hover::after {
-    opacity: 0.3;
+  opacity: 0.3;
 }
 
 
 .welcome--page {
-    @apply flex flex-col items-center justify-center h-full w-full overflow-hidden relative;
+  @apply flex flex-col items-center justify-center h-full w-full overflow-hidden relative;
 }
 
 .welcome--title {
-    @apply font-semibold text-[68px] mb-2 pt-12;
-    background: linear-gradient(180deg, #F4F4F5 0%, #D1D1D6 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    mix-blend-mode: color-dodge;
+  @apply font-semibold text-[68px] mb-2 pt-12;
+  background: linear-gradient(180deg, #F4F4F5 0%, #D1D1D6 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  mix-blend-mode: color-dodge;
 }
 
 .title--smaller {
-    @apply text-5xl pb-4 -mb-2
+  @apply text-5xl pb-4 -mb-2
 }
 
 .welcome--subtitle {
-    @apply text-lava-mute font-normal text-[1.1rem]
+  @apply text-lava-mute font-normal text-[1.1rem]
 }
 
 .welcome--gradient {
-    @apply absolute -top-[30%] xl:-top-[10%];
-    
+  @apply absolute -top-[30%] xl:-top-[10%];
+
 }
 
 .workspace--options {
-    @apply flex pt-8 gap-x-12 pb-12
+  @apply flex pt-8 gap-x-12 pb-12
 }
 
 
 .workspace--option-box {
-    @apply bg-lava-card box-border bg-opacity-0 hover:bg-opacity-20 p-4 px-6 rounded-3xl cursor-pointer transition duration-200 text-center;
-    max-width:225px;
+  @apply bg-lava-card box-border bg-opacity-0 hover:bg-opacity-20 p-4 px-6 rounded-3xl cursor-pointer transition duration-200 text-center;
+  max-width: 225px;
 }
 
 .workspace--option {
-    @apply bg-lava-card p-6 m-auto rounded-3xl relative flex items-center justify-center transition duration-200 text-center;
-    aspect-ratio:1/1;
+  @apply bg-lava-card p-6 m-auto rounded-3xl relative flex items-center justify-center transition duration-200 text-center;
+  aspect-ratio: 1/1;
 }
 
 .workspace--option::before {
-    border-radius: inherit;
-    content: "";
-    inset: 0;
-    -webkit-mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask-composite: xor;
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    padding: 1px;
-    pointer-events: none;
-    position: absolute;
-    background: linear-gradient(180deg, #383A41, #383A4120)
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
+  position: absolute;
+  background: linear-gradient(180deg, #383A41, #383A4120)
 }
 
 .workspace--option::after {
-    border-radius: inherit;
-    content: "";
-    inset: 0;
-    -webkit-mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask-composite: xor;
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    padding: 1px;
-    pointer-events: none;
-    position: absolute;
-    background: linear-gradient(var(--rotate), #8A54FE, #FE9154, #FE605414 50%);
-    opacity:0;
-    @apply transition duration-200
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
+  position: absolute;
+  background: linear-gradient(var(--rotate), #8A54FE, #FE9154, #FE605414 50%);
+  opacity: 0;
+  @apply transition duration-200
 }
 
 .workspace--option-box:hover .workspace--option::after {
-    opacity:0.6;
-    @apply transition duration-200
+  opacity: 0.6;
+  @apply transition duration-200
 }
 
 .workspace--plus {
-    @apply absolute left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 transition duration-200 rotate-0 opacity-50;
-    transform-origin:top;
+  @apply absolute left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 transition duration-200 rotate-0 opacity-50;
+  transform-origin: top;
 }
 
 .workspace--sol {
-    @apply absolute left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 transition duration-200 rotate-0;
-    transform-origin:top;
-    z-index:10000;
-    mix-blend-mode:overlay;
-    
+  @apply absolute left-1/2 top-1/2 transform -translate-y-1/2 -translate-x-1/2 transition duration-200 rotate-0;
+  transform-origin: top;
+  z-index: 10000;
+  mix-blend-mode: overlay;
+
 }
 
 .workspace--option:hover .workspace--plus {
-    @apply transform transition duration-200 rotate-90 opacity-100;
-    transform-origin:top;
+  @apply transform transition duration-200 rotate-90 opacity-100;
+  transform-origin: top;
 }
 
 .workspace--title {
-    @apply text-base font-medium text-lava-primary mt-6 mb-2
+  @apply text-base font-medium text-lava-primary mt-6 mb-2
 }
 
 .workspace--subtitle {
-    @apply text-sm font-normal text-lava-mute mt-0
+  @apply text-sm font-normal text-lava-mute mt-0
 }
 
 .wrapper {
-    @apply flex overflow-hidden w-full;
+  @apply flex overflow-hidden w-full;
 }
 
 .content {
-    @apply flex overflow-hidden w-full
+  @apply flex overflow-hidden w-full
 }
 
 .accounts {
-    @apply my-2 ml-2 flex
+  @apply my-2 ml-2 flex
 }
 
 .accounts--sidebar {
-    @apply w-[275px] overflow-hidden flex flex-col h-[99.5%] bg-lava-900 border-solid border-1 border-lava-800 p-3 relative rounded-lg box-border;
+  @apply w-[275px] overflow-hidden flex flex-col h-[99.5%] bg-lava-900 border-solid border-1 border-lava-800 p-3 relative rounded-lg box-border;
 }
 
 .gradient {
-    @apply z-10 absolute -left-[45%] -bottom-[100%] overflow-hidden opacity-50
+  @apply z-10 absolute -left-[45%] -bottom-[100%] overflow-hidden opacity-50
 }
 
 .accounts--sidebar-header {
-    @apply flex w-full justify-center;
-    background: radial-gradient(100% 100% at 50% 0.00%, #F4F4F5 0%, #A0A0AB 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+  @apply flex w-full justify-center;
+  background: radial-gradient(100% 100% at 50% 0.00%, #F4F4F5 0%, #A0A0AB 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 
 }
 
 .accounts--sidebar-title {
-    @apply text-lg font-medium
+  @apply text-lg font-medium
 }
 
 .accounts--sidebar--search {
-    @apply relative mt-3
+  @apply relative mt-3
 }
 
 .accounts--sidebar--input {
-    @apply w-full h-[42px] indent-lg text-lg text-[14px] text-lava-white p-4 box-border outline-none rounded-[10px] bg-lava-bg border-none;
+  @apply w-full h-[42px] indent-lg text-lg text-[14px] text-lava-white p-4 box-border outline-none rounded-[10px] bg-lava-bg border-none;
 }
 
 .accounts--search--icon {
-    @apply absolute p-3 items-center inset-y-0 left-2 flex left-0 bg-lava-bg rounded-xl
+  @apply absolute p-3 items-center inset-y-0 left-2 flex left-0 bg-lava-bg rounded-xl
 }
 
 .accounts--sidebar--input::placeholder {
-    @apply text-lava-mute
+  @apply text-lava-mute
 }
 
 .sidebar--bottom {
-    @apply mt-auto mb-4;
+  @apply mt-auto mb-4;
 }
 
 .connect {
-    @apply relative
+  @apply relative
 }
 
 .connect--button {
-    @apply relative h-8 w-8 rounded-lg flex justify-center items-center cursor-pointer bg-lava-900 hover:bg-lava-800 hover:bg-opacity-50 transition duration-100;
+  @apply relative h-8 w-8 rounded-lg flex justify-center items-center cursor-pointer bg-lava-900 hover:bg-lava-800 hover:bg-opacity-50 transition duration-100;
 }
 
 .popover {
-    @apply absolute w-max bg-lava-800 bg-opacity-[80%] rounded-lg border-lava-700 border-opacity-50 border border-solid p-2 px-3 text-sm;
-    z-index:99999999999999999999999;
+  @apply absolute w-max bg-lava-800 bg-opacity-[80%] rounded-lg border-lava-700 border-opacity-50 border border-solid p-2 px-3 text-sm;
+  z-index: 99999999999999999999999;
 }
 
 .popover--message {
-    @apply text-lava-white font-medium mb-0 mt-0
+  @apply text-lava-white font-medium mb-0 mt-0
 }
 
 .connect--change {
-    @apply !text-lava-mute text-xs font-medium
+  @apply !text-lava-mute text-xs font-medium
 }
 
 .ping {
-    @apply relative flex h-3.5 w-3.5 items-center justify-center;
+  @apply relative flex h-3.5 w-3.5 items-center justify-center;
 }
 
 .ping--outer {
-    @apply absolute inline-flex h-full w-full rounded-full bg-lava-success opacity-20;
+  @apply absolute inline-flex h-full w-full rounded-full bg-lava-success opacity-20;
 }
 
 .ping--inner {
-    @apply relative inline-flex rounded-full h-1.5 w-1.5 bg-lava-success z-10
+  @apply relative inline-flex rounded-full h-1.5 w-1.5 bg-lava-success z-10
 }
 
 .ping--pulse {
-    @apply absolute inline-flex h-full w-full rounded-full bg-lava-success opacity-20;
-    animation: ping-pulse 1.8s infinite;
+  @apply absolute inline-flex h-full w-full rounded-full bg-lava-success opacity-20;
+  animation: ping-pulse 1.8s infinite;
 }
 
 @keyframes ping-pulse {
-	0% {
-		transform: scale(0);
-        opacity: 0;
-	}
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
 
-	50% {
-		transform: scale(0);
-        opacity: 1;
-	}
+  50% {
+    transform: scale(0);
+    opacity: 1;
+  }
 
-	100% {
-		transform: scale(1);
-        opacity: 0;
-	}
+  100% {
+    transform: scale(1);
+    opacity: 0;
+  }
 }
 
 .accounts--list {
-    @apply mt-4 flex flex-col w-full;
+  @apply mt-4 flex flex-col w-full;
 }
 
 .account {
-    @apply p-2 flex items-center w-full border-b-gray-700 flex-shrink-0 transition duration-200 box-border hover:bg-lava-bg outline-[1px] hover:outline-lava-800 rounded-lg cursor-pointer mb-1;
+  @apply p-2 flex items-center w-full border-b-gray-700 flex-shrink-0 transition duration-200 box-border hover:bg-lava-bg outline-[1px] hover:outline-lava-800 rounded-lg cursor-pointer mb-1;
 }
 
 .account--info {
-    @apply flex flex-col w-full;
+  @apply flex flex-col w-full;
 }
 
 .account--testing--for {
-    @apply text-lava-mute text-xs font-medium
+  @apply text-lava-mute text-xs font-medium
 }
 
 .accounts--subheading {
-    @apply my-2 text-lava-mute font-medium text-[14px] pl-3
+  @apply my-2 text-lava-mute font-medium text-[14px] pl-3
 }
 
 .account--image {
-    @apply flex-shrink-0 mr-4
+  @apply flex-shrink-0 mr-4
 }
 
 .account--name {
-    @apply my-0
+  @apply my-0
 }
 
 .accounts--sidebar-back {
@@ -404,802 +404,816 @@ body {
 }
 
 .account--info--header {
-    @apply text-[16px] font-medium text-lava-white mb-1.5 mt-0 flex items-center space-x-2 w-full flex-shrink-0 box-border
+  @apply text-[16px] font-medium text-lava-white mb-1.5 mt-0 flex items-center space-x-2 w-full flex-shrink-0 box-border
 }
 
 .account--address {
-    @apply text-lava-mute truncate w-[60%] mt-0 mb-0 text-sm
+  @apply text-lava-mute truncate w-[60%] mt-0 mb-0 text-sm
 }
 
 .account--view-type {
-    @apply flex gap-x-1 items-center justify-center absolute right-2.5 top-2.5 text-[14px] px-1.5 p-1 bg-lava-900 border-lava-800 border border-solid rounded-lg
+  @apply flex gap-x-1 items-center justify-center absolute right-2.5 top-2.5 text-[14px] px-1.5 p-1 bg-lava-900 border-lava-800 border border-solid rounded-lg
 }
 
 .account--view-option {
-    @apply space-x-1 flex items-center rounded-md p-1 px-2 opacity-50 hover:bg-lava-700 hover:bg-opacity-60 cursor-pointer transition transition-all duration-300
+  @apply space-x-1 flex items-center rounded-md p-1 px-2 opacity-50 hover:bg-lava-700 hover:bg-opacity-60 cursor-pointer transition transition-all duration-300
 }
 
 .view--selected {
-    @apply bg-lava-700 font-medium text-lava-white opacity-100 bg-opacity-70 !hover:bg-opacity-70 transition transition-all duration-300
+  @apply bg-lava-700 font-medium text-lava-white opacity-100 bg-opacity-70 !hover:bg-opacity-70 transition transition-all duration-300
 }
 
 .account--view-icon {
-    @apply w-[14px] h-[14px]
+  @apply w-[14px] h-[14px]
 }
 
 .no--text {
-    @apply hidden
+  @apply hidden
 }
 
 .view--text {
-    @apply px-0.5
+  @apply px-0.5
 }
 
 .new--account {
-    @apply mt-auto text-sm text-white font-medium gap-x-2
+  @apply mt-auto text-sm text-white font-medium gap-x-2
 }
 
 .new--account img {
-    @apply w-[18px] filter brightness-150
+  @apply w-[18px] filter brightness-150
 }
 
 .blank--program:hover {
-    background:linear-gradient(180deg, rgb(94, 230, 173, 0.1), #1E1F22);
-    @apply transition transition-opacity duration-200;
-    border-radius:inherit;
+  background: linear-gradient(180deg, rgb(94, 230, 173, 0.1), #1E1F22);
+  @apply transition transition-opacity duration-200;
+  border-radius: inherit;
 }
 
 .blank--program::after {
-    border-radius: inherit;
-    content: "";
-    inset: 0;
-    -webkit-mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask-composite: xor;
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    padding: 1px;
-    pointer-events: none;
-    position: absolute;
-    background: linear-gradient(var(--rotate), transparent, #00C270, #146F48, transparent 100%);
-    opacity:0;
-    @apply transition duration-200
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
+  position: absolute;
+  background: linear-gradient(var(--rotate), transparent, #00C270, #146F48, transparent 100%);
+  opacity: 0;
+  @apply transition duration-200
 }
 
 .nft--program:hover {
-    background:linear-gradient(180deg, rgba(138, 84, 254, 0.1), #1E1F22);
-    border-radius:inherit;
-    @apply transition transition-opacity duration-200
+  background: linear-gradient(180deg, rgba(138, 84, 254, 0.1), #1E1F22);
+  border-radius: inherit;
+  @apply transition transition-opacity duration-200
 }
 
 .nft--program::after {
-    border-radius: inherit;
-    content: "";
-    inset: 0;
-    -webkit-mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask-composite: xor;
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    padding: 1px;
-    pointer-events: none;
-    position: absolute;
-    background: linear-gradient(var(--rotate), transparent, #8A54FE, #471E9E, transparent 100%);
-    opacity:0;
-    @apply transition duration-200
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
+  position: absolute;
+  background: linear-gradient(var(--rotate), transparent, #8A54FE, #471E9E, transparent 100%);
+  opacity: 0;
+  @apply transition duration-200
 }
 
 .token--program:hover {
-    background:linear-gradient(180deg, rgba(255, 190, 65, 0.1), #1E1F22);
-    border-radius:inherit;
-    @apply transition transition-opacity duration-200
+  background: linear-gradient(180deg, rgba(255, 190, 65, 0.1), #1E1F22);
+  border-radius: inherit;
+  @apply transition transition-opacity duration-200
 }
 
 .token--program::after {
-    border-radius: inherit;
-    content: "";
-    inset: 0;
-    -webkit-mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask-composite: xor;
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    padding: 1px;
-    pointer-events: none;
-    position: absolute;
-    background: linear-gradient(var(--rotate), transparent, #FFBE41, #825E18, transparent 100%);
-    opacity:0;
-    @apply transition duration-200
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
+  position: absolute;
+  background: linear-gradient(var(--rotate), transparent, #FFBE41, #825E18, transparent 100%);
+  opacity: 0;
+  @apply transition duration-200
 }
 
 .accounts--bottom {
-    @apply mt-auto
+  @apply mt-auto
 }
 
 .accounts--new {
-    @apply flex text-lava-mute font-medium text-sm mb-3 w-full justify-center items-center
+  @apply flex text-lava-mute font-medium text-sm mb-3 w-full justify-center items-center
 }
 
 .accounts--new img {
-    @apply w-[14px] mr-1
+  @apply w-[14px] mr-1
 }
 
 .accounts--buttons {
-    @apply flex space-x-1 items-center justify-center
+  @apply flex space-x-1 items-center justify-center
 }
 
 .modal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-  }
-
-  .modal--content {
-    @apply p-5 bg-lava-900 rounded-xl w-[50%] relative;
-    z-index:10000000;
-  }
-
-  .modal--content::after {
-    border-radius: inherit;
-    content: "";
-    inset: 0;
-    -webkit-mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask-composite: xor;
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    padding: 1px;
-    pointer-events: none;
-    position: absolute;
-    background: linear-gradient(#383A41, #383A4120 100%);
-    opacity:1;
-    @apply transition duration-200
-  }
-
-
-  .modal--variant::after {
-    border-radius: inherit;
-    content: "";
-    inset: 0;
-    -webkit-mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask-composite: xor;
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    padding: 1px;
-    pointer-events: none;
-    position: absolute;
-    background: linear-gradient(var(--borderColor), #383A4120 100%) !important;
-    opacity:0.2;
-    @apply transition duration-200
-  }
-
-  .modal--background {
-    @apply bg-lava-bg bg-opacity-90 w-full h-full absolute backdrop-filter backdrop-blur-sm
-  }
-
-  .btns--modal {
-    @apply w-full flex space-x-2 mt-4
-  }
-
-  .modal--title {
-    @apply mt-0 mb-0 text-xl font-medium
-  }
-
-  .common--subtitle {
-    @apply mb-5 text-lg font-medium text-lava-mute
-  }
-
-
-  .modal--form-title {
-    @apply mb-2 mt-4 text-sm font-medium text-lava-secondary
-  }
-
-  .modal--form {
-    @apply pt-2 pb-2 border-t border-b-0 border-r-0 border-l-0
-  }
-
-  .common--wrapper {
-    @apply w-full h-screen flex px-12 pt-8
-  } 
-
-  .tokens--title {
-    @apply my-0
-  }
-
-  .workspace--home {
-    @apply w-full h-screen flex items-center
-  }
-
-  .workspace--left {
-    @apply w-[60%] h-full flex flex-col items-center px-24 
-  }
-
-  .workspace--right {
-    @apply w-[40%] h-full border-left bg-[#0B0B0D] border-lava-800 border-l border-solid border-b-none border-r-none border-t-none bg-opacity-20
-  }
-
-  .workspace--logo {
-    @apply w-[150px] mb-4
-  }
-
-  .workspace--home--title {
-    @apply text-4xl font-bold
-  }
-
-  .workspace--home--title span {
-    background: radial-gradient(100% 100% at 50% 0.00%, rgb(244, 244, 245, 0.2) 0%, rgb(244, 244, 245, 0.6) 100%), linear-gradient(107deg, #FE9154 0%, #FE6054 50.19%, #8A54FE 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-  
-  .workspace--home--version {
-    @apply text-lava-mute absolute relative 
-  }
-
-  .workspace--home--header {
-    @apply flex flex-col items-center space-y-2 pt-12
-  }
-
-  .workspace--home--create {
-    @apply flex flex-col justify-start mt-16 w-full box-border
-  }
-
-  .workspace--home--recents {
-    @apply flex flex-col justify-start mt-12 px-12 w-full box-border
-  }
-
-  .workspace--create--title {
-    @apply text-[16px] font-medium text-lava-mute
-  }
-
-  .workspace--create--options {
-    @apply flex flex-col gap-[15px] divide-y divide-light-50 mt-7
-  }
-
-  .workspace--create--option {
-    @apply flex flex-row items-start items-center
-  }
-
-  .workspace--option-btn {
-    @apply ml-auto h-[40px] w-[80px];
-  }
-
-  .workspace--create--text {
-    @apply block space-y-1 
-  }
-
-  .workspace--create--text--title {
-    @apply text-[16px] text-lava-white font-medium mb-2
-  }
-
-  .workspace--create--text--subtitle {
-    @apply text-[14px] text-lava-secondary
-  }
-
-  .workspace--option-img {
-    @apply w-[40px] h-[40px] flex-shrink-0 mr-3
-  }
-  
-  .divider {
-    @apply w-full my-0 opacity-50 !border-lava-700 border-solid
-  }
-
-  .workspace--active {
-    @apply ml-auto text-lava-success text-sm;
-  }
-
-  .disabled--workspace {
-    @apply ml-4
-  }
-
-  .common--header {
-    @apply w-full flex mb-8 pr-4 box-border items-center;
-  }
-
-  .back--button {
-    @apply hover:transform hover:-translate-x-2 duration-200 transition cursor-pointer;
-  }
-
-  .common--title {
-    @apply font-bold mb-8 mt-0 text-3xl; 
-    background: radial-gradient(50% 50.00% at 50% 50.00%, #F4F4F5 0%, #D1D1D6 100%);
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    width:max-content;
-    display:flex;
-  }
-
-  .tokens {
-    @apply flex flex-col w-full h-full relative;
-  }
-
-  .token--list {
-    @apply grid lg:grid-cols-4 gap-2 relative max-h-[75vh] w-[98%] select-none;
-  }
-
-  .wallet--list {
-    @apply grid lg:grid-cols-4 gap-2 relative max-h-[75vh] w-[98%] pr-4 overflow-y-auto;
-  }
-
-  .wallet--info {
-    @apply flex space-x-2 items-center
-  }
-
-  .wallet--name {
-    @apply my-0 text-lg text-lava-primary font-bold
-  }
-
-  .wallet--modal--name {
-    @apply my-0 text-lava-primary font-semibold
-  }
-
-  .wallet--address {
-    @apply text-lava-mute truncate max-w-[95%] font-mono;
-  }
-
-  .wallet--list--item {
-    @apply w-full h-[200px] bg-lava-card rounded-2xl box-border relative overflow-hidden p-[1.5px] flex flex-col;
-    z-index:0;
-  }
-
-  .wallet--list--content::after {
-    content: "";
-    @apply absolute h-[60%] w-full top-0 left-0;
-    opacity:1;
-    background: linear-gradient(180deg, var(--bgColor), transparent 100%);
-    z-index:0;
-  }
-
-  .wallet--list--item:hover::before {
-    opacity:0;
-    @apply transition duration-500
-  }
-
-  .wallet--list--item::before {
-      border-radius: 15px;
-      @apply transition duration-500;
-      content: "";
-      inset: 0px;
-      -webkit-mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-      mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-      mask-composite: xor;
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      padding: 1px;
-      pointer-events: none;
-      position: absolute;
-      z-index:0;
-      opacity:0.6;
-      background: linear-gradient(30deg, transparent, transparent, var(--color), var(--color2), transparent, transparent 100%);
-  }
-
-  .wallet--list--content {
-    @apply items-start cursor-pointer transition-all box-border w-full h-full bg-lava-card bg-opacity-90  rounded-2xl p-5 py-4 box-border relative overflow-hidden space-y-2 flex flex-col;
-    aspect-ratio:4/3;
-    z-index:999;
-  }
-
-  .token--list--item {
-    @apply items-start cursor-pointer box-border w-full h-full bg-lava-card rounded-2xl p-5 py-4 box-border relative overflow-hidden space-y-2 flex flex-col;
-    aspect-ratio:4/3;
-  }
-
-  .token--list--item--shimmer {
-    position: absolute;
-    top: calc(var(--top) * 1px - 100px);
-    left: calc(var(--left) * 1px - 100px);
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(var(--color) 0%, transparent 100%);
-    z-index:0;
-    display:none;
-    border-radius:999999px;
-    filter:blur(20px)
-  }
-  
-  .wallet--list--item:hover > .token--list--item--shimmer {
-    display:block;
-    opacity:0.5;
-  }
-
-  .wallet--footer {
-    @apply text-base text-lava-secondary !mt-auto font-medium flex-col items-center space-y-2;
-  }
-
-  .wallet--tokens--list {
-    @apply flex relative items-center gap-x-1;
-  }
-
-  .wallet--tokens {
-    @apply text-lava-mute font-medium mt-6 mb-2
-  }
-
-  .wallet--footer span {
-    @apply font-mono text-lava-mute text-sm tracking-wider
-  } 
-
-  .token--name {
-    @apply text-[20px] font-bold !mt-auto;
-  }
-
-  .token--header {
-    @apply flex items-center 
-  }
-
-  .token--supply {
-    color: var(--color);
-    @apply filter brightness-120 text-[16px] font-medium font-mono;
-  }
-
-  .token--owner {
-    @apply !mt-4 text-lava-mute text-sm font-medium flex items-center
-  }
-
-  .token--owner-icon {
-    @apply mr-1 w-[16px] h-[16px]
-  }
-
-  .token--ticker {
-    @apply ml-2 font-bold text-lg
-  }
-
-  .token--list--item::before {
-    border-radius: inherit;
-    content: "";
-    inset: 0;
-    -webkit-mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask-composite: xor;
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    padding: 1px;
-    pointer-events: none;
-    overflow:hidden;
-    position: absolute;
-    z-index:100;
-    opacity:var(--opacity);
-    background: linear-gradient(30deg, transparent, transparent, var(--color), var(--color2), transparent, transparent 100%);
-  }
-
-  .new--token {
-    @apply cursor-pointer hover:filter hover:brightness-125 duration-200 transition;
-  }
-
-  .wallet--modal--list {
-    @apply grid grid-cols-2 w-full gap-3;
-  }
-
-  .wallet--modal--item {
-    @apply w-full h-full rounded-xl bg-lava-700 flex flex-col bg-opacity-20 border-lava-700 border-solid border p-3 box-border
-  }
-
-  .wallet--modal--item--amount {
-    @apply mt-1 flex items-center space-x-1
-  }
-
-  .wallet--modal--item--amount span {
-    @apply text-lava-mute font-medium
-  }
-
-  .wallet--modal--item--header {
-    @apply flex items-center space-x-2
-  }
-
-  .new--token::before {
-    border-radius: inherit;
-    content: "";
-    inset: 0;
-    -webkit-mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask: linear-gradient(black 0 0) content-box,linear-gradient(black 0 0);
-    mask-composite: xor;
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    padding: 1px;
-    pointer-events: none;
-    position: absolute;
-    opacity:0.4;
-    background: linear-gradient(180deg, var(--color), transparent 100%);
-  }
-
-  .new--wallet-text {
-    @apply text-lg text-lava-white font-medium;
-  }
-
-  .token--list--item::after {
-    content: "";
-    @apply absolute h-[60%] w-full top-0 left-0;
-    background: linear-gradient(180deg, var(--bgColor), transparent 100%)
-  }
-
-  .new--wallet {
-    @apply !mt-auto flex items-center;
-  }
-
-  .new--wallet-icon {
-    @apply w-[16px] h-[16px] mr-2
-  }
-
-  .modal--form--group {
-    @apply relative;
-  }
-
-  .dropdown {
-    @apply w-full relative;
-  }
-
-  .dropdown--content {
-    @apply absolute top-10 w-full left-0 p-1 h-max bg-lava-bg rounded-b-lg border border-lava-800 border-t-0 border-solid box-border;
-    z-index:9999999;
-  }
-
-  .dropdown--options {
-    @apply flex flex-col overflow-y-auto max-h-30
-  }
-
-  .dropdown--option {
-    @apply p-2.5 px-3 hover:bg-lava-900 transition duration-200 cursor-pointer rounded-lg
-  }
-
-
- .wallet--list::-webkit-scrollbar {
-    width: 0.5em;
-    }
-  
-  
- .wallet--list::-webkit-scrollbar-thumb {
-    @apply bg-lava-700;
-    border-radius:10px;
-  }
-  
-  .dropdown--options:-webkit-scrollbar {
-    width: 0.5em;
-    }
-  
-  
- .dropdown--options::-webkit-scrollbar-thumb {
-    @apply bg-lava-700;
-    border-radius:10px;
-  }
-  
-  .token--list:-webkit-scrollbar {
-    width: 0.5em;
-    }
-  
-  
- .token--list::-webkit-scrollbar-thumb {
-    @apply bg-lava-700;
-    border-radius:10px;
-  }
-  
-
-  a {
-    text-decoration:none;
-  }
-
-  .svelte-select {
-    position:relative;
-    @apply w-full box-border;
-  }
-
-  .svelte-select input {
-    @apply w-full mt-0  p-3 transition font-medium duration-200 box-border rounded-[10px] bg-lava-bg text-lava-primary border border-solid border-lava-800 hover:border-lava-700 outline-none placeholder-lava-mute text-sm
-  }
-
-  .svelte-select-list {
-    @apply w-full p-1 bg-lava-bg -mt-3 box-border transition transition-opacity duration-100 rounded-b-[10px] border border-solid border-lava-800 border-t-0 overflow-hidden;
-    z-index:99999999;
-  }
-
-  .svelte-select-list .item {
-    @apply p-3 hover:bg-lava-800 transition duration-200 cursor-pointer rounded-lg text-sm font-medium flex w-full box-border
-  }
-
-  .svelte-select input {
-    caret-color: transparent;
-  }
-
-  .list-open input {
-    @apply rounded-b-none;
-    caret-color: white !important;
-  }
-  
-  
-  .svelte-select span {
-    @apply hidden;
-  }
-
-  .svelte-select .selected-item {
-    @apply absolute top-[50%] text-sm transform leading-none -translate-y-[50%] left-3.5 font-medium overflow-hidden
-  }
-
-  .svelte-select .indicators {
-    @apply absolute right-2 bottom-2.5 flex
-  }
-
-  .svelte-select .clear-select {
-    @apply w-[32px] h-[32px] p-2 flex cursor-pointer items-center text-lava-mute hover:text-lava-secondary duration-200 transition justify-center box-border bg-transparent border-none outline-none
-  }
-
-  .select--option {
-    @apply flex items-center space-x-2 overflow-hidden box-border
-  }
-
-  .svelte-select .empty {
-    @apply p-3
-  }
-
-  .select--text {
-    @apply text-lava-primary font-medium
-  }
-  
-  .select--address {
-    @apply w-24 truncate ml-auto text-lava-mute text-sm
-  }
-
-  .hide-selected-item {
-    @apply hidden
-  }
-
-  .empty--state {
-    @apply w-full h-[75vh] flex justify-center items-center flex-col gap-y-2
-  }
-
-  .empty--state--text {
-    @apply text-xl text-lava-primary font-semibold mb-4
-  }
-  .empty--state--subtext {
-    @apply text-lava-mute mt-0 -mt-4 mb-4
-  }
-
-  .empty--state--image {
-    @apply w-[33vw] mb-6
-  }
-
-  .empty--state--modal {
-    @apply w-full flex justify-center items-center flex-col gap-y-2
-  }
-
-  .empty--state--image--modal {
-    @apply w-[70%] my-6
-  }
-
-  .assign--tokens--wrapper {
-    @apply flex items-center space-x-4 h-full w-full mt-6
-  }
-
-  .assign--tokens {
-    @apply flex items-center w-full h-[55px] box-border rounded-xl bg-lava-700 bg-opacity-10 border-lava-700 border border-solid border-opacity-20 p-1 space-x-2
-  }
-
-  .assign--tokens--wallet {
-    @apply w-full;
-  }
-
-  .assign--button {
-    @apply flex items-center justify-center rounded-xl box-border bg-lava-700 bg-opacity-20 border-lava-700 border border-solid border-opacity-50 p-3 cursor-pointer hover:bg-opacity-40 transition duration-200;
-  }
-
-  .assign--button--image {
-    @apply w-[16px] h-[16px]
-  }
-
-  .assign--tokens--amount {
-    @apply w-[50%]
-  }
-
-  .assigned--header {
-    @apply text-lava-mute text-sm font-medium mt-4
-  }
-
-  .assigned--tokens {
-    @apply flex flex-col gap-y-2 mt-2 overflow-auto pr-4 max-h-[150px]
-  }
-
-  .assigned--tokens::-webkit-scrollbar {
-    width: 0.3em !important;
-    }
-  
-  
-  .assigned--tokens::-webkit-scrollbar-thumb {
-      @apply !bg-lava-700;
-      border-radius:10px !important;
-    }
-
-  .assigned--token {
-    @apply flex w-full items-center h-full bg-lava-bg gap-x-2 bg-opacity-40 border-lava-700 border border-solid border-opacity-40 p-3 rounded-lg box-border
-  }
-
-  .assigned--wallet--name {
-    @apply font-semibold text-sm
-  }
-
-  .assigned--wallet--amount {
-    @apply !ml-auto font-medium font-mono text-lava-mute;
-  }
-
-  .test--result {
-    @apply flex gap-x-1 items-center justify-center w-full box-border
-  }
-
-  .test--result--success {
-    @apply hover:opacity-60 gap-x-2 cursor-pointer transition duration-200 flex items-center justify-center text-lava-success p-2.5 w-full h-full bg-lava-success bg-opacity-5 border border-solid border-lava-success border-opacity-20 rounded-xl box-border opacity-20
-  }
-
-  .test--result--icon {
-    @apply w-[16px] h-[16px]
-  }
-  
-  .test--result--fail {
-    @apply hover:opacity-60 gap-x-2 cursor-pointer transition duration-200 flex items-center justify-center text-lava-error p-2.5 w-full h-full bg-lava-error bg-opacity-5 border border-solid border-lava-error border-opacity-20 rounded-xl box-border opacity-20
-  }
-
-  .result--selected {
-    @apply opacity-100 hover:!opacity-100
-  }
-
-  .bordered-container {
-    border: rgb(38, 39, 43) solid 1px;
-    padding: 1rem;
-    margin: 1rem;
-    border-radius: 1rem;
-  }
-
-  .trash {
-    position: absolute;
-    top: 1rem;
-    right: 1rem;
-    z-index: 100;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-  }
-
-  .relative:hover .trash {
-    cursor: pointer;
-    width: 2rem;
-    height: 2rem;
-  }
-
-  .trash img {
-    width: 100%;
-    height: 100%;
-  }
-
-  .relative {
-    position: relative;
-  }
-
-  .border-lava-error{
-    @apply border-lava-error
-  }
-
-
-  .edit {
-    position: absolute;
-    top: 1rem;
-    right: 3rem;
-    z-index: 100;
-    width: 0;
-    height: 0;
-    overflow: hidden;
-  }
-
-  .relative:hover .edit {
-    cursor: pointer;
-    width: 2rem;
-    height: 2rem;
-  }
-
-  .edit img {
-    width: 100%;
-    height: 100%;
-  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal--content {
+  @apply p-5 bg-lava-900 rounded-xl w-[50%] relative;
+  z-index: 10000000;
+}
+
+.modal--content::after {
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
+  position: absolute;
+  background: linear-gradient(#383A41, #383A4120 100%);
+  opacity: 1;
+  @apply transition duration-200
+}
+
+
+.modal--variant::after {
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
+  position: absolute;
+  background: linear-gradient(var(--borderColor), #383A4120 100%) !important;
+  opacity: 0.2;
+  @apply transition duration-200
+}
+
+.modal--background {
+  @apply bg-lava-bg bg-opacity-90 w-full h-full absolute backdrop-filter backdrop-blur-sm
+}
+
+.btns--modal {
+  @apply w-full flex space-x-2 mt-4
+}
+
+.modal--title {
+  @apply mt-0 mb-0 text-xl font-medium
+}
+
+.common--subtitle {
+  @apply mb-5 text-lg font-medium text-lava-mute
+}
+
+
+.modal--form-title {
+  @apply mb-2 mt-4 text-sm font-medium text-lava-secondary
+}
+
+.modal--form {
+  @apply pt-2 pb-2 border-t border-b-0 border-r-0 border-l-0
+}
+
+.common--wrapper {
+  @apply w-full h-screen flex px-12 pt-8
+}
+
+.tokens--title {
+  @apply my-0
+}
+
+.workspace--home {
+  @apply w-full h-screen flex items-center
+}
+
+.workspace--left {
+  @apply w-[60%] h-full flex flex-col items-center px-24
+}
+
+.workspace--right {
+  @apply w-[40%] h-full border-left bg-[#0B0B0D] border-lava-800 border-l border-solid border-b-none border-r-none border-t-none bg-opacity-20
+}
+
+.workspace--logo {
+  @apply w-[150px] mb-4
+}
+
+.workspace--home--title {
+  @apply text-4xl font-bold
+}
+
+.workspace--home--title span {
+  background: radial-gradient(100% 100% at 50% 0.00%, rgb(244, 244, 245, 0.2) 0%, rgb(244, 244, 245, 0.6) 100%), linear-gradient(107deg, #FE9154 0%, #FE6054 50.19%, #8A54FE 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.workspace--home--version {
+  @apply text-lava-mute absolute relative
+}
+
+.workspace--home--header {
+  @apply flex flex-col items-center space-y-2 pt-12
+}
+
+.workspace--home--create {
+  @apply flex flex-col justify-start mt-16 w-full box-border
+}
+
+.workspace--home--recents {
+  @apply flex flex-col justify-start mt-12 px-12 w-full box-border
+}
+
+.workspace--create--title {
+  @apply text-[16px] font-medium text-lava-mute
+}
+
+.workspace--create--options {
+  @apply flex flex-col gap-[15px] divide-y divide-light-50 mt-7
+}
+
+.workspace--create--option {
+  @apply flex flex-row items-start items-center
+}
+
+.workspace--option-btn {
+  @apply ml-auto h-[40px] w-[80px];
+}
+
+.workspace--create--text {
+  @apply block space-y-1
+}
+
+.workspace--create--text--title {
+  @apply text-[16px] text-lava-white font-medium mb-2
+}
+
+.workspace--create--text--subtitle {
+  @apply text-[14px] text-lava-secondary
+}
+
+.workspace--option-img {
+  @apply w-[40px] h-[40px] flex-shrink-0 mr-3
+}
+
+.divider {
+  @apply w-full my-0 opacity-50 !border-lava-700 border-solid
+}
+
+.workspace--active {
+  @apply ml-auto text-lava-success text-sm;
+}
+
+.disabled--workspace {
+  @apply ml-4
+}
+
+.common--header {
+  @apply w-full flex mb-8 pr-4 box-border items-center;
+}
+
+.back--button {
+  @apply hover:transform hover:-translate-x-2 duration-200 transition cursor-pointer;
+}
+
+.common--title {
+  @apply font-bold mb-8 mt-0 text-3xl;
+  background: radial-gradient(50% 50.00% at 50% 50.00%, #F4F4F5 0%, #D1D1D6 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  width: max-content;
+  display: flex;
+}
+
+.tokens {
+  @apply flex flex-col w-full h-full relative;
+}
+
+.token--list {
+  @apply grid lg:grid-cols-4 gap-2 relative max-h-[75vh] w-[98%] select-none;
+}
+
+.wallet--list {
+  @apply grid lg:grid-cols-4 gap-2 relative max-h-[75vh] w-[98%] pr-4 overflow-y-auto;
+}
+
+.wallet--info {
+  @apply flex space-x-2 items-center
+}
+
+.wallet--name {
+  @apply my-0 text-lg text-lava-primary font-bold
+}
+
+.wallet--modal--name {
+  @apply my-0 text-lava-primary font-semibold
+}
+
+.wallet--address {
+  @apply text-lava-mute truncate max-w-[95%] font-mono;
+}
+
+.wallet--list--item {
+  @apply w-full h-[200px] bg-lava-card rounded-2xl box-border relative overflow-hidden p-[1.5px] flex flex-col;
+  z-index: 0;
+}
+
+.wallet--list--content::after {
+  content: "";
+  @apply absolute h-[60%] w-full top-0 left-0;
+  opacity: 1;
+  background: linear-gradient(180deg, var(--bgColor), transparent 100%);
+  z-index: 0;
+}
+
+.wallet--list--item:hover::before {
+  opacity: 0;
+  @apply transition duration-500
+}
+
+.wallet--list--item::before {
+  border-radius: 15px;
+  @apply transition duration-500;
+  content: "";
+  inset: 0px;
+  -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
+  position: absolute;
+  z-index: 0;
+  opacity: 0.6;
+  background: linear-gradient(30deg, transparent, transparent, var(--color), var(--color2), transparent, transparent 100%);
+}
+
+.wallet--list--content {
+  @apply items-start cursor-pointer transition-all box-border w-full h-full bg-lava-card bg-opacity-90 rounded-2xl p-5 py-4 box-border relative overflow-hidden space-y-2 flex flex-col;
+  aspect-ratio: 4/3;
+  z-index: 999;
+}
+
+.token--list--item {
+  @apply items-start cursor-pointer box-border w-full h-full bg-lava-card rounded-2xl p-5 py-4 box-border relative overflow-hidden space-y-2 flex flex-col;
+  aspect-ratio: 4/3;
+}
+
+.token--list--item--shimmer {
+  position: absolute;
+  top: calc(var(--top) * 1px - 100px);
+  left: calc(var(--left) * 1px - 100px);
+  width: 200px;
+  height: 200px;
+  background: radial-gradient(var(--color) 0%, transparent 100%);
+  z-index: 0;
+  display: none;
+  border-radius: 999999px;
+  filter: blur(20px)
+}
+
+.wallet--list--item:hover>.token--list--item--shimmer {
+  display: block;
+  opacity: 0.5;
+}
+
+.wallet--footer {
+  @apply text-base text-lava-secondary !mt-auto font-medium flex-col items-center space-y-2;
+}
+
+.wallet--tokens--list {
+  @apply flex relative items-center gap-x-1;
+}
+
+.wallet--tokens {
+  @apply text-lava-mute font-medium mt-6 mb-2
+}
+
+.wallet--footer span {
+  @apply font-mono text-lava-mute text-sm tracking-wider
+}
+
+.token--name {
+  @apply text-[20px] font-bold !mt-auto;
+}
+
+.token--header {
+  @apply flex items-center
+}
+
+.token--supply {
+  color: var(--color);
+  @apply filter brightness-120 text-[16px] font-medium font-mono;
+}
+
+.token--owner {
+  @apply !mt-4 text-lava-mute text-sm font-medium flex items-center
+}
+
+.token--owner-icon {
+  @apply mr-1 w-[16px] h-[16px]
+}
+
+.token--ticker {
+  @apply ml-2 font-bold text-lg
+}
+
+.token--list--item::before {
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
+  overflow: hidden;
+  position: absolute;
+  z-index: 100;
+  opacity: var(--opacity);
+  background: linear-gradient(30deg, transparent, transparent, var(--color), var(--color2), transparent, transparent 100%);
+}
+
+.new--token {
+  @apply cursor-pointer hover:filter hover:brightness-125 duration-200 transition;
+}
+
+.wallet--modal--list {
+  @apply grid grid-cols-2 w-full gap-3;
+}
+
+.wallet--modal--item {
+  @apply w-full h-full rounded-xl bg-lava-700 flex flex-col bg-opacity-20 border-lava-700 border-solid border p-3 box-border
+}
+
+.wallet--modal--item--amount {
+  @apply mt-1 flex items-center space-x-1
+}
+
+.wallet--modal--item--amount span {
+  @apply text-lava-mute font-medium
+}
+
+.wallet--modal--item--header {
+  @apply flex items-center space-x-2
+}
+
+.new--token::before {
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  pointer-events: none;
+  position: absolute;
+  opacity: 0.4;
+  background: linear-gradient(180deg, var(--color), transparent 100%);
+}
+
+.new--wallet-text {
+  @apply text-lg text-lava-white font-medium;
+}
+
+.token--list--item::after {
+  content: "";
+  @apply absolute h-[60%] w-full top-0 left-0;
+  background: linear-gradient(180deg, var(--bgColor), transparent 100%)
+}
+
+.new--wallet {
+  @apply !mt-auto flex items-center;
+}
+
+.new--wallet-icon {
+  @apply w-[16px] h-[16px] mr-2
+}
+
+.modal--form--group {
+  @apply relative;
+}
+
+.dropdown {
+  @apply w-full relative;
+}
+
+.dropdown--content {
+  @apply absolute top-10 w-full left-0 p-1 h-max bg-lava-bg rounded-b-lg border border-lava-800 border-t-0 border-solid box-border;
+  z-index: 9999999;
+}
+
+.dropdown--options {
+  @apply flex flex-col overflow-y-auto max-h-30
+}
+
+.dropdown--option {
+  @apply p-2.5 px-3 hover:bg-lava-900 transition duration-200 cursor-pointer rounded-lg
+}
+
+
+.wallet--list::-webkit-scrollbar {
+  width: 0.5em;
+}
+
+
+.wallet--list::-webkit-scrollbar-thumb {
+  @apply bg-lava-700;
+  border-radius: 10px;
+}
+
+.dropdown--options:-webkit-scrollbar {
+  width: 0.5em;
+}
+
+
+.dropdown--options::-webkit-scrollbar-thumb {
+  @apply bg-lava-700;
+  border-radius: 10px;
+}
+
+.token--list:-webkit-scrollbar {
+  width: 0.5em;
+}
+
+
+.token--list::-webkit-scrollbar-thumb {
+  @apply bg-lava-700;
+  border-radius: 10px;
+}
+
+
+a {
+  text-decoration: none;
+}
+
+.svelte-select {
+  position: relative;
+  @apply w-full box-border;
+}
+
+.svelte-select input {
+  @apply w-full mt-0 p-3 transition font-medium duration-200 box-border rounded-[10px] bg-lava-bg text-lava-primary border border-solid border-lava-800 hover:border-lava-700 outline-none placeholder-lava-mute text-sm
+}
+
+.svelte-select-list {
+  @apply w-full p-1 bg-lava-bg -mt-3 box-border transition transition-opacity duration-100 rounded-b-[10px] border border-solid border-lava-800 border-t-0 overflow-hidden;
+  z-index: 99999999;
+}
+
+.svelte-select-list .item {
+  @apply p-3 hover:bg-lava-800 transition duration-200 cursor-pointer rounded-lg text-sm font-medium flex w-full box-border
+}
+
+.svelte-select input {
+  caret-color: transparent;
+}
+
+.list-open input {
+  @apply rounded-b-none;
+  caret-color: white !important;
+}
+
+
+.svelte-select span {
+  @apply hidden;
+}
+
+.svelte-select .selected-item {
+  @apply absolute top-[50%] text-sm transform leading-none -translate-y-[50%] left-3.5 font-medium overflow-hidden
+}
+
+.svelte-select .indicators {
+  @apply absolute right-2 bottom-2.5 flex
+}
+
+.svelte-select .clear-select {
+  @apply w-[32px] h-[32px] p-2 flex cursor-pointer items-center text-lava-mute hover:text-lava-secondary duration-200 transition justify-center box-border bg-transparent border-none outline-none
+}
+
+.select--option {
+  @apply flex items-center space-x-2 overflow-hidden box-border
+}
+
+.svelte-select .empty {
+  @apply p-3
+}
+
+.select--text {
+  @apply text-lava-primary font-medium
+}
+
+.select--address {
+  @apply w-24 truncate ml-auto text-lava-mute text-sm
+}
+
+.hide-selected-item {
+  @apply hidden
+}
+
+.empty--state {
+  @apply w-full h-[75vh] flex justify-center items-center flex-col gap-y-2
+}
+
+.empty--state--text {
+  @apply text-xl text-lava-primary font-semibold mb-4
+}
+
+.empty--state--subtext {
+  @apply text-lava-mute mt-0 -mt-4 mb-4
+}
+
+.empty--state--image {
+  @apply w-[33vw] mb-6
+}
+
+.empty--state--modal {
+  @apply w-full flex justify-center items-center flex-col gap-y-2
+}
+
+.empty--state--image--modal {
+  @apply w-[70%] my-6
+}
+
+.assign--tokens--wrapper {
+  @apply flex items-center space-x-4 h-full w-full mt-6
+}
+
+.assign--tokens {
+  @apply flex items-center w-full h-[55px] box-border rounded-xl bg-lava-700 bg-opacity-10 border-lava-700 border border-solid border-opacity-20 p-1 space-x-2
+}
+
+.assign--tokens--wallet {
+  @apply w-full;
+}
+
+.assign--button {
+  @apply flex items-center justify-center rounded-xl box-border bg-lava-700 bg-opacity-20 border-lava-700 border border-solid border-opacity-50 p-3 cursor-pointer hover:bg-opacity-40 transition duration-200;
+}
+
+.assign--button--image {
+  @apply w-[16px] h-[16px]
+}
+
+.assign--tokens--amount {
+  @apply w-[50%]
+}
+
+.assigned--header {
+  @apply text-lava-mute text-sm font-medium mt-4
+}
+
+.assigned--tokens {
+  @apply flex flex-col gap-y-2 mt-2 overflow-auto pr-4 max-h-[150px]
+}
+
+.assigned--tokens::-webkit-scrollbar {
+  width: 0.3em !important;
+}
+
+
+.assigned--tokens::-webkit-scrollbar-thumb {
+  @apply !bg-lava-700;
+  border-radius: 10px !important;
+}
+
+.assigned--token {
+  @apply flex w-full items-center h-full bg-lava-bg gap-x-2 bg-opacity-40 border-lava-700 border border-solid border-opacity-40 p-3 rounded-lg box-border
+}
+
+.assigned--wallet--name {
+  @apply font-semibold text-sm
+}
+
+.assigned--wallet--amount {
+  @apply !ml-auto font-medium font-mono text-lava-mute;
+}
+
+.test--result {
+  @apply flex gap-x-1 items-center justify-center w-full box-border
+}
+
+.test--result--success {
+  @apply hover:opacity-60 gap-x-2 cursor-pointer transition duration-200 flex items-center justify-center text-lava-success p-2.5 w-full h-full bg-lava-success bg-opacity-5 border border-solid border-lava-success border-opacity-20 rounded-xl box-border opacity-20
+}
+
+.test--result--icon {
+  @apply w-[16px] h-[16px]
+}
+
+.test--result--fail {
+  @apply hover:opacity-60 gap-x-2 cursor-pointer transition duration-200 flex items-center justify-center text-lava-error p-2.5 w-full h-full bg-lava-error bg-opacity-5 border border-solid border-lava-error border-opacity-20 rounded-xl box-border opacity-20
+}
+
+.result--selected {
+  @apply opacity-100 hover: !opacity-100
+}
+
+.bordered-container {
+  border: rgb(38, 39, 43) solid 1px;
+  padding: 1rem;
+  margin: 1rem;
+  border-radius: 1rem;
+}
+
+.trash {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 100;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.relative:hover .trash {
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+}
+
+.trash img {
+  width: 100%;
+  height: 100%;
+}
+
+.relative {
+  position: relative;
+}
+
+.border-lava-error {
+  @apply border-lava-error
+}
+
+.edit {
+  position: absolute;
+  top: 1rem;
+  right: 3rem;
+  z-index: 100;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.relative:hover .edit {
+  cursor: pointer;
+  width: 2rem;
+  height: 2rem;
+}
+
+.edit img {
+  width: 100%;
+  height: 100%;
+}
+
+.relative .tokens-button {
+  display: none;
+}
+
+.relative:hover .tokens-button {
+  display: inline;
+  background: transparent;
+  color: white;
+  border: 1px solid #383A41;
+  border-radius: 0.3rem;
+  padding-inline: 0;
+  width: 1.2rem;
+}

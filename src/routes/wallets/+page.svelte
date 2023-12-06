@@ -104,6 +104,7 @@
 
   import Popover from "../../components/Popover.svelte";
   import { PublicKey } from "@solana/web3.js";
+  import Select from "svelte-select/no-styles/Select.svelte";
 
   // function selectWallet(wallet) {
   //   selectedWallet.set(wallet)
@@ -175,6 +176,7 @@
       }
     }
   };
+
   let editingWallet = -1;
   const editWallet = (index) => {
     editingWallet = index;
@@ -200,6 +202,42 @@
       editingWallet = -1;
     }
   };
+
+  let isAddTokenModalOpen = false;
+
+  const addToken = () => {
+    console.log(symbol, amount);
+    if (symbol?.value && editingWallet !== -1) {
+      const index = $workspaces[$selectedWorkspace].wallets[
+        editingWallet
+      ].tokens.findIndex((token) => token.symbol === symbol?.value);
+      if (index !== -1) {
+        $workspaces[$selectedWorkspace].wallets[editingWallet].tokens[
+          index
+        ].amount = amount;
+      } else {
+        $workspaces[$selectedWorkspace].wallets[editingWallet].tokens= [
+          ...$workspaces[$selectedWorkspace].wallets[editingWallet].tokens,
+          {
+            symbol: symbol?.value,
+            amount,
+          },
+        ];
+      }
+      symbol = "";
+      amount = 1000000000;
+      isAddTokenModalOpen = false;
+      openedWallet = $workspaces[$selectedWorkspace].wallets[editingWallet];
+    }
+  };
+
+  const updateToken = (e) => {
+    symbol = e.detail;
+    amount = $workspaces[$selectedWorkspace]?.wallets[editingWallet]?.tokens?.find(
+      (token) => token.symbol === symbol?.value
+    )?.amount ?? 1000000000;
+    isViewModalOpen = false;
+  };
 </script>
 
 {#if ready}
@@ -209,7 +247,9 @@
     bind:isOpen={isCreateModalOpen}
     on:close={() => (isCreateModalOpen = false)}
   >
-    <h1 class="modal--title">{editingWallet == -1 ? "Create a new Wallet" : "Edit Wallet"}</h1>
+    <h1 class="modal--title">
+      {editingWallet == -1 ? "Create a new Wallet": "Edit Wallet"}
+    </h1>
     <div class="modal--form">
       <div class="modal--form-title">Wallet Name</div>
       <input
@@ -218,7 +258,9 @@
         bind:value={walletName}
       />
       <input
-        class={`input--primary${isValidAddress(walletAddress) ? "" : " border-lava-error"}`}
+        class={`input--primary${
+          isValidAddress(walletAddress) ? "" : " border-lava-error"
+        }`}
         placeholder="Assing an Address"
         bind:value={walletAddress}
       />
@@ -230,9 +272,12 @@
 
     <div class="btns--modal">
       <button
-        class={`btn btn--lava${isValidAddress(walletAddress) ? "" : " btn--disabled"}`}
+        class={`btn btn--lava${
+          isValidAddress(walletAddress) ? "" : " btn--disabled"
+        }`}
         disabled={!isValidAddress(walletAddress)}
-        on:click={() => { editingWallet == -1 ? addWallet() : onEditWallet();
+        on:click={() => {
+          editingWallet == -1 ? addWallet() : onEditWallet();
         }}>Save Wallet</button
       >
     </div>
@@ -299,6 +344,33 @@
     {/if}
   </Modal>
 
+  <!-- Add token modal -->
+  <Modal
+    bind:isOpen={isAddTokenModalOpen}
+    on:close={() => (isAddTokenModalOpen = false)}
+  >
+    <Select
+      on:change={updateToken}
+      placeholder="Select a token"
+      items={$workspaces[$selectedWorkspace]?.tokens.map(
+        ({ symbol }) => symbol
+      ) ?? []}
+    />
+    <input
+      class="input--primary"
+      placeholder="Assing an Address"
+      bind:value={amount}
+    />
+    <div class="btns--modal">
+      <button
+        class="btn btn--lava"
+        on:click={() => {
+          addToken();
+        }}>Save</button
+      >
+    </div>
+  </Modal>
+
   <div class="common--wrapper">
     <div class="tokens">
       <div class="common--header">
@@ -344,13 +416,24 @@
                     />
                     <div class="wallet--name">{wallet.name}</div>
                   </div>
-                  <div class="wallet--address">{`SOL Balance:${wallet.sol_balance}`}</div>
+                  <div class="wallet--address">
+                    {`SOL Balance:${wallet.sol_balance}`}
+                  </div>
                   <div class="wallet--address">
                     {wallet.address}
                   </div>
-                  {#if wallet?.tokens?.length > 0}
+
                     <div class="wallet--footer">
                       <span>TOKENS</span>
+                      <button
+                        class="tokens-button"
+                        type="button"
+                        on:click={() => {
+                          editingWallet = index;
+                          isAddTokenModalOpen = true;
+                        }}>+</button
+                      >
+                      {#if wallet?.tokens?.length > 0}
                       <div class="wallet--tokens--list">
                         {#each wallet.tokens as ownedToken, index}
                           {#if index < 4}
@@ -391,8 +474,9 @@
                           {/if}
                         {/each}
                       </div>
+                      {/if}
                     </div>
-                  {/if}
+
                 </div>
               </div>
               <div
@@ -412,8 +496,6 @@
                 <img src="./edit.svg" alt="Edit Icon" />
               </div>
             </div>
-            
-
           {/each}
         </div>
       {:else}
