@@ -175,6 +175,31 @@
       }
     }
   };
+  let editingWallet = -1;
+  const editWallet = (index) => {
+    editingWallet = index;
+    walletName = $workspaces[$selectedWorkspace].wallets[index].name;
+    walletAddress = $workspaces[$selectedWorkspace].wallets[index].address;
+    sol_balance = $workspaces[$selectedWorkspace].wallets[index].sol_balance;
+    isCreateModalOpen = true;
+  };
+
+  const onEditWallet = () => {
+    if (walletName) {
+      $workspaces[$selectedWorkspace].wallets[editingWallet] = {
+        name: walletName,
+        address: walletAddress,
+        tokens: $workspaces[$selectedWorkspace].wallets[editingWallet].tokens,
+        sol_balance,
+      };
+      walletName = "";
+      walletAddress = "";
+      walletTokens = [];
+      isCreateModalOpen = false;
+      sol_balance = 0;
+      editingWallet = -1;
+    }
+  };
 </script>
 
 {#if ready}
@@ -184,7 +209,7 @@
     bind:isOpen={isCreateModalOpen}
     on:close={() => (isCreateModalOpen = false)}
   >
-    <h1 class="modal--title">Create a new Wallet</h1>
+    <h1 class="modal--title">{editingWallet == -1 ? "Create a new Wallet" : "Edit Wallet"}</h1>
     <div class="modal--form">
       <div class="modal--form-title">Wallet Name</div>
       <input
@@ -207,9 +232,8 @@
       <button
         class={`btn btn--lava${isValidAddress(walletAddress) ? "" : " btn--disabled"}`}
         disabled={!isValidAddress(walletAddress)}
-        on:click={() => {
-          addWallet();
-        }}>Create</button
+        on:click={() => { editingWallet == -1 ? addWallet() : onEditWallet();
+        }}>Save Wallet</button
       >
     </div>
   </Modal>
@@ -379,7 +403,17 @@
               >
                 <img src="./trash.svg" alt="Delete Icon" />
               </div>
+              <div
+                class="edit"
+                on:click={() => {
+                  editWallet(index);
+                }}
+              >
+                <img src="./edit.svg" alt="Edit Icon" />
+              </div>
             </div>
+            
+
           {/each}
         </div>
       {:else}
