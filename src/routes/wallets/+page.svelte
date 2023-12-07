@@ -72,6 +72,7 @@
     },
   ];
   let colors = ["#FEBC2E", "#FEBC2E"];
+  let color = ["#9945FF","#19FB9B"];
   let ready = false;
   onMount(() => {
     ready = true;
@@ -389,18 +390,12 @@
                 on:click={() => openWalletModal(index)}
                 on:mousemove={handleMousemove}
                 in:fade|global={{ delay: index * 100, duration: 100 }}
-                style={`--color: ${colors[0]}; --color2: ${colors[1]};  --bgColor: ${colors[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
+                style={`--color: ${color[0]}; --color2: ${color[1]}; --bgColor: ${color[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
               >
                 <div class="token--list--item--shimmer" />
                 <div class="wallet--list--content">
                   <div class="wallet--info">
-                    <TokenIcon
-                      value={wallet.name}
-                      size={32}
-                      color={colors[0]}
-                      border={true}
-                      radius={7}
-                    />
+                    <img src={`/SOL.svg`} alt={`Sol Icon`} style="width:32px;height:32px">
                     <div class="wallet--name">{wallet.name}</div>
                   </div>
                   <div class="wallet--address">
