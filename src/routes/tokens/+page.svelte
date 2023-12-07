@@ -57,6 +57,8 @@
     let wallets = $workspaces[$selectedWorkspace]?.wallets.map(wallet=>{return {label: wallet.name, value: wallet.address, color: "#DC30C0"}}) ?? [];
         
     let color = ["#9945FF","#19FB9B"];
+    let colors = ["#FEBC2E", "#FEBC2E"];
+
     let assignedList = [];
 
     let ready = false;
@@ -381,13 +383,21 @@
                                 delay: index * 100,
                                 duration: 100,
                             }}
-                            style={`--color: ${color[0]}; --color2: ${color[1]}; --bgColor: ${color[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
+                                            style={`--color: ${colors[0]}; --color2: ${colors[1]};  --bgColor: ${colors[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
+
+
                         >
                             <div class="token--list--item--shimmer" />
                             <div class="wallet--list--content">
                                 <div class="token--header">
-                                 
-                                        <img src={`/SOL.svg`} alt={`${token.symbol} Icon`} style="width:32px;height:32px">
+                                    <TokenIcon
+                                    value={token.symbol}
+                                    size={32}
+                                    color={colors[0]}
+                                    border={true}
+                                    radius={7}
+                                  />
+                                        
                                    
                                     <div class="token--ticker">
                                         {token.symbol}
