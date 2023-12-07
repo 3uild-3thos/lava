@@ -54,7 +54,7 @@
         },
     ];
 
-    let wallets = $workspaces[$selectedWorkspace].wallets.map(wallet=>{return {label: wallet.name, value: wallet.address, color: "#DC30C0"}});
+    let wallets = $workspaces[$selectedWorkspace]?.wallets.map(wallet=>{return {label: wallet.name, value: wallet.address, color: "#DC30C0"}}) ?? [];
         
     let color = ["#9945FF","#19FB9B"];
     let assignedList = [];
@@ -72,7 +72,7 @@
     let isDropdownOpen = false;
     let selectedOption = "None";
     let hideTokens = false;
-    let openedToken = $workspaces[$selectedWorkspace].tokens[0];
+    let openedToken = $workspaces[$selectedWorkspace]?.tokens[0] ?? [];
 
     function openViewModal(index) {
         isViewModalOpen = true;
@@ -369,9 +369,9 @@
                     >
                 {/if}
             </div>
-            {#if dummyTokens && !hideTokens}
+            {#if $workspaces[$selectedWorkspace]?.tokens.length > 0 && !hideTokens}
                 <div class="token--list">
-                    {#each $workspaces[$selectedWorkspace].tokens as token, index}
+                    {#each $workspaces[$selectedWorkspace]?.tokens ?? [] as token, index}
                     <div class="relative">
                         <div
                             class="wallet--list--item"

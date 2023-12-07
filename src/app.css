@@ -677,7 +677,17 @@ body {
 }
 
 .workspace--create--text--title {
-  @apply text-[16px] text-lava-white font-medium mb-2
+  @apply text-[16px] text-lava-white font-medium mb-2 relative cursor-pointer
+}
+
+.workspace--create--text--title.active {
+  @apply font-bold
+}
+
+.workspace--create--text--title.active::before {
+  @apply absolute -left-4 top-1/2 w-2 h-2 bg-lava-success rounded transform -translate-y-1/4;
+  content: "";
+
 }
 
 .workspace--create--text--subtitle {

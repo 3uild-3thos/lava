@@ -54,16 +54,8 @@
 
   onMount(() => {
     ready = true;
-
     if ($workspaces === undefined) {
-      $workspaces = [
-        {
-          name: "Empty Workspace",
-          programs: [],
-          wallets: [],
-          tokens: [],
-        },
-      ];
+      $workspaces = [];
     }
     if ($selectedWorkspace === undefined) {
       $selectedWorkspace = 0;
