@@ -75,19 +75,6 @@
   let ready = false;
   onMount(() => {
     ready = true;
-    if ($workspaces === undefined) {
-      $workspaces = [
-        {
-          name: "Empty Workspace",
-          programs: [],
-          wallets: [],
-          tokens: [],
-        },
-      ];
-    }
-    if ($selectedWorkspace === undefined) {
-      $selectedWorkspace = 0;
-    }
   });
 
   import Modal from "../../components/Modal.svelte";
@@ -95,7 +82,7 @@
   let isCreateModalOpen = false;
   let isViewModalOpen = false;
   let hideWallets = false;
-  let openedWallet = $workspaces[$selectedWorkspace].wallets[0];
+  let openedWallet = $workspaces[$selectedWorkspace]?.wallets[0];
 
   function openWalletModal(index) {
     isViewModalOpen = true;
@@ -393,7 +380,7 @@
           >
         {/if}
       </div>
-      {#if dummyWallets && !hideWallets}
+      {#if $workspaces[$selectedWorkspace]?.wallets.length > 0 && !hideWallets}
         <div class="wallet--list">
           {#each $workspaces[$selectedWorkspace]?.wallets ?? [] as wallet, index}
             <div class="relative">

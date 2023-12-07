@@ -102,20 +102,18 @@
                 {#each $workspaces as workspace, index}
                     <div class="workspace--create--option">
                         <div class="workspace--create--text">
-                            <div class="workspace--create--text--title">
+                            <div 
+                            on:click={() => {$selectedWorkspace = index;}}
+                            class={`workspace--create--text--title${$selectedWorkspace === index ? " active" : ""}`}>
                                 {workspace.name}
                             </div>
 
                         </div>
-                        {#if $selectedWorkspace === index}
-                            <div class="workspace--active">Active</div>
-                        {/if}
                         <button
                             class="btn btn--primary workspace--option-btn"
                             on:click={() => {
-                                if($selectedWorkspace === index){
-                                    // download a json file with the workspace data
-                                    const data = JSON.stringify(workspace);                                    const blob = new Blob([data], {type: 'text/plain'});
+                                    const data = JSON.stringify(workspace);
+                                    const blob = new Blob([data], {type: 'text/plain'});
                                     const url = window.URL.createObjectURL(blob);
                                     const a = document.createElement('a');
                                     a.setAttribute('hidden', '');
@@ -125,18 +123,27 @@
                                     a.click();
                                     document.body.removeChild(a);
                                     window.URL.revokeObjectURL(url);
-                                }
-                                else{
-                                $selectedWorkspace = index;
-                                }
+
                             }}
-                            >{$selectedWorkspace === index?"Save":"Select"}</button
+                            >Save</button
                         >
                     </div>
-                    {#if index < workspaces.length - 1}
+                    {#if index < $workspaces.length - 1}
                         <hr class="divider" />
                     {/if}
                 {/each}
+                {#if $workspaces.length == 0}
+                    <div class="workspace--create--option">
+                        <div class="workspace--create--text">
+                            <div class="workspace--create--text--title">
+                                No workspaces found
+                            </div>
+                            <div class="workspace--create--text--subtitle">
+                                Create a new workspace or import an existing one
+                            </div>
+                        </div>
+                    </div>
+                {/if}
             </div>
         </div>
     </div>
