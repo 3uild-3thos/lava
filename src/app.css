@@ -82,11 +82,25 @@ body {
 }
 
 .input--primary {
-  @apply relative w-full font-medium h-[42px] text-lg text-[14px] text-lava-white p-4 box-border outline-none rounded-[10px] bg-lava-bg border border-solid border-lava-800 focus:border-lava-700 focus:border-opacity-100 transition duration-200;
+  @apply relative w-full font-medium h-[42px] text-lava-white p-4 box-border outline-none rounded-[10px] bg-lava-bg border border-solid border-lava-800 focus:border-lava-700 focus:border-opacity-100 transition duration-200;
+}
+
+.input--invalid {
+  @apply border-lava-error focus:border-lava-error
+}
+
+.modal--form--label-end {
+  @apply !ml-auto text-xs text-lava-mute self-end mb-2
+} 
+
+.modal--close {
+  @apply w-[20px] h-[20px] absolute right-4 top-5 cursor-pointer;
+  background-image:url('./close.svg');
+  background-size:cover;
 }
 
 .input--primary::placeholder {
-  @apply text-lava-mute
+  @apply text-lava-mute 
 }
 
 .sidebar {
@@ -585,7 +599,7 @@ body {
 }
 
 .btns--modal {
-  @apply w-full flex space-x-2 mt-4
+  @apply w-full flex space-x-2 mt-10
 }
 
 .modal--title {
@@ -598,11 +612,19 @@ body {
 
 
 .modal--form-title {
-  @apply mb-2 mt-4 text-sm font-medium text-lava-secondary
+  @apply mb-2 mt-4 text-sm font-semibold text-lava-secondary
 }
 
 .modal--form {
   @apply pt-2 pb-2 border-t border-b-0 border-r-0 border-l-0
+}
+
+.modal--form-inline {
+  @apply flex flex-row space-x-2 w-full
+}
+
+.modal--form-item {
+  @apply flex flex-col w-full
 }
 
 .common--wrapper {
@@ -1001,8 +1023,9 @@ a {
 }
 
 .svelte-select input {
-  @apply w-full mt-0 p-3 transition font-medium duration-200 box-border rounded-[10px] bg-lava-bg text-lava-primary border border-solid border-lava-800 hover:border-lava-700 outline-none placeholder-lava-mute text-sm
+  @apply w-full mt-0 p-3 transition font-medium duration-200 box-border rounded-[10px] bg-lava-bg text-lava-primary border border-solid border-lava-800 hover:border-lava-700 outline-none placeholder-lava-mute
 }
+
 
 .svelte-select-list {
   @apply w-full p-1 bg-lava-bg -mt-3 box-border transition transition-opacity duration-100 rounded-b-[10px] border border-solid border-lava-800 border-t-0 overflow-hidden;
@@ -1032,11 +1055,23 @@ a {
 }
 
 .svelte-select .indicators {
-  @apply absolute right-2 bottom-2.5 flex
+  @apply absolute right-5 top-1 w-[16px] h-[16px];
 }
 
 .svelte-select .clear-select {
   @apply w-[32px] h-[32px] p-2 flex cursor-pointer items-center text-lava-mute hover:text-lava-secondary duration-200 transition justify-center box-border bg-transparent border-none outline-none
+}
+
+.svelte-select .value-container:after {
+  @apply absolute right-3 top-1/2 transform -translate-y-1/2 w-[16px] h-[16px];
+  content: "";
+  background-image:url('./chevron.svg');
+  background-size:cover;
+
+}
+
+.svelte-select:has(.clear-select) .value-container:after {
+  @apply hidden;
 }
 
 .select--option {
@@ -1226,4 +1261,6 @@ a {
   border-radius: 0.3rem;
   padding-inline: 0;
   width: 1.2rem;
+  z-index:99999999;
+  position:relative;
 }

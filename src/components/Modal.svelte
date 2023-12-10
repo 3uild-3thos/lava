@@ -30,9 +30,10 @@
     <div
       class="modal--content {modalVariant ? 'modal--variant' : ''}"
       style={`width:${width}px;`}
-      transition:scale={{ opacity: 0, duration: 200, start: 0.7 }}
+      transition:scale|global={{ opacity: 0, duration: 200, start: 0.7 }}
       on:click={(e) => e.stopPropagation()}
     >
+      <div class="modal--close" on:click={() => (isOpen = false)} />
       <slot />
     </div>
     <div

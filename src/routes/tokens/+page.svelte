@@ -1,454 +1,550 @@
-<script>
-    import { createEventDispatcher, onMount } from "svelte";
-    import TokenIcon from "../../components/avatars/index.svelte";
-    import { fade, fly, blur } from "svelte/transition";
-    import Select from "svelte-select/no-styles/Select.svelte";
-    import Icon from "../../components/avatars/index.svelte";
-    import {workspaces, selectedWorkspace} from "../../stores/store";
+<script lang="ts">
+  import { createEventDispatcher, onMount } from "svelte";
+  import TokenIcon from "../../components/avatars/index.svelte";
+  import { fade, fly, blur } from "svelte/transition";
+  import Select from "svelte-select/no-styles/Select.svelte";
+  import Icon from "../../components/avatars/index.svelte";
+  import { workspaces, selectedWorkspace } from "../../stores/store";
 
-    let dummyTokens = [
-        {
-            name: "USDCoin",
-            ticker: "USDC",
-            owner: "Wallet Temp",
-            supply: 10000000,
-            decimals: 7,
-            color: ["#2775CA","#2775CA"],
-            userAdded: false
-        },
-        {
-            name: "Solana",
-            ticker: "SOL",
-            owner: "Wallet Temp",
-            supply: 500000000,
-            decimals: 10,
-            color: ["#9945FF","#19FB9B"],
-            userAdded: false
-        },
-        {
-            name: "KenOath",
-            ticker: "KEN",
-            owner: "Wallet Temp",
-            supply: 1000000,
-            decimals: 7,
-            color: ["#30DCB2","#30DCB2"],
-            userAdded: true
-        },
-        {
-            name: "EpicMarz",
-            ticker: "MARZ",
-            owner: "Wallet Temp",
-            supply: 100000000,
-            decimals: 9,
-            color: ["#8A54FE", "#8A54FE"],
-            userAdded:true,
-        },
-        {
-            name: "Bob",
-            ticker: "BOB",
-            owner: "Wallet Temp",
-            supply: 1000000000,
-            decimals: 10,
-            userAdded: true,
-            color: ["#FEBC2E", "#FEBC2E"],
-        },
-    ];
+  let dummyTokens = [
+    {
+      name: "USDCoin",
+      ticker: "USDC",
+      owner: "Wallet Temp",
+      supply: 10000000,
+      decimals: 7,
+      color: ["#2775CA", "#2775CA"],
+      userAdded: false,
+    },
+    {
+      name: "Solana",
+      ticker: "SOL",
+      owner: "Wallet Temp",
+      supply: 500000000,
+      decimals: 10,
+      color: ["#9945FF", "#19FB9B"],
+      userAdded: false,
+    },
+    {
+      name: "KenOath",
+      ticker: "KEN",
+      owner: "Wallet Temp",
+      supply: 1000000,
+      decimals: 7,
+      color: ["#30DCB2", "#30DCB2"],
+      userAdded: true,
+    },
+    {
+      name: "EpicMarz",
+      ticker: "MARZ",
+      owner: "Wallet Temp",
+      supply: 100000000,
+      decimals: 9,
+      color: ["#8A54FE", "#8A54FE"],
+      userAdded: true,
+    },
+    {
+      name: "Bob",
+      ticker: "BOB",
+      owner: "Wallet Temp",
+      supply: 1000000000,
+      decimals: 10,
+      userAdded: true,
+      color: ["#FEBC2E", "#FEBC2E"],
+    },
+  ];
 
-    let wallets = $workspaces[$selectedWorkspace]?.wallets.map(wallet=>{return {label: wallet.name, value: wallet.address, color: "#DC30C0"}}) ?? [];
-        
-    let color = ["#9945FF","#19FB9B"];
-    let colors = ["#FEBC2E", "#FEBC2E"];
+  let wallets =
+    $workspaces[$selectedWorkspace]?.wallets.map((wallet) => {
+      return { label: wallet.name, value: wallet.address, color: "#DC30C0" };
+    }) ?? [];
 
-    let assignedList = [];
+  let color = ["#9945FF", "#19FB9B"];
+  let colors = ["#FEBC2E", "#FEBC2E"];
 
-    let ready = false;
-    onMount(() => {
-        ready = true;
-    });
+  let assignedList = [];
 
-    import Modal from "../../components/Modal.svelte";
-    import Dropdown from "../../components/Dropdown.svelte";
-    import Index from "../../components/avatars/index.svelte";
-    let isCreateModalOpen = false;
-    let isViewModalOpen = false;
-    let isDropdownOpen = false;
-    let selectedOption = "None";
-    let hideTokens = false;
-    let openedToken = $workspaces[$selectedWorkspace]?.tokens[0] ?? [];
+  let ready = false;
+  onMount(() => {
+    ready = true;
+  });
 
-    function openViewModal(index) {
-        isViewModalOpen = true;
-        openedToken = $workspaces[$selectedWorkspace].tokens[index];
-        assignedList = $workspaces[$selectedWorkspace].wallets.filter((wallet) => wallet.tokens.some((token) => token.symbol === openedToken.symbol)) ?? []
-    }
+  import Modal from "../../components/Modal.svelte";
+  import Dropdown from "../../components/Dropdown.svelte";
+  import Index from "../../components/avatars/index.svelte";
+  let isCreateModalOpen = false;
+  let isViewModalOpen = false;
+  let isDropdownOpen = false;
+  let selectedOption = "None";
+  let hideTokens = false;
+  let openedToken = $workspaces[$selectedWorkspace]?.tokens[0] ?? [];
 
-    let m = { x: 0, y: 0 };
+  function openViewModal(index) {
+    isViewModalOpen = true;
+    openedToken = $workspaces[$selectedWorkspace].tokens[index];
+    assignedList =
+      $workspaces[$selectedWorkspace].wallets.filter((wallet) =>
+        wallet.tokens.some((token) => token.symbol === openedToken.symbol)
+      ) ?? [];
+  }
 
-    function handleMousemove(event) {
-        let bounds = event.currentTarget.getBoundingClientRect();
-        m.x = event.clientX - bounds.left;
-        m.y = event.clientY - bounds.top;
-    }
+  let m = { x: 0, y: 0 };
 
-    let isAssignedButtonDisabled = true;
+  function handleMousemove(event) {
+    let bounds = event.currentTarget.getBoundingClientRect();
+    m.x = event.clientX - bounds.left;
+    m.y = event.clientY - bounds.top;
+  }
 
-    $: if (Object.keys(selectedWallet).length !== 0 && tokenAmount > 0) {
-        isAssignedButtonDisabled = false;
-    }
+  let isAssignedButtonDisabled = true;
 
-    let selectedWallet = {};
-    let tokenAmount = 1000;
+  $: if (Object.keys(selectedWallet).length !== 0 && tokenAmount > 0) {
+    isAssignedButtonDisabled = false;
+  }
 
-    function clearSelectedWallet(e) {
-        selectedWallet = {};
-        selectedWallet = selectedWallet;
-        isAssignedButtonDisabled = true;
-    }
+  let selectedWallet = {};
+  let tokenAmount = 1000;
 
-    function updateSelectedWallet(e) {
-        selectedWallet = e.detail;
-       tokenAmount = $workspaces[$selectedWorkspace].wallets.find((wallet) => wallet.address === selectedWallet.value)?.tokens?.find((token) => token.symbol === openedToken.symbol)?.amount??1000;
-        isAssignedButtonDisabled = true;
-    }
+  function clearSelectedWallet(e) {
+    selectedWallet = {};
+    selectedWallet = selectedWallet;
+    isAssignedButtonDisabled = true;
+  }
 
-    function clearCreatorWallet(e) {
-        creator = "";
-    }
-    function updateCreatorWallet(e) {
-        creator = e.detail.value;
-    }
-    
-    function addWallet() {
-        const index = $workspaces[$selectedWorkspace].wallets.findIndex((wallet) => wallet.address === selectedWallet.value);
-        if (index !== -1) {
-            if ($workspaces[$selectedWorkspace].wallets[index].tokens.some((token) => token.symbol === openedToken.symbol)) {
-                $workspaces[$selectedWorkspace].wallets[index].tokens = $workspaces[$selectedWorkspace].wallets[index].tokens.map((token) => {
-                    if (token.symbol === openedToken.symbol) {
-                        token.amount = tokenAmount;
-                    }
-                    return token;
-                });
-            } else {
-                $workspaces[$selectedWorkspace].wallets[index].tokens = [
-                    ...$workspaces[$selectedWorkspace].wallets[index].tokens,
-                    {
-                        symbol: openedToken.symbol,
-                        amount: tokenAmount,
-                    },
-                ];
-            };
-        }
-        assignedList = $workspaces[$selectedWorkspace].wallets.filter((wallet) => wallet.tokens.some((token) => token.symbol === openedToken.symbol)) ?? []
-        selectedWallet = {};
-        tokenAmount = 1000;
-        isAssignedButtonDisabled = true;
-    }
+  function updateSelectedWallet(e) {
+    selectedWallet = e.detail;
+    tokenAmount =
+      $workspaces[$selectedWorkspace].wallets
+        .find((wallet) => wallet.address === selectedWallet.value)
+        ?.tokens?.find((token) => token.symbol === openedToken.symbol)
+        ?.amount ?? 1000;
+    isAssignedButtonDisabled = true;
+  }
 
-    function removeWallet(index) {
-        assignedList.splice(index, 1);
-        assignedList = assignedList;
-    }
+  function clearCreatorWallet(e) {
+    creator = "";
+  }
+  function updateCreatorWallet(e) {
+    creator = e.detail.value;
+  }
 
-    let supply = 1000000000;
-    let symbol = "";
-    let creator = "";
-    const addToken = () => {
-        if (symbol.length != 0 && supply > 0) {
-        $workspaces[$selectedWorkspace].tokens = [
-            ...$workspaces[$selectedWorkspace].tokens,
-            {
-                symbol,
-                supply,
-                creator
-            },
+  function addWallet() {
+    const index = $workspaces[$selectedWorkspace].wallets.findIndex(
+      (wallet) => wallet.address === selectedWallet.value
+    );
+    if (index !== -1) {
+      if (
+        $workspaces[$selectedWorkspace].wallets[index].tokens.some(
+          (token) => token.symbol === openedToken.symbol
+        )
+      ) {
+        $workspaces[$selectedWorkspace].wallets[index].tokens = $workspaces[
+          $selectedWorkspace
+        ].wallets[index].tokens.map((token) => {
+          if (token.symbol === openedToken.symbol) {
+            token.amount = tokenAmount;
+          }
+          return token;
+        });
+      } else {
+        $workspaces[$selectedWorkspace].wallets[index].tokens = [
+          ...$workspaces[$selectedWorkspace].wallets[index].tokens,
+          {
+            symbol: openedToken.symbol,
+            amount: tokenAmount,
+          },
         ];
-        }    
-        isCreateModalOpen = false;
-        symbol = "";
-        supply = 1000000000;
+      }
+    }
+    assignedList =
+      $workspaces[$selectedWorkspace].wallets.filter((wallet) =>
+        wallet.tokens.some((token) => token.symbol === openedToken.symbol)
+      ) ?? [];
+    selectedWallet = {};
+    tokenAmount = 1000;
+    isAssignedButtonDisabled = true;
+  }
 
-    };
-    const deleteToken = (index) => {
-        $workspaces[$selectedWorkspace].tokens = $workspaces[$selectedWorkspace].tokens.filter((token, i) => i !== index);
-    };
+  function removeWallet(index) {
+    assignedList.splice(index, 1);
+    assignedList = assignedList;
+  }
 
-   
+  let supply: string;
+  let decimal: any;
+  let symbol = "";
+  let name = "";
+  let creator = "";
+  const addToken = () => {
+    // Check the whole valid object is true
+    if (valid.name && valid.symbol && valid.decimal) {
+      $workspaces[$selectedWorkspace].tokens = [
+        ...$workspaces[$selectedWorkspace].tokens,
+        {
+          symbol,
+          supply,
+          creator,
+        },
+      ];
+      formSubmitted = true;
+      isCreateModalOpen = false;
+    } else {
+      formSubmitted = true;
+    }
+  };
+
+  //   let formTouched = false;
+
+  let valid = {
+    name: false,
+    symbol: false,
+    decimal: false,
+  };
+
+  let formTouched = {
+    name: false,
+    symbol: false,
+    decimal: false,
+  };
+
+  let formSubmitted = false;
+
+  $: formTouched = {
+    name: name.length > 0 || formSubmitted,
+    symbol: symbol.length > 0 || formSubmitted,
+    decimal: decimal > 0 || formSubmitted,
+  };
+
+  $: valid = {
+    name: name.length > 0 && name.length <= 32,
+    symbol: symbol.length > 0 && symbol.length <= 5,
+    decimal: decimal >= 0 && decimal <= 18,
+  };
+
+  const deleteToken = (index) => {
+    $workspaces[$selectedWorkspace].tokens = $workspaces[
+      $selectedWorkspace
+    ].tokens.filter((token, i) => i !== index);
+  };
 </script>
 
 {#if ready}
-    <!-- Create Token Modal -->
-    <Modal
-        bind:isOpen={isCreateModalOpen}
-        on:close={() => (isCreateModalOpen = false)}
-    >
-        <h1 class="modal--title">Create a new Token</h1>
-        <div class="modal--form">
-            <div class="modal--form-title">Symbol</div>
-            <input class="input--primary" placeholder="SOL" bind:value={symbol} />
-            <div class="modal--form-title">Supply</div>
-            <input
-                class="input--primary"
-                type="number"
-                bind:value={supply}
-                placeholder="1000000000"
+  <!-- Create Token Modal -->
+  <Modal
+    width={400}
+    bind:isOpen={isCreateModalOpen}
+    on:close={() => (isCreateModalOpen = false)}
+  >
+    <h1 class="modal--title">Create a new Token</h1>
+    <div class="modal--form">
+      <div class="modal--form-item">
+        <div class="modal--form-inline">
+          <div class="modal--form-title">Token Name</div>
+          <div class="modal--form--label-end">{name.length}/32</div>
+        </div>
+        <input
+          class="input--primary {!valid.name && formTouched.name
+            ? 'input--invalid'
+            : ''}"
+          placeholder="My Token"
+          type="text"
+          bind:value={name}
+        />
+      </div>
+      <div class="modal--form-inline">
+        <div class="modal--form-item">
+          <div class="modal--form-title">Ticker Symbol</div>
+          <input
+            class="input--primary {!valid.symbol && formTouched.symbol
+              ? 'input--invalid'
+              : ''}"
+            placeholder="TKN"
+            type="text"
+            bind:value={symbol}
+          />
+        </div>
+        <div class="modal--form-item">
+          <div class="modal--form-title">Decimals</div>
+          <input
+            class="input--primary {!valid.decimal && formTouched.decimal
+              ? 'input--invalid'
+              : ''}"
+            type="number"
+            placeholder="Number between 0-18"
+            bind:value={decimal}
+          />
+        </div>
+      </div>
+      <div class="modal--form-title">Mint Authority</div>
+      <div class="assign--tokens--wallet">
+        <Select
+          items={[...wallets, { label: "", value: "", color: "#DC30C0" }]}
+          focused={true}
+          placeholder="Select Wallet (Optional)"
+          on:change={updateCreatorWallet}
+          on:clear={clearCreatorWallet}
+        >
+          <div slot="selection" class="select--option" let:selection>
+            <Icon
+              size={24}
+              value={selection.label}
+              color={selection.color}
+              border={true}
+              radius={7}
             />
-            <div class="modal--form-title">Creator</div>
-            <div class="assign--tokens--wallet">
-                <Select
-                    items={[...wallets, {label:"", value:"", color:"#DC30C0"}]}
-                    focused={true}
-                    placeholder="Select Wallet"
-                    on:change={updateCreatorWallet}
-                    on:clear={clearCreatorWallet}
-                >
-                    <div
-                        slot="selection"
-                        class="select--option"
-                        let:selection
-                    >
-                        <Icon
-                            size={24}
-                            value={selection.label}
-                            color={selection.color}
-                            border={true}
-                            radius={7}
-                        />
-                        <div class="select--text">{selection.label}</div>
-                    </div>
+            <div class="select--text">{selection.label}</div>
+          </div>
 
-                    <div slot="item" class="select--option" let:item>
-                        <Icon
-                            size={24}
-                            value={item.label}
-                            color={item.color}
-                            border={true}
-                            radius={7}
-                        />
-                        <div class="select--text">{item.label}</div>
-                    </div>
-                </Select>
+          <div slot="item" class="select--option" let:item>
+            <Icon
+              size={24}
+              value={item.label}
+              color={item.color}
+              border={true}
+              radius={7}
+            />
+            <div class="select--text">{item.label}</div>
+          </div>
+        </Select>
+      </div>
+      <div class="modal--form-title">Freeze Authority</div>
+      <div class="assign--tokens--wallet">
+        <Select
+          items={[...wallets, { label: "", value: "", color: "#DC30C0" }]}
+          focused={true}
+          placeholder="Select Wallet (Optional)"
+          on:change={updateCreatorWallet}
+          on:clear={clearCreatorWallet}
+        >
+          <div slot="selection" class="select--option" let:selection>
+            <Icon
+              size={24}
+              value={selection.label}
+              color={selection.color}
+              border={true}
+              radius={7}
+            />
+            <div class="select--text">{selection.label}</div>
+          </div>
+
+          <div slot="item" class="select--option" let:item>
+            <Icon
+              size={24}
+              value={item.label}
+              color={item.color}
+              border={true}
+              radius={7}
+            />
+            <div class="select--text">{item.label}</div>
+          </div>
+        </Select>
+      </div>
+      <div class="btns--modal">
+        <button class="btn btn--lava" on:click={() => addToken()}
+          >Create Token</button
+        >
+      </div>
+    </div></Modal
+  >
+
+  <!-- Assign Tokens Modal -->
+
+  <Modal
+    bind:isOpen={isViewModalOpen}
+    on:close={() => (isViewModalOpen = false)}
+    modalVariant={true}
+    color={color[0]}
+    width={400}
+  >
+    <h1 class="modal--title">
+      Assign <span style={`color: ${color[0]}`}>{openedToken.symbol}</span> to Wallets
+    </h1>
+    <div class="assign--tokens--wrapper">
+      <div class="assign--tokens">
+        <div class="assign--tokens--wallet">
+          <Select
+            items={wallets}
+            focused={true}
+            placeholder="Select Wallet"
+            on:change={updateSelectedWallet}
+            on:clear={clearSelectedWallet}
+          >
+            <div slot="selection" class="select--option" let:selection>
+              <Icon
+                size={24}
+                value={selection.label}
+                color={selection.color}
+                border={true}
+                radius={7}
+              />
+              <div class="select--text">{selection.label}</div>
             </div>
-                </div>
-        <div class="btns--modal">
-            <button
-                class="btn btn--lava"
-                on:click={() => addToken()}>Create</button
-            >
+
+            <div slot="item" class="select--option" let:item>
+              <Icon
+                size={24}
+                value={item.label}
+                color={item.color}
+                border={true}
+                radius={7}
+              />
+              <div class="select--text">{item.label}</div>
+            </div>
+          </Select>
         </div>
-    </Modal>
-
-    <!-- Assign Tokens Modal -->
-
-    <Modal
-        bind:isOpen={isViewModalOpen}
-        on:close={() => (isViewModalOpen = false)}
-        modalVariant={true}
-        color={color[0]}
-        width={400}
-    >
-        <h1 class="modal--title">
-            Assign <span style={`color: ${color[0]}`}
-                >{openedToken.symbol}</span
-            > to Wallets
-        </h1>
-        <div class="assign--tokens--wrapper">
-            <div class="assign--tokens">
-                <div class="assign--tokens--wallet">
-                    <Select
-                        items={wallets}
-                        focused={true}
-                        placeholder="Select Wallet"
-                        on:change={updateSelectedWallet}
-                        on:clear={clearSelectedWallet}
-                    >
-                        <div
-                            slot="selection"
-                            class="select--option"
-                            let:selection
-                        >
-                            <Icon
-                                size={24}
-                                value={selection.label}
-                                color={selection.color}
-                                border={true}
-                                radius={7}
-                            />
-                            <div class="select--text">{selection.label}</div>
-                        </div>
-
-                        <div slot="item" class="select--option" let:item>
-                            <Icon
-                                size={24}
-                                value={item.label}
-                                color={item.color}
-                                border={true}
-                                radius={7}
-                            />
-                            <div class="select--text">{item.label}</div>
-                        </div>
-                    </Select>
-                </div>
-                <div class="assign--tokens--amount">
-                    <input
-                        class="input--primary"
-                        bind:value={tokenAmount}
-                        style="height:45px"
-                        type="number"
-                        step="100"
-                        placeholder="Amount"
-                    />
-                </div>
-            </div>
-            <button
-                class="assign--button"
-                disabled={isAssignedButtonDisabled}
-                style={isAssignedButtonDisabled ? "opacity:0.2" : "opacity:1"}
-                on:click={() => addWallet()}
-            >
-                <img src="./add.svg" class="assign--button--image" />
-            </button>
+        <div class="assign--tokens--amount">
+          <input
+            class="input--primary"
+            bind:value={tokenAmount}
+            style="height:45px"
+            type="number"
+            step="100"
+            placeholder="Amount"
+          />
         </div>
-
-        {#if assignedList.length > 0}
-            <div class="assigned--header" transition:fade={{ duration: 200 }}>
-                Wallets Assigned
-            </div>
-            <div class="assigned--tokens">
-                {#each assignedList as assigned, index}
-                    <div
-                        class="assigned--token"
-                        transition:fade={{ duration: 200 }}
-                    >
-                        <Icon
-                            size={24}
-                            value={assigned.name}
-                            color={color[0]}
-                            border={true}
-                            radius={7}
-                        />
-                        <div class="assigned--wallet--name">
-                            {assigned.name}
-                        </div>
-                        <div class="assigned--wallet--amount">
-                            {assigned?.tokens?.find((token) => token.symbol === openedToken.symbol)?.amount??""}
-                        </div>
-                        <button
-                            class="assign--button"
-                            style="padding:0.25rem"
-                            on:click={() => removeWallet(index)}
-                        >
-                            <img
-                                src="./remove.svg"
-                                style="width:14px;height:14px"
-                            />
-                        </button>
-                    </div>
-                {/each}
-            </div>
-        {/if}
-
-    </Modal>
-
-    <div class="common--wrapper">
-        <div class="tokens">
-            <div class="common--header">
-                <h1
-                    class="common--title"
-                    style="margin-bottom:0px !important"
-                    in:fly|global={{ delay: 100, duration: 100, y: -10 }}
-                >
-                    Tokens
-                </h1>
-                {#if dummyTokens && !hideTokens}
-                    <button
-                        class="btn btn--primary btn--fit btn--end"
-                        on:click={() => (isCreateModalOpen = true)}
-                        ><img
-                            src="./add.svg"
-                            alt="Add Icon"
-                            style="margin-right:5px;width:16px;height:16px;"
-                        /> Add a Token</button
-                    >
-                {/if}
-            </div>
-            {#if $workspaces[$selectedWorkspace]?.tokens.length > 0 && !hideTokens}
-                <div class="token--list">
-                    {#each $workspaces[$selectedWorkspace]?.tokens ?? [] as token, index}
-                    <div class="relative">
-                        <div
-                            class="wallet--list--item"
-                            on:click={() => openViewModal(index)}
-                            on:mousemove={handleMousemove}
-                            in:fade|global={{
-                                delay: index * 100,
-                                duration: 100,
-                            }}
-                                            style={`--color: ${colors[0]}; --color2: ${colors[1]};  --bgColor: ${colors[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
-
-
-                        >
-                            <div class="token--list--item--shimmer" />
-                            <div class="wallet--list--content">
-                                <div class="token--header">
-                                    <TokenIcon
-                                    value={token.symbol}
-                                    size={32}
-                                    color={colors[0]}
-                                    border={true}
-                                    radius={7}
-                                  />
-                                        
-                                   
-                                    <div class="token--ticker">
-                                        {token.symbol}
-                                    </div>
-                                </div>
-                                <div class="token--name">{token.symbol}</div>
-                                <div class="token--supply">
-                                    {token.supply.toLocaleString()}
-                                </div>
-                                <div class="token--owner">
-                                    <img
-                                        src="./owner.svg"
-                                        class="token--owner-icon"
-                                        alt="Fingerprint Icon"
-                                    />{token.creator}
-                                </div>
-                            </div>
-                        </div>
-                        <div class="trash" on:click={()=>{deleteToken(index)}}>
-                            <img
-                            src="./trash.svg"
-                            alt="Delete Icon"
-                        />
-                        </div>
-                    </div>
-                    {/each}
-                </div>
-            {:else}
-                <div class="empty--state">
-                    <img
-                        src="/emptystates/notokens.svg"
-                        class="empty--state--image"
-                        alt="No Tokens in Wallet"
-                    />
-                    <div class="empty--state--text">
-                        You don't have any tokens, yet
-                    </div>
-                    <div class="empty--state--subtext">
-                        Create and assign to your wallets here
-                    </div>
-                    <button
-                        class="btn btn--primary btn--fit"
-                        on:click={() => (isCreateModalOpen = true)}
-                        ><img
-                            src="./add.svg"
-                            alt="Add Icon"
-                            style="margin-right:5px;width:16px;height:16px;"
-                        /> Create a Token</button
-                    >
-                </div>
-            {/if}
-        </div>
+      </div>
+      <button
+        class="assign--button"
+        disabled={isAssignedButtonDisabled}
+        style={isAssignedButtonDisabled ? "opacity:0.2" : "opacity:1"}
+        on:click={() => addWallet()}
+      >
+        <img src="./add.svg" class="assign--button--image" />
+      </button>
     </div>
+
+    {#if assignedList.length > 0}
+      <div class="assigned--header" transition:fade={{ duration: 200 }}>
+        Wallets Assigned
+      </div>
+      <div class="assigned--tokens">
+        {#each assignedList as assigned, index}
+          <div class="assigned--token" transition:fade={{ duration: 200 }}>
+            <Icon
+              size={24}
+              value={assigned.name}
+              color={color[0]}
+              border={true}
+              radius={7}
+            />
+            <div class="assigned--wallet--name">
+              {assigned.name}
+            </div>
+            <div class="assigned--wallet--amount">
+              {assigned?.tokens?.find(
+                (token) => token.symbol === openedToken.symbol
+              )?.amount ?? ""}
+            </div>
+            <button
+              class="assign--button"
+              style="padding:0.25rem"
+              on:click={() => removeWallet(index)}
+            >
+              <img src="./remove.svg" style="width:14px;height:14px" />
+            </button>
+          </div>
+        {/each}
+      </div>
+    {/if}
+  </Modal>
+
+  <div class="common--wrapper">
+    <div class="tokens">
+      <div class="common--header">
+        <h1
+          class="common--title"
+          style="margin-bottom:0px !important"
+          in:fly|global={{ delay: 100, duration: 100, y: -10 }}
+        >
+          Tokens
+        </h1>
+        {#if dummyTokens && !hideTokens}
+          <button
+            class="btn btn--primary btn--fit btn--end"
+            on:click={() => (isCreateModalOpen = true)}
+            ><img
+              src="./add.svg"
+              alt="Add Icon"
+              style="margin-right:5px;width:16px;height:16px;"
+            /> Add a Token</button
+          >
+        {/if}
+      </div>
+      {#if $workspaces[$selectedWorkspace]?.tokens.length > 0 && !hideTokens}
+        <div class="token--list">
+          {#each $workspaces[$selectedWorkspace]?.tokens ?? [] as token, index}
+            <div class="relative">
+              <div
+                class="wallet--list--item"
+                on:click={() => openViewModal(index)}
+                on:mousemove={handleMousemove}
+                in:fade|global={{
+                  delay: index * 100,
+                  duration: 100,
+                }}
+                style={`--color: ${colors[0]}; --color2: ${colors[1]};  --bgColor: ${colors[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
+              >
+                <div class="token--list--item--shimmer" />
+                <div class="wallet--list--content">
+                  <div class="token--header">
+                    <TokenIcon
+                      value={token.symbol}
+                      size={32}
+                      color={colors[0]}
+                      border={true}
+                      radius={7}
+                    />
+
+                    <div class="token--ticker">
+                      {token.symbol}
+                    </div>
+                  </div>
+                  <div class="token--name">{token.symbol}</div>
+                  <div class="token--supply">
+                    {token.supply}
+                  </div>
+                  <div class="token--owner">
+                    <img
+                      src="./owner.svg"
+                      class="token--owner-icon"
+                      alt="Fingerprint Icon"
+                    />{token.creator}
+                  </div>
+                </div>
+              </div>
+              <div
+                class="trash"
+                on:click={() => {
+                  deleteToken(index);
+                }}
+              >
+                <img src="./trash.svg" alt="Delete Icon" />
+              </div>
+            </div>
+          {/each}
+        </div>
+      {:else}
+        <div class="empty--state">
+          <img
+            src="/emptystates/notokens.svg"
+            class="empty--state--image"
+            alt="No Tokens in Wallet"
+          />
+          <div class="empty--state--text">You don't have any tokens, yet</div>
+          <div class="empty--state--subtext">
+            Create and assign to your wallets here
+          </div>
+          <button
+            class="btn btn--primary btn--fit"
+            on:click={() => (isCreateModalOpen = true)}
+            ><img
+              src="./add.svg"
+              alt="Add Icon"
+              style="margin-right:5px;width:16px;height:16px;"
+            /> Create a Token</button
+          >
+        </div>
+      {/if}
+    </div>
+  </div>
 {/if}

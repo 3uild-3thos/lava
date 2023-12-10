@@ -8,6 +8,7 @@ export default defineConfig({
   ssr: {
     noExternal: ['buffer', 'svelte-select']
   },
+  optimizeDeps: { exclude: ["fsevents"] },
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   // prevent vite from obscuring rust errors
