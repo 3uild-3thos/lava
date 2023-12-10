@@ -1227,17 +1227,6 @@ a {
 .border-lava-error {
   @apply border-lava-error
 }
-
-.edit {
-  position: absolute;
-  top: 1rem;
-  right: 3rem;
-  z-index: 100;
-  width: 0;
-  height: 0;
-  overflow: hidden;
-}
-
 .relative:hover .edit {
   cursor: pointer;
   width: 2rem;
@@ -1251,6 +1240,48 @@ a {
 
 .relative .tokens-button {
   display: none;
+}
+
+.edit-icon {
+    position: absolute;
+    top: 1.5rem;
+    right: 3.25rem;
+    z-index: 100; 
+    overflow: hidden;
+    background-color: #9292AD;
+    width:20px;
+    height:20px;
+    -webkit-mask:  url('/edit.svg') no-repeat 50% 50%;
+    mask: url('/edit.svg') no-repeat 50% 50%;
+    cursor:pointer;
+    transition: 200ms;
+    -webkit-mask-size: cover;
+    mask-size:cover;
+}
+
+.edit-icon:hover {
+  background-color: #CCCCE0;
+}
+
+.trash-icon {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  z-index: 100; 
+  overflow: hidden;
+  background-color: #9292AD;
+  width:20px;
+  height:20px;
+  -webkit-mask:  url('/trash.svg') no-repeat 50% 50%;
+  -webkit-mask-size: cover;
+  mask-size:cover;
+  mask: url('/trash.svg') no-repeat 50% 50%;
+  cursor:pointer;
+  transition: 200ms;
+}
+
+.trash-icon:hover {
+background-color: #FF2950;
 }
 
 .relative:hover .tokens-button {

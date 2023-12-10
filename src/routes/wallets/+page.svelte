@@ -115,6 +115,7 @@
   let popOverOpened = false;
 
   let walletName = "";
+  let hoveredLink = "";
   let walletAddress = "";
   /**
    * @type {any[]}
@@ -447,7 +448,7 @@
                     <div class="wallet--name">{wallet.name}</div>
                   </div>
                   <div class="wallet--address">
-                    {`SOL Balance:${wallet.sol_balance}`}
+                    {`${wallet.sol_balance} SOL`}
                   </div>
                   <div class="wallet--address">
                     {wallet.address}
@@ -458,10 +459,21 @@
                     <button
                       class="tokens-button"
                       type="button"
+                      on:mouseover={() => (hoveredLink = "tokens")}
+                      on:mouseleave={() => (hoveredLink = "")}
                       on:click={() => {
                         editingWallet = index;
                         isassignTokenModalOpen = true;
-                      }}>+</button
+                      }}
+                      >+
+
+                      {#if hoveredLink === "tokens"}
+                        <Popover
+                          blur={25}
+                          yOffset={-50}
+                          title="Assign a Token"
+                        />
+                      {/if}</button
                     >
                     {#if wallet?.tokens?.length > 0}
                       <div class="wallet--tokens--list">
@@ -509,21 +521,17 @@
                 </div>
               </div>
               <div
-                class="trash"
+                class="trash-icon"
                 on:click={() => {
                   deleteWallet(index);
                 }}
-              >
-                <img src="./trash.svg" alt="Delete Icon" />
-              </div>
+              />
               <div
-                class="edit"
+                class="edit-icon"
                 on:click={() => {
                   editWallet(index);
                 }}
-              >
-                <img src="./edit.svg" alt="Edit Icon" />
-              </div>
+              />
             </div>
           {/each}
         </div>

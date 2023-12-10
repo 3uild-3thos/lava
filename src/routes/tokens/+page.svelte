@@ -513,13 +513,11 @@
                 </div>
               </div>
               <div
-                class="trash"
+                class="trash-icon"
                 on:click={() => {
                   deleteToken(index);
                 }}
-              >
-                <img src="./trash.svg" alt="Delete Icon" />
-              </div>
+              />
             </div>
           {/each}
         </div>
