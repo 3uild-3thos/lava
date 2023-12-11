@@ -94,6 +94,7 @@
 
   $: console.log($workspaces[$selectedWorkspace]?.wallets);
 
+  let hoveredCard;
   // For each wallet get the tokens and assign them a color, make it selectable by index
   $: colors = $workspaces[$selectedWorkspace]?.wallets.map((wallet) => {
     return wallet.tokens.map((token) => {
@@ -513,15 +514,17 @@
                           {#if index < 4}
                             <div
                               class="wallet--token"
-                              on:mouseover={() => (
+                              on:mouseover={() => {
+                                hoveredCard = index;
                                 setHoveredToken(tokenIndex),
-                                (popOverOpened = true)
-                              )}
-                              on:mouseleave={() => (
-                                setHoveredToken(null), (popOverOpened = false)
-                              )}
+                                  (popOverOpened = true);
+                              }}
+                              on:mouseleave={() => {
+                                hoveredCard = null;
+                                setHoveredToken(null), (popOverOpened = false);
+                              }}
                             >
-                              {#if hoveredToken === tokenIndex && popOverOpened}
+                              {#if hoveredToken === tokenIndex && hoveredCard === index && popOverOpened}
                                 <Popover
                                   xOffset={25 * tokenIndex}
                                   yOffset={-65}
