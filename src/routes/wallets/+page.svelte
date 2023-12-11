@@ -371,7 +371,7 @@
             <div class="wallet--modal--item--amount">
               <span>Owned:</span>
               <div
-                class="token--supply"
+                class="token--supply--modal"
                 style={`color: ${colors[openedWalletIndex][index]};`}
               >
                 {ownedToken.amount.toLocaleString()}

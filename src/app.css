@@ -869,8 +869,14 @@ body {
 
 .token--supply {
   color: var(--supply);
+  @apply filter brightness-120 text-[16px] font-medium font-mono truncate w-full;
+}
+
+.token--supply--modal {
+  color: var(--supply);
   @apply filter brightness-120 text-[14px] font-medium font-mono truncate w-full;
 }
+
 
 .token--owner {
   @apply !mt-4 text-lava-mute text-sm font-medium flex items-center
