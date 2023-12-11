@@ -461,8 +461,9 @@
                       type="button"
                       on:mouseover={() => (hoveredLink = "tokens")}
                       on:mouseleave={() => (hoveredLink = "")}
-                      on:click={() => {
+                      on:click={(event) => {
                         editingWallet = index;
+                        event.stopPropagation();
                         isassignTokenModalOpen = true;
                       }}
                       >+

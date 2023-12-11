@@ -1227,10 +1227,12 @@ a {
 .border-lava-error {
   @apply border-lava-error
 }
-.relative:hover .edit {
-  cursor: pointer;
-  width: 2rem;
-  height: 2rem;
+.relative:hover .edit-icon {
+  opacity:1;
+}
+
+.relative:hover .trash-icon {
+  opacity:1;
 }
 
 .edit img {
@@ -1243,6 +1245,7 @@ a {
 }
 
 .edit-icon {
+    opacity:0;
     position: absolute;
     top: 1.5rem;
     right: 3.25rem;
@@ -1265,6 +1268,7 @@ a {
 
 .trash-icon {
   position: absolute;
+  opacity:0;
   top: 1.5rem;
   right: 1.5rem;
   z-index: 100; 
