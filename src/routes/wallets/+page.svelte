@@ -480,7 +480,7 @@
                     <div class="wallet--name">{wallet.name}</div>
                   </div>
                   <div class="wallet--address">
-                    {`${wallet.sol_balance} SOL`}
+                    {`${wallet.sol_balance.toLocaleString()} SOL`}
                   </div>
                   <div class="wallet--address">
                     {wallet.address}
@@ -532,7 +532,7 @@
                                 >
                                   <!--color: ${ownedToken.color}; -->
                                   <span style={`height:26px;`}
-                                    >{ownedToken.amount} owned</span
+                                    >{ownedToken.amount.toLocaleString()} owned</span
                                   >
                                 </Popover>
                               {/if}
