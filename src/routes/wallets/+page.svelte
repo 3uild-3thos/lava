@@ -360,7 +360,7 @@
             <div class="wallet--modal--item--header">
               <TokenIcon
                 value={ownedToken.symbol}
-                style="shape"
+                style="character"
                 size={26}
                 color={colors[openedWalletIndex][index]}
                 border={true}
@@ -538,7 +538,7 @@
                             {:else}-->
                               <TokenIcon
                                 value={ownedToken.symbol}
-                                style="shape"
+                                style="character"
                                 size={26}
                                 color={colors[index][tokenIndex]}
                                 border={true}
