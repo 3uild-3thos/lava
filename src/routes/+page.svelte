@@ -3,13 +3,20 @@
   import { workspaces, selectedWorkspace } from "../stores/store";
   let createModal = false;
   let name = "";
+  let isValid = false;
+  let formTouched = false;
+  $: formTouched = name.length > 0;
+  $: isValid = name.length > 0 && name.length < 32;
   const addWorkspace = () => {
-    $workspaces = [
-      ...$workspaces,
-      { name, programs: [], wallets: [], tokens: [] },
-    ];
-    $selectedWorkspace = $workspaces.length - 1;
-    createModal = false;
+    formTouched = true;
+    if (isValid) {
+      $workspaces = [
+        ...$workspaces,
+        { name, programs: [], wallets: [], tokens: [] },
+      ];
+      $selectedWorkspace = $workspaces.length - 1;
+      createModal = false;
+    }
   };
 </script>
 
@@ -20,7 +27,9 @@
       <div class="modal--form">
         <div class="modal--form-title">Workspace Name</div>
         <input
-          class="input--primary"
+          class="input--primary {!isValid && formTouched
+            ? 'input--invalid'
+            : ''}"
           placeholder="New Workspace"
           bind:value={name}
         />

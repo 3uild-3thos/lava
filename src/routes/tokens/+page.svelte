@@ -6,61 +6,35 @@
   import Icon from "../../components/avatars/index.svelte";
   import { workspaces, selectedWorkspace } from "../../stores/store";
 
-  let dummyTokens = [
-    {
-      name: "USDCoin",
-      ticker: "USDC",
-      owner: "Wallet Temp",
-      supply: 10000000,
-      decimals: 7,
-      color: ["#2775CA", "#2775CA"],
-      userAdded: false,
-    },
-    {
-      name: "Solana",
-      ticker: "SOL",
-      owner: "Wallet Temp",
-      supply: 500000000,
-      decimals: 10,
-      color: ["#9945FF", "#19FB9B"],
-      userAdded: false,
-    },
-    {
-      name: "KenOath",
-      ticker: "KEN",
-      owner: "Wallet Temp",
-      supply: 1000000,
-      decimals: 7,
-      color: ["#30DCB2", "#30DCB2"],
-      userAdded: true,
-    },
-    {
-      name: "EpicMarz",
-      ticker: "MARZ",
-      owner: "Wallet Temp",
-      supply: 100000000,
-      decimals: 9,
-      color: ["#8A54FE", "#8A54FE"],
-      userAdded: true,
-    },
-    {
-      name: "Bob",
-      ticker: "BOB",
-      owner: "Wallet Temp",
-      supply: 1000000000,
-      decimals: 10,
-      userAdded: true,
-      color: ["#FEBC2E", "#FEBC2E"],
-    },
-  ];
-
   let wallets =
     $workspaces[$selectedWorkspace]?.wallets.map((wallet) => {
       return { label: wallet.name, value: wallet.address, color: "#DC30C0" };
     }) ?? [];
 
   let color = ["#9945FF", "#19FB9B"];
-  let colors = ["#FEBC2E", "#FEBC2E"];
+
+  let tokenColors = [
+    "#8A54FE",
+    "#5498FE",
+    "#FEBC2E",
+    "#19FB9B",
+    "#FE6054",
+    "#DC30C0",
+  ];
+
+  function getTokenColor(stringParam) {
+    let sum = 0;
+    for (let i = 0; i < stringParam.length; i++) {
+      sum += stringParam.charCodeAt(i);
+    }
+    let result = sum % 5;
+    let finalColor = tokenColors[result];
+    return finalColor;
+  }
+
+  $: colors = $workspaces[$selectedWorkspace]?.tokens.map((token) => {
+    return getTokenColor(token.symbol);
+  });
 
   let assignedList = [];
 
@@ -77,11 +51,13 @@
   let isDropdownOpen = false;
   let selectedOption = "None";
   let hideTokens = false;
+  let openedTokenIndex;
   let openedToken = $workspaces[$selectedWorkspace]?.tokens[0] ?? [];
 
   function openViewModal(index) {
     isViewModalOpen = true;
     openedToken = $workspaces[$selectedWorkspace].tokens[index];
+    openedTokenIndex = index;
     assignedList =
       $workspaces[$selectedWorkspace].wallets.filter((wallet) =>
         wallet.tokens.some((token) => token.symbol === openedToken.symbol)
@@ -278,7 +254,7 @@
       <div class="modal--form-title">Mint Authority</div>
       <div class="assign--tokens--wallet">
         <Select
-          items={[...wallets, { label: "", value: "", color: "#DC30C0" }]}
+          items={[...wallets, { label: "", value: "", color: "#8A54FE" }]}
           focused={true}
           placeholder="Select Wallet (Optional)"
           on:change={updateCreatorWallet}
@@ -310,7 +286,7 @@
       <div class="modal--form-title">Freeze Authority</div>
       <div class="assign--tokens--wallet">
         <Select
-          items={[...wallets, { label: "", value: "", color: "#DC30C0" }]}
+          items={[...wallets, { label: "", value: "", color: "#8A54FE" }]}
           focused={true}
           placeholder="Select Wallet (Optional)"
           on:change={updateCreatorWallet}
@@ -353,11 +329,13 @@
     bind:isOpen={isViewModalOpen}
     on:close={() => (isViewModalOpen = false)}
     modalVariant={true}
-    color={color[0]}
+    color={colors[openedTokenIndex]}
     width={400}
   >
     <h1 class="modal--title">
-      Assign <span style={`color: ${color[0]}`}>{openedToken.symbol}</span> to Wallets
+      Assign <span style={`color: ${colors[openedTokenIndex]}`}
+        >{openedToken.symbol}</span
+      > to Wallets
     </h1>
     <div class="assign--tokens--wrapper">
       <div class="assign--tokens">
@@ -458,7 +436,7 @@
         >
           Tokens
         </h1>
-        {#if dummyTokens && !hideTokens}
+        {#if !hideTokens}
           <button
             class="btn btn--primary btn--fit btn--end"
             on:click={() => (isCreateModalOpen = true)}
@@ -482,7 +460,7 @@
                   delay: index * 100,
                   duration: 100,
                 }}
-                style={`--color: ${colors[0]}; --color2: ${colors[1]};  --bgColor: ${colors[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
+                style={`--color: #A0A0AB50; --color2: #A0A0AB50; --bgColor: #383A4110; --hoveredColor: ${colors[index]}; --opacity: 1; --left:${m.x}; --top:${m.y}`}
               >
                 <div class="token--list--item--shimmer" />
                 <div class="wallet--list--content">
@@ -490,7 +468,7 @@
                     <TokenIcon
                       value={token.symbol}
                       size={32}
-                      color={colors[0]}
+                      color={colors[index]}
                       border={true}
                       radius={7}
                     />
@@ -500,7 +478,10 @@
                     </div>
                   </div>
                   <div class="token--name">{token.symbol}</div>
-                  <div class="token--supply">
+                  <div
+                    class="token--supply"
+                    style={`--supply: ${getTokenColor(token.symbol)}`}
+                  >
                     {token.supply}
                   </div>
                   <div class="token--owner">

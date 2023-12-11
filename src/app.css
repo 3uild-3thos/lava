@@ -831,7 +831,7 @@ body {
   left: calc(var(--left) * 1px - 100px);
   width: 200px;
   height: 200px;
-  background: radial-gradient(var(--color) 0%, transparent 100%);
+  background: radial-gradient(var(--hoveredColor) 0%, transparent 100%);
   z-index: 0;
   display: none;
   border-radius: 999999px;
@@ -868,8 +868,8 @@ body {
 }
 
 .token--supply {
-  color: var(--color);
-  @apply filter brightness-120 text-[16px] font-medium font-mono;
+  color: var(--supply);
+  @apply filter brightness-120 text-[14px] font-medium font-mono truncate w-full;
 }
 
 .token--owner {

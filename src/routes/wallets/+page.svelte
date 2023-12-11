@@ -71,8 +71,38 @@
       color: ["#30DCB2", "#30DCB2"],
     },
   ];
-  let colors = ["#FEBC2E", "#FEBC2E"];
+  // let colors = ["#FEBC2E", "#FEBC2E"];
   let color = ["#9945FF", "#19FB9B"];
+  let tokenColors = [
+    "#8A54FE",
+    "#5498FE",
+    "#FEBC2E",
+    "#19FB9B",
+    "#FE6054",
+    "#DC30C0",
+  ];
+
+  function getTokenColor(stringParam) {
+    let sum = 0;
+    for (let i = 0; i < stringParam.length; i++) {
+      sum += stringParam.charCodeAt(i);
+    }
+    let result = sum % 5;
+    let finalColor = tokenColors[result];
+    return finalColor;
+  }
+
+  $: console.log($workspaces[$selectedWorkspace]?.wallets);
+
+  // For each wallet get the tokens and assign them a color, make it selectable by index
+  $: colors = $workspaces[$selectedWorkspace]?.wallets.map((wallet) => {
+    return wallet.tokens.map((token) => {
+      return getTokenColor(token.symbol);
+    });
+  });
+
+  $: console.log(colors);
+
   let ready = false;
   onMount(() => {
     ready = true;
@@ -84,10 +114,12 @@
   let isViewModalOpen = false;
   let hideWallets = false;
   let openedWallet = $workspaces[$selectedWorkspace]?.wallets[0];
+  let openedWalletIndex = 0;
 
   function openWalletModal(index) {
     isViewModalOpen = true;
     openedWallet = $workspaces[$selectedWorkspace].wallets[index];
+    openedWalletIndex = index;
   }
 
   import Popover from "../../components/Popover.svelte";
@@ -256,6 +288,8 @@
     token_symbol: symbol?.value?.length > 0,
     token_amount: amount > 0,
   };
+
+  $: console.log(editingWallet);
 </script>
 
 {#if ready}
@@ -310,22 +344,16 @@
   <Modal
     bind:isOpen={isViewModalOpen}
     on:close={() => (isViewModalOpen = false)}
-    width={400}
+    width={450}
     modalVariant={true}
-    color={colors[0]}
+    color={"#A0A0AB"}
   >
     <div class="wallet--info">
-      <TokenIcon
-        value={openedWallet.name}
-        size={32}
-        color={colors[0]}
-        border={true}
-        radius={7}
-      />
+      <img src={`/SOL.svg`} alt={`Sol Icon`} style="width:32px;height:32px" />
       <div class="wallet--name">{openedWallet.name}</div>
     </div>
     {#if openedWallet.tokens && openedWallet.tokens.length > 0}
-      <div class="wallet--tokens">Tokens Owned</div>
+      <div class="wallet--tokens">Tokens Assigned</div>
       <div class="wallet--modal--list">
         {#each openedWallet.tokens as ownedToken, index}
           <div class="wallet--modal--item">
@@ -334,7 +362,7 @@
                 value={ownedToken.symbol}
                 style="shape"
                 size={26}
-                color={colors[0]}
+                color={colors[openedWalletIndex][index]}
                 border={true}
                 radius={7}
               />
@@ -342,8 +370,11 @@
             </div>
             <div class="wallet--modal--item--amount">
               <span>Owned:</span>
-              <div class="token--supply" style={`color: ${colors[0]};`}>
-                {ownedToken.amount}
+              <div
+                class="token--supply"
+                style={`color: ${colors[openedWalletIndex][index]};`}
+              >
+                {ownedToken.amount.toLocaleString()}
               </div>
             </div>
           </div>
@@ -435,7 +466,7 @@
                 on:click={() => openWalletModal(index)}
                 on:mousemove={handleMousemove}
                 in:fade|global={{ delay: index * 100, duration: 100 }}
-                style={`--color: ${color[0]}; --color2: ${color[1]}; --bgColor: ${color[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
+                style={`--color: ${color[0]}; --color2: ${color[1]}; --hoveredColor: ${color[0]};  --bgColor: ${color[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
               >
                 <div class="token--list--item--shimmer" />
                 <div class="wallet--list--content">
@@ -478,20 +509,21 @@
                     >
                     {#if wallet?.tokens?.length > 0}
                       <div class="wallet--tokens--list">
-                        {#each wallet.tokens as ownedToken, index}
+                        {#each wallet.tokens as ownedToken, tokenIndex}
                           {#if index < 4}
                             <div
                               class="wallet--token"
                               on:mouseover={() => (
-                                setHoveredToken(index), (popOverOpened = true)
+                                setHoveredToken(tokenIndex),
+                                (popOverOpened = true)
                               )}
                               on:mouseleave={() => (
                                 setHoveredToken(null), (popOverOpened = false)
                               )}
                             >
-                              {#if hoveredToken === index && popOverOpened}
+                              {#if hoveredToken === tokenIndex && popOverOpened}
                                 <Popover
-                                  xOffset={25 * index}
+                                  xOffset={25 * tokenIndex}
                                   yOffset={-65}
                                   title={ownedToken.symbol}
                                 >
@@ -505,10 +537,10 @@
                             <img src={`${ownedToken.ticker}.svg`} alt={ownedToken.name} style="width:24px;height:24px;display:flex;align-self:center">
                             {:else}-->
                               <TokenIcon
-                                value={ownedToken.name}
+                                value={ownedToken.symbol}
                                 style="shape"
                                 size={26}
-                                color={ownedToken.color}
+                                color={colors[index][tokenIndex]}
                                 border={true}
                                 radius={7}
                               />
