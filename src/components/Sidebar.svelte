@@ -1,86 +1,76 @@
 <script lang="ts">
-   import { page } from "$app/stores";
-   import { fade, fly } from "svelte/transition";
-   let path;
+  import { page } from "$app/stores";
+  import { fade, fly } from "svelte/transition";
+  let path;
 
-   $: path = $page.url.pathname;
-   $: console.log(path);
-   import NodeConnection from "./NodeConnection.svelte";
-   import Popover from "./Popover.svelte";
-   let routes = [
-      {
-         title: "Workspaces",
-         link: "/",
-         icon: "workspace.svg",
-      },
-      {
-         title: "Wallets",
-         link: "/wallets",
-         icon: "wallet.svg",
-      },
-      {
-         title: "Tokens",
-         link: "/tokens",
-         icon: "tokens.svg",
-      },
-      {
-         title: "Tests",
-         link: "/tests",
-         icon: "tests.svg",
-      },
-   ];
+  $: path = $page.url.pathname;
+  $: console.log(path);
+  import NodeConnection from "./NodeConnection.svelte";
+  import Popover from "./Popover.svelte";
+  let routes = [
+    {
+      title: "Workspaces",
+      link: "/",
+      icon: "workspace.svg",
+    },
+    {
+      title: "Accounts",
+      link: "/accounts",
+      icon: "tokens.svg",
+    },
+    {
+      title: "Tests",
+      link: "/tests",
+      icon: "tests.svg",
+    },
+  ];
 
-   let m = { x: 0, y: 0 };
+  let m = { x: 0, y: 0 };
 
-   function handleMousemove(event) {
-      let bounds = event.currentTarget.getBoundingClientRect();
-      m.x = event.clientX - bounds.left;
-      m.y = event.clientY - bounds.top;
-   }
+  function handleMousemove(event) {
+    let bounds = event.currentTarget.getBoundingClientRect();
+    m.x = event.clientX - bounds.left;
+    m.y = event.clientY - bounds.top;
+  }
 
-   let hoveredLink: number;
+  let hoveredLink: number;
 
-   function hovered(index) {
-      hoveredLink = index;
-   }
+  function hovered(index) {
+    hoveredLink = index;
+  }
 </script>
 
 <div class="sidebar">
-   <div class="sidebar--nav">
-      <a href="/">
-         <img class="sidebar--logo" src="./logo-glyph.svg" alt="Logo Glyph" />
-      </a>
-      {#each routes as route, index}
-         <div class="sidebar--link-wrapper">
-            {#if route.link === path}
-               <div class="sidebar--active-link" in:fade={{ duration: 150 }} />
-            {/if}
-            {#if hoveredLink === index}
-               <Popover
-                  title={route.title}
-                  xOffset={55}
-                  yOffset={2.5}
-                  blur={25}
-               />
-            {/if}
-            <a
-               class="sidebar--link"
-               href={route.link}
-               on:mouseover={() => hovered(index)}
-               on:mouseleave={() => hovered(null)}
-               on:mousemove={handleMousemove}
-               style={`--left:${m.x}; --top:${m.y}`}
-            >
-               <img
-                  class="sidebar--link-icon"
-                  src={`./${route.icon}`}
-                  alt={`${route.link} Icon`}
-               />
-            </a>
-         </div>
-      {/each}
-      <div class="sidebar--bottom">
-         <NodeConnection />
+  <div class="sidebar--nav">
+    <a href="/">
+      <img class="sidebar--logo" src="./logo-glyph.svg" alt="Logo Glyph" />
+    </a>
+    {#each routes as route, index}
+      <div class="sidebar--link-wrapper">
+        {#if route.link === path}
+          <div class="sidebar--active-link" in:fade={{ duration: 150 }} />
+        {/if}
+        {#if hoveredLink === index}
+          <Popover title={route.title} xOffset={55} yOffset={2.5} blur={25} />
+        {/if}
+        <a
+          class="sidebar--link"
+          href={route.link}
+          on:mouseover={() => hovered(index)}
+          on:mouseleave={() => hovered(null)}
+          on:mousemove={handleMousemove}
+          style={`--left:${m.x}; --top:${m.y}`}
+        >
+          <img
+            class="sidebar--link-icon"
+            src={`./${route.icon}`}
+            alt={`${route.link} Icon`}
+          />
+        </a>
       </div>
-   </div>
+    {/each}
+    <div class="sidebar--bottom">
+      <NodeConnection />
+    </div>
+  </div>
 </div>

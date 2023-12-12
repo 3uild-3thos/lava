@@ -76,9 +76,29 @@ body {
   mask-composite: xor;
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  padding: 1px;
+  padding: 1.5px;
   pointer-events: none;
   position: absolute;
+}
+
+.input--group .input--primary {
+  text-indent: 20px;
+}
+
+.input--search--icon {
+  @apply w-[20px] h-[20px] absolute left-2.5 cursor-pointer;
+  background-image:url('./search.svg');
+  background-color: #131316;
+  background-size:cover;
+  z-index:999;
+}
+
+.input--group {
+  @apply flex items-center relative w-[175%];
+}
+
+.accounts--filters {
+  @apply ml-auto w-1/3 flex items-center gap-x-2 justify-center
 }
 
 .input--primary {
@@ -211,7 +231,7 @@ body {
   mask-composite: xor;
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  padding: 1px;
+  padding: 1.5px;
   pointer-events: none;
   position: absolute;
   background: linear-gradient(180deg, #383A41, #383A4120)
@@ -226,7 +246,7 @@ body {
   mask-composite: xor;
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  padding: 1px;
+  padding: 1.5px;
   pointer-events: none;
   position: absolute;
   background: linear-gradient(var(--rotate), #8A54FE, #FE9154, #FE605414 50%);
@@ -472,7 +492,7 @@ body {
   mask-composite: xor;
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  padding: 1px;
+  padding: 1.5px;
   pointer-events: none;
   position: absolute;
   background: linear-gradient(var(--rotate), transparent, #00C270, #146F48, transparent 100%);
@@ -495,7 +515,7 @@ body {
   mask-composite: xor;
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  padding: 1px;
+  padding: 1.5px;
   pointer-events: none;
   position: absolute;
   background: linear-gradient(var(--rotate), transparent, #8A54FE, #471E9E, transparent 100%);
@@ -518,7 +538,7 @@ body {
   mask-composite: xor;
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  padding: 1px;
+  padding: 1.5px;
   pointer-events: none;
   position: absolute;
   background: linear-gradient(var(--rotate), transparent, #FFBE41, #825E18, transparent 100%);
@@ -568,7 +588,7 @@ body {
   mask-composite: xor;
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  padding: 1px;
+  padding: 1.5px;
   pointer-events: none;
   position: absolute;
   background: linear-gradient(#383A41, #383A4120 100%);
@@ -586,7 +606,7 @@ body {
   mask-composite: xor;
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  padding: 1px;
+  padding: 1.5px;
   pointer-events: none;
   position: absolute;
   background: linear-gradient(var(--borderColor), #383A4120 100%) !important;
@@ -806,7 +826,7 @@ body {
   mask-composite: xor;
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  padding: 1px;
+  padding: 1.5px;
   pointer-events: none;
   position: absolute;
   z-index: 0;
@@ -899,7 +919,7 @@ body {
   mask-composite: xor;
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  padding: 1px;
+  padding: 1.5px;
   pointer-events: none;
   overflow: hidden;
   position: absolute;
@@ -941,11 +961,15 @@ body {
   mask-composite: xor;
   -webkit-mask-composite: xor;
   mask-composite: exclude;
-  padding: 1px;
+  padding: 1.5px;
   pointer-events: none;
   position: absolute;
   opacity: 0.4;
   background: linear-gradient(180deg, var(--color), transparent 100%);
+}
+
+.wallet--token--more {
+  @apply w-[26px] h-[26px] rounded-[7px] text-xs flex items-center justify-center border-lava-700 border-solid border-opacity-80 text-lava-mute
 }
 
 .new--wallet-text {
@@ -1272,6 +1296,14 @@ a {
   background-color: #CCCCE0;
 }
 
+.relative:hover .account--type {
+  opacity:0;
+}
+
+.account--type {
+  @apply text-misc rounded-xl border-lava-700 bg-lava-card font-medium bg-opacity-50 border-solid border p-1.5 px-2 text-xs font-medium absolute top-4 right-4 transition duration-200
+}
+
 .trash-icon {
   position: absolute;
   opacity:0;
@@ -1304,4 +1336,21 @@ background-color: #FF2950;
   width: 1.2rem;
   z-index:99999999;
   position:relative;
+}
+
+.create--account--grid {
+  @apply grid grid-cols-3 gap-4 mt-4
+}
+
+.create--account {
+  @apply flex flex-col gap-y-2 text-center text-sm font-medium 
+}
+
+.create--account--card {
+  @apply rounded-xl w-full cursor-pointer flex items-center justify-center h-full p-2 bg-lava-card bg-opacity-90 border-lava-700 border-solid border border-opacity-20 hover:border-opacity-70 box-border relative overflow-hidden transition duration-200;
+  aspect-ratio: 1/1;
+}
+
+.create--account--card img {
+  @apply w-[85%]
 }
