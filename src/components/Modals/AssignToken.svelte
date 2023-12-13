@@ -120,32 +120,3 @@
 <div class="btns--modal">
   <button class="btn btn--lava" on:click={assignToken}>Assign</button>
 </div>
-<!-- <Select
-items={wallets}
-focused={true}
-placeholder="Select Wallet"
-on:change={updateSelectedWallet}
-on:clear={clearSelectedWallet}
->
-<div slot="selection" class="select--option" let:selection>
-  <Icon
-    size={24}
-    value={selection.label}
-    color={selection.color}
-    border={true}
-    radius={7}
-  />
-  <div class="select--text">{selection.label}</div>
-</div>
-
-<div slot="item" class="select--option" let:item>
-  <Icon
-    size={24}
-    value={item.label}
-    color={item.color}
-    border={true}
-    radius={7}
-  />
-  <div class="select--text">{item.label}</div>
-</div>
-</Select> -->

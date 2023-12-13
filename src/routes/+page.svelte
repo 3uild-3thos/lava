@@ -1,6 +1,7 @@
 <script>
   import Modal from "../components/Modal.svelte";
   import { workspaces, selectedWorkspace } from "../stores/store";
+  import { goto } from "$app/navigation";
   let createModal = false;
   let name = "";
   let isValid = false;
@@ -17,6 +18,11 @@
       $selectedWorkspace = $workspaces.length - 1;
       createModal = false;
     }
+  };
+
+  const setActiveWorkspace = (index) => {
+    $selectedWorkspace = index;
+    goto("/workspace");
   };
 </script>
 
@@ -113,20 +119,22 @@
       <div class="workspace--create--title">Workspaces</div>
       <div class="workspace--create--options">
         {#each $workspaces as workspace, index}
-          <div class="workspace--create--option">
-            <div class="workspace--create--text">
+          <div class="workspace--list--item">
+            <div
+              class={`workspace--list--item--text${
+                $selectedWorkspace === index ? " active" : ""
+              }`}
+            >
               <div
                 on:click={() => {
                   $selectedWorkspace = index;
                 }}
-                class={`workspace--create--text--title${
-                  $selectedWorkspace === index ? " active" : ""
-                }`}
+                class={`workspace--list--item--text--title`}
               >
                 {workspace.name}
               </div>
             </div>
-            <button
+            <!-- <button
               class="btn btn--primary workspace--option-btn"
               on:click={() => {
                 const data = JSON.stringify(workspace);
@@ -141,7 +149,17 @@
                 document.body.removeChild(a);
                 window.URL.revokeObjectURL(url);
               }}>Save</button
+            > -->
+            <button
+              class="btn btn--primary workspace--option-btn"
+              on:click={() => setActiveWorkspace(index)}
             >
+              {#if $selectedWorkspace === index}
+                View
+              {:else}
+                Use
+              {/if}
+            </button>
           </div>
           {#if index < $workspaces.length - 1}
             <hr class="divider" />

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { fade } from "svelte/transition";
+  import { fade, blur } from "svelte/transition";
   import Popover from "./Popover.svelte";
   import TokenIcon from "./avatars/index.svelte";
   import { createEventDispatcher } from "svelte";
@@ -93,7 +93,7 @@
           (hoveredCard = account.index), (hoveredCardType = "wallet")
         )}
         on:mouseleave={() => ((hoveredCard = -1), (hoveredCardType = ""))}
-        in:fade|global={{ delay: index * 100, duration: 100 }}
+        in:fade|global={{ delay: index * 50, duration: 100 }}
         style={`--color: ${color[0]}; --color2: ${color[1]}; --hoveredColor: ${color[0]};  --bgColor: ${color[0]}10; --opacity: 0.6; --left:${m.x}; --top:${m.y}`}
       >
         <div class="token--list--item--shimmer" />
@@ -179,9 +179,9 @@
       </div>
       <div
         class="account--type"
-        in:fade|global={{
+        in:blur|global={{
           delay: index * 100,
-          duration: 100,
+          duration: 300,
         }}
       >
         Wallet
@@ -217,7 +217,7 @@
         )}
         on:mouseleave={() => ((hoveredCard = -1), (hoveredCardType = ""))}
         in:fade|global={{
-          delay: index * 100,
+          delay: index * 50,
           duration: 100,
         }}
         style={`--color: #A0A0AB50; --color2: #A0A0AB50; --bgColor: #383A4110; --hoveredColor: ${
@@ -266,9 +266,9 @@
       </div>
       <div
         class="account--type"
-        in:fade|global={{
+        in:blur|global={{
           delay: index * 100,
-          duration: 100,
+          duration: 300,
         }}
       >
         Token

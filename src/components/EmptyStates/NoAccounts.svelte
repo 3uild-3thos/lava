@@ -8,7 +8,7 @@
   <img
     src="/emptystates/nowallets.svg"
     class="empty--state--image"
-    alt="No Tokens in Wallet"
+    alt="No Accounts"
   />
   <div class="empty--state--text">You don't have any accounts</div>
   <div class="empty--state--subtext">Add an account to start testing</div>
