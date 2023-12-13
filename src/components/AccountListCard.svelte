@@ -60,6 +60,7 @@
     .map((wallet, index) => ({ ...wallet, itemType: "wallet", index }));
 
   $: filteredTokens = accounts.tokens
+    .map((token, index) => ({ ...token, originalIndex: index }))
     .filter((token) =>
       token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
     )
@@ -220,7 +221,7 @@
           duration: 100,
         }}
         style={`--color: #A0A0AB50; --color2: #A0A0AB50; --bgColor: #383A4110; --hoveredColor: ${
-          tokenColors[account.index]
+          tokenColors[account.originalIndex]
         }; --opacity: 1; --left:${m.x}; --top:${m.y};
         `}
       >
@@ -232,7 +233,7 @@
               size={32}
               border={true}
               radius={7}
-              color={tokenColors[account.index]}
+              color={tokenColors[account.originalIndex]}
             />
 
             <div class="token--ticker">
@@ -241,7 +242,7 @@
           </div>
           <div
             class="token--name"
-            style={`color: ${tokenColors[account.index]}`}
+            style={`color: ${tokenColors[account.originalIndex]}`}
           >
             {account.symbol}
           </div>
