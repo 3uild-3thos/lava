@@ -9,8 +9,8 @@
   import Popover from "./Popover.svelte";
   let routes = [
     {
-      title: "Workspaces",
-      link: "/",
+      title: "Workspace",
+      link: "/workspace",
       icon: "workspace.svg",
     },
     {
