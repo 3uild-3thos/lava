@@ -236,22 +236,30 @@
             />
 
             <div class="token--ticker">
-              {account.symbol}
+              {account.name}
             </div>
           </div>
-          <div class="token--name">{account.symbol}</div>
           <div
-            class="token--supply"
+            class="token--name"
             style={`color: ${tokenColors[account.index]}`}
           >
-            {account.supply}
+            {account.symbol}
           </div>
-          <div class="token--owner">
-            <img
-              src="./owner.svg"
-              class="token--owner-icon"
-              alt="Fingerprint Icon"
-            />{account.creator}
+          <div class="token--owners">
+            <div class="token--owner">
+              <img
+                src="./owner.svg"
+                class="token--owner-icon"
+                alt="Fingerprint Icon"
+              />
+            </div>
+            <div class="token--owner">
+              <img
+                src="./freeze.svg"
+                class="token--owner-icon"
+                alt="Freeze Icon"
+              />
+            </div>
           </div>
         </div>
       </div>

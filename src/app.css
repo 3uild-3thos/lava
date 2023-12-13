@@ -783,11 +783,11 @@ body {
 }
 
 .wallet--info {
-  @apply flex space-x-2 items-center
+  @apply flex space-x-2 items-center w-[60%]
 }
 
 .wallet--name {
-  @apply my-0 text-lg text-lava-primary font-bold
+  @apply my-0 text-lg text-lava-primary font-bold truncate
 }
 
 .wallet--modal--name {
@@ -880,11 +880,11 @@ body {
 }
 
 .token--name {
-  @apply text-[20px] font-bold !mt-auto;
+  @apply text-[20px] font-medium !mt-auto truncate font-mono; 
 }
 
 .token--header {
-  @apply flex items-center
+  @apply flex items-center w-[60%]
 }
 
 .token--supply {
@@ -897,17 +897,20 @@ body {
   @apply filter brightness-120 text-[14px] font-medium font-mono truncate w-full;
 }
 
+.token--owners {
+  @apply text-lava-mute text-sm font-medium flex items-center space-x-1
+}
 
 .token--owner {
-  @apply !mt-4 text-lava-mute text-sm font-medium flex items-center
+  @apply w-[26px] h-[26px] rounded-[7px] text-xs flex items-center justify-center border-lava-700 border-solid border-opacity-80 text-lava-mute
 }
 
 .token--owner-icon {
-  @apply mr-1 w-[16px] h-[16px]
+  @apply w-[16px] h-[16px]
 }
 
 .token--ticker {
-  @apply ml-2 font-bold text-lg
+  @apply ml-2 font-bold text-lg truncate
 }
 
 .token--list--item::before {

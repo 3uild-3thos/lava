@@ -20,6 +20,7 @@ export interface Workspace {
 }
 
 export interface Token {
+  name: string;
   symbol: string;
   supply: number;
   creator: string;

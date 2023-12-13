@@ -31,7 +31,7 @@
     shapeKey = randiman({ value, min: 1, max: 60 });
     wrapperStyle = `width: ${size}px; height: ${size}px; border-radius: ${
       radius || size
-    }px; background-color: ${color}09; border: 1px solid ${color}40;`;
+    }px; background-color: ${color}09; border: 1px solid ${color}40; flex-shrink:0`;
 
     if (shadow) {
       wrapperStyle +=

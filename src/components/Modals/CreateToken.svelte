@@ -54,6 +54,7 @@
       $workspaces[$selectedWorkspace].tokens = [
         ...$workspaces[$selectedWorkspace].tokens,
         {
+          name,
           symbol: symbol.toUpperCase(),
           supply,
           creator,
