@@ -17,6 +17,7 @@
       ];
       $selectedWorkspace = $workspaces.length - 1;
       createModal = false;
+      goto("/workspace");
     }
   };
 

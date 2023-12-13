@@ -205,7 +205,7 @@
           >
         {/if}
       </div>
-      {#if $workspaces[$selectedWorkspace]?.wallets.length > 0 && !hideWallets}
+      {#if ($workspaces[$selectedWorkspace]?.wallets.length > 0 || $workspaces[$selectedWorkspace]?.tokens.length  > 0) && !hideWallets}
         <div class="wallet--list">
           <AccountListCard
             accounts={{

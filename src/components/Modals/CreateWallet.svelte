@@ -37,6 +37,7 @@
 
   function handleInputTouch(field: string) {
     formTouched[field] = true;
+    console.log(formTouched);
   }
 
   function onEditWallet() {
@@ -77,7 +78,7 @@
 <div class="modal--form">
   <div class="modal--form-inline">
     <div class="modal--form-title">Wallet Name</div>
-    <div class="modal--form--label-end">{walletName.length}/32</div>
+    <div class={`modal--form--label-end${walletName.length > 32 ? " text-lava-error" : ""}`}>{walletName.length}/32</div>
   </div>
   <input
     class="input--primary {!valid.name && formTouched.name
@@ -102,9 +103,9 @@
 <div class="btns--modal">
   <button
     class={`btn btn--lava${
-      isValidAddress(walletAddress) ? "" : " btn--disabled"
+      isValidAddress(walletAddress) && valid.name && valid.sol_balance ? "" : " btn--disabled"
     }`}
-    disabled={!isValidAddress(walletAddress)}
+    disabled={!isValidAddress(walletAddress) || !valid.name || !valid.sol_balance}
     on:click={() => {
       handleInputTouch("name");
       handleInputTouch("sol_balance");

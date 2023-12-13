@@ -73,7 +73,7 @@
   <div class="modal--form-item">
     <div class="modal--form-inline">
       <div class="modal--form-title">Token Name</div>
-      <div class="modal--form--label-end">{name.length}/32</div>
+      <div class={`modal--form--label-end${name.length > 32 ? " text-lava-error": ""}`}>{name.length}/32</div>
     </div>
     <input
       class="input--primary {!valid.name && formTouched.name
@@ -173,7 +173,9 @@
     </Select>
   </div>
   <div class="btns--modal">
-    <button class="btn btn--lava" on:click={() => addToken()}
+    <button class={`btn btn--lava${!valid.name || !valid.symbol || !valid.decimal ? " btn--disabled" : ""}`}
+      on:click={() => addToken()}
+      disabled={!valid.name || !valid.symbol || !valid.decimal}
       >Create Token</button
     >
   </div>

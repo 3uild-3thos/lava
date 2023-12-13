@@ -1456,3 +1456,7 @@ background-color: #FF2950;
 .create--account--card img {
   @apply w-[85%]
 }
+
+.text-lava-error {
+  @apply text-lava-error
+}

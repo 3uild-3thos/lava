@@ -31,6 +31,22 @@
           style="margin-right:5px;width:16px;height:16px;"
         /> Create an Account</button
       > -->
+      <button
+      class="btn btn--primary workspace--option-btn"
+      on:click={() => {
+        const data = JSON.stringify(workspace);
+        const blob = new Blob([data], { type: "text/plain" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.setAttribute("hidden", "");
+        a.setAttribute("href", url);
+        a.setAttribute("download", `${workspace.name}.json`);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+      }}>Download</button
+    >
       </div>
 
       <div class="workspace--view">
