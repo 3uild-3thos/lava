@@ -902,7 +902,8 @@ body {
 }
 
 .token--owner {
-  @apply w-[26px] h-[26px] rounded-[7px] text-xs flex items-center justify-center border-lava-700 border-solid border-opacity-80 text-lava-mute
+  @apply w-[26px] h-[26px] rounded-[7px] text-xs flex items-center justify-center border-lava-700 border-solid border-opacity-80 text-lava-mute;
+  box-sizing:border-box;
 }
 
 .token--owner-icon {
@@ -972,7 +973,8 @@ body {
 }
 
 .wallet--token--more {
-  @apply w-[26px] h-[26px] rounded-[7px] text-xs flex items-center justify-center border-lava-700 border-solid border-opacity-80 text-lava-mute
+  @apply w-[26px] h-[26px] rounded-[7px] text-xs flex items-center justify-center border-lava-700 border-solid border-opacity-80 text-lava-mute;
+  box-sizing:border-box;
 }
 
 .new--wallet-text {

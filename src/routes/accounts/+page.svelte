@@ -59,9 +59,19 @@
   }
 
   const deleteToken = (index) => {
+    const tokenToDelete = $workspaces[$selectedWorkspace].tokens[index];
     $workspaces[$selectedWorkspace].tokens = $workspaces[
       $selectedWorkspace
     ].tokens.filter((token, i) => i !== index);
+
+    $workspaces[$selectedWorkspace].wallets = $workspaces[
+      $selectedWorkspace
+    ].wallets.map((wallet) => {
+      wallet.tokens = wallet.tokens.filter(
+        (token) => token.symbol !== tokenToDelete.symbol
+      );
+      return wallet;
+    });
   };
 
   let walletName = "";
@@ -161,6 +171,7 @@
     on:close={() => (isAssignTokenModalOpen = false)}
   >
     <AssignToken
+      tokenColors={colorsTokens}
       {editingWallet}
       on:closeModal={() => (isAssignTokenModalOpen = false)}
     />

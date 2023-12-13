@@ -7,6 +7,8 @@
   let symbol = "";
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
+  import Icon from "../avatars/index.svelte";
+  export let tokenColors;
 
   function updateToken(event) {
     symbol = event.detail;
@@ -73,16 +75,37 @@
 <div class="modal--form">
   <div class="modal--form-title">Token</div>
   <Select
-    on:change={updateToken}
-    placeholder="Select a token"
     items={$workspaces[$selectedWorkspace]?.tokens.map(
       ({ symbol }) => symbol
     ) ?? []}
+    on:change={updateToken}
+    placeholder="Select a token"
     class={!valid.token_symbol && formTouched.token_symbol
       ? "input--invalid"
       : ""}
     on:blur={() => handleInputTouch("token_symbol")}
-  />
+  >
+    <div slot="selection" class="select--option" let:selection>
+      <Icon
+        size={24}
+        value={selection.label}
+        color={tokenColors[selection.index]}
+        border={true}
+        radius={7}
+      />
+      <div class="select--text">{selection.label}</div>
+    </div>
+    <div slot="item" class="select--option" let:item>
+      <Icon
+        size={24}
+        value={item.label}
+        color={tokenColors[item.index]}
+        border={true}
+        radius={7}
+      />
+      <div class="select--text">{item.label}</div>
+    </div>
+  </Select>
   <div class="modal--form-title">Amount</div>
   <input
     class="input--primary {!valid.token_amount && formTouched.token_amount
@@ -97,3 +120,32 @@
 <div class="btns--modal">
   <button class="btn btn--lava" on:click={assignToken}>Assign</button>
 </div>
+<!-- <Select
+items={wallets}
+focused={true}
+placeholder="Select Wallet"
+on:change={updateSelectedWallet}
+on:clear={clearSelectedWallet}
+>
+<div slot="selection" class="select--option" let:selection>
+  <Icon
+    size={24}
+    value={selection.label}
+    color={selection.color}
+    border={true}
+    radius={7}
+  />
+  <div class="select--text">{selection.label}</div>
+</div>
+
+<div slot="item" class="select--option" let:item>
+  <Icon
+    size={24}
+    value={item.label}
+    color={item.color}
+    border={true}
+    radius={7}
+  />
+  <div class="select--text">{item.label}</div>
+</div>
+</Select> -->

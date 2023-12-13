@@ -166,7 +166,7 @@
                     </div>
                   {/if}
                 {/each}
-                {#if account.tokens.length > 3}
+                {#if account.tokens.length > 4}
                   <div class="wallet--token--more">
                     +{account.tokens.length - 4}
                   </div>
