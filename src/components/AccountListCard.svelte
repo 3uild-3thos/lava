@@ -3,6 +3,7 @@
   import Popover from "./Popover.svelte";
   import TokenIcon from "./avatars/index.svelte";
   import { createEventDispatcher } from "svelte";
+  import Modal from "./Modal.svelte";
 
   export let walletsLength: number;
   export let accounts: any = [];
@@ -43,6 +44,7 @@
 
   function deleteToken(index) {
     dispatch("deleteToken", { index });
+    deleteTokenModal = false;
   }
 
   let m = { x: 0, y: 0 };
@@ -71,7 +73,54 @@
     sortType === "wallets"
       ? [...filteredWallets, ...filteredTokens]
       : [...filteredTokens, ...filteredWallets];
+
+  let deletingWallet = -1;
+  let deleteModal = false;
+
+  const onDeleteWallet = (index) => {
+    deletingWallet = index;
+    deleteModal = true;
+  };
+
+  let deletingToken = -1;
+  let deleteTokenModal = false;
+
+  const onDeleteToken = (index) => {
+    deletingToken = index;
+    deleteTokenModal = true;
+  };
+  
 </script>
+
+
+    <Modal bind:isOpen={deleteModal} on:close={() => deleteModal = false}>
+      <h1 class="modal--title">Delete</h1>
+      <div class="modal--form">
+        <div class="modal--form-title">please confirm that you whant to delet the selected Wallet</div>
+      <div class="btns--modal">
+        <button
+          class="btn btn--lava"
+          on:click={() => {
+            deleteWallet(deletingWallet);
+          }}>Remove</button
+        >
+      </div>
+    </Modal>
+
+
+    <Modal bind:isOpen={deleteTokenModal} on:close={() => deleteTokenModal = false}>
+      <h1 class="modal--title">Delete</h1>
+      <div class="modal--form">
+        <div class="modal--form-title">Please confirm that you whant to delet the selected Token account</div>
+      <div class="btns--modal">
+        <button
+          class="btn btn--lava"
+          on:click={() => {
+            deleteToken(deletingToken);
+          }}>Remove</button
+        >
+      </div>
+    </Modal>
 
 {#each sortedAccounts as account, index}
   {#if account.type === "wallet"}
@@ -192,7 +241,7 @@
       <div
         class="trash-icon"
         on:click={() => {
-          deleteWallet(account.originalIndex);
+          onDeleteWallet(account.originalIndex);
         }}
       />
       <div
@@ -283,7 +332,7 @@
       <div
         class="trash-icon"
         on:click={() => {
-          deleteToken(account.originalIndex);
+          onDeleteToken(account.originalIndex);
         }}
       />
     </div>
