@@ -21,21 +21,6 @@
 
   const dispatch = createEventDispatcher();
 
-  function isTokenOwnedByHoveredWallet(token: any) {
-    if (
-      hoveredCard === -1 ||
-      accounts.wallets[hoveredCard]?.tokens === undefined
-    ) {
-      return false;
-    }
-    if (hoveredCardType === "wallet") {
-      return accounts.wallets[hoveredCard].tokens.some(
-        (ownedToken: any) => ownedToken.symbol === token.symbol
-      );
-    }
-    return false;
-  }
-
   function deleteWallet(index) {
     dispatch("deleteWallet", { index });
   }
@@ -93,7 +78,10 @@
     <div
       class="relative"
       style={`opacity: ${
-        hoveredCard === account.index || hoveredCard === -1 ? "1" : "0.2"
+        (hoveredCard === account.index && hoveredCardType === "wallet") ||
+        hoveredCard === -1
+          ? "1"
+          : "0.2"
       }`}
     >
       <div
@@ -214,9 +202,6 @@
     <div
       class="relative"
       style={`opacity: ${
-        (hoveredCardType === "wallet" &&
-          (hoveredCard === account.index ||
-            isTokenOwnedByHoveredWallet(account))) ||
         (hoveredCardType === "token" && hoveredCard === account.index) ||
         hoveredCard === -1
           ? "1"
