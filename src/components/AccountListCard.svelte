@@ -54,6 +54,7 @@
   }
 
   $: filteredWallets = accounts.wallets
+    .map((wallet, index) => ({ ...wallet, originalIndex: index }))
     .filter((wallet) =>
       wallet.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
@@ -70,8 +71,6 @@
     sortType === "wallets"
       ? [...filteredWallets, ...filteredTokens]
       : [...filteredTokens, ...filteredWallets];
-
-  $: console.log(accounts);
 </script>
 
 {#each sortedAccounts as account, index}
@@ -80,14 +79,18 @@
       class="relative"
       style={`opacity: ${
         (hoveredCard === account.index && hoveredCardType === "wallet") ||
-        hoveredCard === -1
-          ? "1"
-          : "0.2"
+        hoveredCard === -1 ||
+        (hoveredCardType === "token" &&
+          account?.tokens.some(
+            (token) => token.symbol === accounts.tokens[hoveredCard]?.symbol
+          ))
+          ? 1
+          : 0.2
       }`}
     >
       <div
         class="wallet--list--item"
-        on:click={() => openWalletModal(account.index)}
+        on:click={() => openWalletModal(account.originalIndex)}
         on:mousemove={handleMousemove}
         on:mouseover={() => (
           (hoveredCard = account.index), (hoveredCardType = "wallet")
@@ -120,9 +123,9 @@
               on:mouseover={() => (hoveredLink = "tokens")}
               on:mouseleave={() => (hoveredLink = "")}
               on:click={(event) => {
-                editingWallet = account.index;
+                editingWallet = account.originalIndex;
                 event.stopPropagation();
-                openAssignTokenModal(account.index);
+                openAssignTokenModal(account.originalIndex);
               }}
               >+
 
@@ -137,7 +140,7 @@
                     <div
                       class="wallet--token"
                       on:mouseover={() => {
-                        hoveredCard = account.index;
+                        hoveredCard = account.originalIndex;
                         setHoveredToken(tokenIndex), (popOverOpened = true);
                       }}
                       on:mouseleave={() => {
@@ -160,7 +163,7 @@
                         value={ownedToken.symbol}
                         style="character"
                         size={26}
-                        color={walletColors[account.index][tokenIndex]}
+                        color={walletColors[account.originalIndex][tokenIndex]}
                         border={true}
                         radius={7}
                       />
@@ -189,13 +192,13 @@
       <div
         class="trash-icon"
         on:click={() => {
-          deleteWallet(account.index);
+          deleteWallet(account.originalIndex);
         }}
       />
       <div
         class="edit-icon"
         on:click={() => {
-          editWallet(account.index);
+          editWallet(account.originalIndex);
         }}
       />
     </div>
@@ -204,9 +207,13 @@
       class="relative"
       style={`opacity: ${
         (hoveredCardType === "token" && hoveredCard === account.index) ||
-        hoveredCard === -1
-          ? "1"
-          : "0.2"
+        hoveredCard === -1 ||
+        (hoveredCardType === "wallet" &&
+          accounts.wallets[hoveredCard]?.tokens?.some(
+            (ownedToken) => ownedToken.symbol === account.symbol
+          ))
+          ? 1
+          : 0.2
       }`}
     >
       <div
@@ -276,7 +283,7 @@
       <div
         class="trash-icon"
         on:click={() => {
-          deleteToken(account.index);
+          deleteToken(account.originalIndex);
         }}
       />
     </div>
