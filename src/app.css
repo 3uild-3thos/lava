@@ -94,11 +94,11 @@ body {
 }
 
 .input--group {
-  @apply flex items-center relative w-[175%];
+  @apply flex items-center relative w-[150%];
 }
 
 .accounts--filters {
-  @apply ml-auto w-1/3 flex items-center gap-x-2 justify-center
+  @apply ml-auto w-2/5 flex items-center gap-x-2 justify-center
 }
 
 .input--primary {
@@ -1252,6 +1252,7 @@ a {
 
 .relative {
   position: relative;
+  @apply transition ease;
 }
 
 .border-lava-error {

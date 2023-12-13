@@ -44,6 +44,9 @@
   let openedWallet = $workspaces[$selectedWorkspace]?.wallets[0];
   let openedWalletIndex = 0;
 
+  $: searchTerm = "";
+  $: sortType = "wallets";
+
   function openWalletModal(index) {
     isViewModalOpen = true;
     openedWallet = $workspaces[$selectedWorkspace].wallets[index];
@@ -173,7 +176,10 @@
         >
           Accounts
         </h1>
-        <AccountFilter />
+        <AccountFilter
+          on:searchTermChange={(event) => (searchTerm = event.detail)}
+          on:sortTypeChange={(event) => (sortType = event.detail)}
+        />
         {#if !hideWallets}
           <button
             class="btn btn--primary btn--fit btn--end"
@@ -192,8 +198,16 @@
         <div class="wallet--list">
           <AccountListCard
             accounts={{
-              wallets: $workspaces[$selectedWorkspace]?.wallets ?? [],
-              tokens: $workspaces[$selectedWorkspace]?.tokens ?? [],
+              wallets:
+                $workspaces[$selectedWorkspace]?.wallets.map((wallet) => ({
+                  ...wallet,
+                  type: "wallet",
+                })) ?? [],
+              tokens:
+                $workspaces[$selectedWorkspace]?.tokens.map((token) => ({
+                  ...token,
+                  type: "token",
+                })) ?? [],
             }}
             walletsLength={$workspaces[$selectedWorkspace]?.wallets.length}
             {color}
@@ -205,6 +219,8 @@
             on:deleteWallet={(event) => deleteWallet(event.detail.index)}
             on:editWallet={(event) => editWallet(event.detail.index)}
             on:deleteToken={(event) => deleteToken(event.detail.index)}
+            {searchTerm}
+            {sortType}
           />
         </div>
       {:else}
