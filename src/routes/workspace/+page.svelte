@@ -66,7 +66,16 @@
       subtitle: "Subtitle",
       completed: false,
     },
-  ];
+  ].map((step, index, array) => {
+    if (index === 0) {
+      return { ...step, nextStepActive: step.completed || index === 0 };
+    } else {
+      return {
+        ...step,
+        nextStepActive: step.completed || array[index - 1].completed,
+      };
+    }
+  });
 </script>
 
 {#if ready}
@@ -194,7 +203,9 @@
               {#each gettingStarted as step, index}
                 <div
                   class="workspace--getting-started--step"
-                  style={`--color: ${step.completed ? "#54FE98" : "#A0A0AB40"}
+                  style={`opacity: ${step.nextStepActive ? "100%" : "40%"}
+                  
+                  ;--color: ${step.completed ? "#54FE98" : "#A0A0AB40"}
                   
                   ;--opacity: ${
                     index === gettingStarted.length - 1 ? "0%" : "100%"
