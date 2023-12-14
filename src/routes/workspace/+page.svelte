@@ -198,7 +198,12 @@
 
         <div class="workspace--items">
           <div class="workspace--getting-started">
-            <div class="workspace--getting-started--title">Getting Started</div>
+            <div class="workspace--getting-started--title">
+              Getting Started <span style="color: #A0A0AB"
+                >({gettingStarted.filter((step) => step.completed)
+                  .length}/{gettingStarted.length})</span
+              >
+            </div>
             <div class="workspace--getting-started--card">
               {#each gettingStarted as step, index}
                 <div
@@ -233,7 +238,16 @@
             </div>
           </div>
           <div class="workspace--idl">
-            <div class="workspace--getting-started--title">IDL</div>
+            <div class="workspace--idl--header">
+              <div class="workspace--getting-started--title">IDL</div>
+              <button
+                class="btn btn--primary workspace--btn btn--fit"
+                on:click={() => alert("Not implemented yet")}
+              >
+                <img src="/import.svg" alt="Export Icon" />
+                Import
+              </button>
+            </div>
             <div class="workspace--idl--card" />
           </div>
         </div>

@@ -1501,7 +1501,7 @@ background-color: #FF2950;
 }
 
 .workspace--btn {
-  @apply  flex items-center gap-x-2
+  @apply  flex items-center gap-x-2 ml-auto
 }
 
 .header--buttons {
@@ -1527,4 +1527,8 @@ background-color: #FF2950;
 
 .text-lava-error {
   @apply text-lava-error
+}
+
+.workspace--idl--header {
+  @apply flex items-center gap-x-2 -mt-4
 }
