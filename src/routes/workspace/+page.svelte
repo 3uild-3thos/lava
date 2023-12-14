@@ -2,6 +2,8 @@
   import { workspaces, selectedWorkspace } from "../../stores/store";
   import { onMount } from "svelte";
   import { fly, fade } from "svelte/transition";
+  import Modal from "../../components/Modal.svelte";
+  import Export from "../../components/Modals/Export.svelte";
 
   let workspace = $workspaces[$selectedWorkspace];
 
@@ -9,13 +11,38 @@
   onMount(() => {
     ready = true;
   });
+
+  let isExportModalOpen = false;
+
+  function exportWorkspace() {
+    const data = JSON.stringify(workspace);
+    const blob = new Blob([data], { type: "text/plain" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.setAttribute("hidden", "");
+    a.setAttribute("href", url);
+    a.setAttribute("download", `${workspace.name}.json`);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }
 </script>
 
 {#if ready}
+  <!-- Export Modal -->
+  <Modal
+    width={300}
+    bind:isOpen={isExportModalOpen}
+    on:close={() => (isExportModalOpen = false)}
+  >
+    <Export on:exportWorkspace={() => exportWorkspace()} />
+  </Modal>
+
   <div class="common--wrapper">
     <div class="tokens">
       <div class="common--slug">Viewing Workspace</div>
-      <div class="common--header">
+      <div class="common--header" style="padding-right:0;">
         <h1
           class="common--title"
           style="margin-bottom:0"
@@ -24,29 +51,13 @@
           {workspace.name}
           <div class="workspace--edit" />
         </h1>
-        <!-- <button class="btn btn--primary btn--fit btn--end"
-        ><img
-          src="./add.svg"
-          alt="Add Icon"
-          style="margin-right:5px;width:16px;height:16px;"
-        /> Create an Account</button
-      > -->
-      <button
-      class="btn btn--primary workspace--option-btn"
-      on:click={() => {
-        const data = JSON.stringify(workspace);
-        const blob = new Blob([data], { type: "text/plain" });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.setAttribute("hidden", "");
-        a.setAttribute("href", url);
-        a.setAttribute("download", `${workspace.name}.json`);
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-      }}>Download</button
-    >
+        <button
+          class="btn btn--primary workspace--btn btn--fit"
+          on:click={() => (isExportModalOpen = true)}
+        >
+          <img src="/export.svg" alt="Export Icon" />
+          Export
+        </button>
       </div>
 
       <div class="workspace--view">

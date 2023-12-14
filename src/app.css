@@ -659,7 +659,7 @@ body {
 }
 
 .workspace--stats {
-  @apply w-full h-full z-10 relative flex gap-x-2
+  @apply w-full h-full z-10 relative flex gap-x-2 box-border
 }
 
 .workspace--stat--icon {
@@ -1446,6 +1446,18 @@ background-color: #FF2950;
 
 .create--account--grid {
   @apply grid grid-cols-3 gap-4 mt-4
+}
+
+.export--grid {
+  @apply grid grid-cols-2 gap-4 mt-4
+}
+
+.workspace--btn {
+  @apply ml-auto flex items-center gap-x-2
+}
+
+.workspace--btn img {
+  @apply w-[20px] h-[20px]
 }
 
 .create--account {
