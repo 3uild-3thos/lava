@@ -44,6 +44,29 @@
     isDeleteModalOpen = false;
     goto("/");
   }
+
+  let gettingStarted = [
+    {
+      title: "Create your first Wallet Account",
+      subtitle: "Subtitle",
+      completed: workspace.wallets.length > 0,
+    },
+    {
+      title: "Create your first Token Account",
+      subtitle: "Subtitle",
+      completed: workspace.tokens.length > 0,
+    },
+    {
+      title: "Assign a token to a wallet",
+      subtitle: "Subtitle",
+      completed: workspace.wallets.some((tokens) => tokens.tokens.length > 0),
+    },
+    {
+      title: "Import IDL",
+      subtitle: "Subtitle",
+      completed: false,
+    },
+  ];
 </script>
 
 {#if ready}
@@ -161,6 +184,46 @@
               <div class="workspace--stat--value">0</div>
               <div class="workspace--stat--title">Metadata Accounts</div>
             </div>
+          </div>
+        </div>
+
+        <div class="workspace--items">
+          <div class="workspace--getting-started">
+            <div class="workspace--getting-started--title">Getting Started</div>
+            <div class="workspace--getting-started--card">
+              {#each gettingStarted as step, index}
+                <div
+                  class="workspace--getting-started--step"
+                  style={`--color: ${step.completed ? "#54FE98" : "#A0A0AB40"}
+                  
+                  ;--opacity: ${
+                    index === gettingStarted.length - 1 ? "0%" : "100%"
+                  }`}
+                >
+                  {#if step.completed}
+                    <div class="workspace--getting-started--step-icon">
+                      <img src="/check.svg" />
+                    </div>
+                  {:else}
+                    <div class="workspace--getting-started--step-icon">
+                      <img src="/dash.svg" />
+                    </div>
+                  {/if}
+                  <div class="workspace--getting-started--step--text">
+                    <div class="workspace--getting-started--step--title">
+                      {step.title}
+                    </div>
+                    <div class="workspace--getting-started--step--subtitle">
+                      {step.subtitle}
+                    </div>
+                  </div>
+                </div>
+              {/each}
+            </div>
+          </div>
+          <div class="workspace--idl">
+            <div class="workspace--getting-started--title">IDL</div>
+            <div class="workspace--idl--card" />
           </div>
         </div>
       </div>

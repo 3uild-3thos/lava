@@ -659,11 +659,59 @@ body {
 }
 
 .workspace--stats {
-  @apply w-full h-full z-10 relative flex gap-x-2 box-border
+  @apply w-full z-10 relative grid grid-cols-2 lg:grid-cols-4 gap-2 box-border
 }
 
 .workspace--stat--icon {
   @apply w-[54px] h-[54px] flex-shrink-0 mr-3
+}
+
+.workspace--items {
+  @apply w-full flex items-center grid grid-cols-5 gap-4 relative mt-10
+}
+
+.workspace--getting-started {
+  @apply w-full flex flex-col gap-y-4 col-span-3
+}
+
+.workspace--getting-started--title {
+  @apply text-lg font-medium text-lava-primary
+}
+
+.workspace--getting-started--card {
+  @apply w-full bg-lava-card rounded-2xl box-border border border-solid border-lava-mute border-opacity-10 relative overflow-hidden p-5 flex flex-col gap-y-6;
+}
+
+.workspace--getting-started--step {
+  @apply flex gap-x-4 items-center relative
+}
+
+.workspace--getting-started--step-icon::before {
+  content: "";
+  @apply absolute w-[3px] left-1/2 top-full transform -translate-x-1/2 -translate-y-[3px];
+  height: calc(100% + 7px);
+  opacity: var(--opacity);
+  background-color: var(--color)
+}
+
+.workspace--getting-started--step--title {
+  @apply text-lava-primary font-medium
+}
+
+.workspace--getting-started--step--subtitle {
+  @apply text-lava-mute text-sm truncate
+}
+
+.workspace--idl {
+  @apply w-full h-full flex flex-col gap-y-4 col-span-2
+}
+
+.workspace--idl--card {
+  @apply w-full bg-lava-card rounded-2xl box-border border border-solid border-lava-mute border-opacity-10 relative overflow-hidden p-5 flex flex-col gap-y-6;
+}
+
+.workspace--getting-started--step-icon {
+  @apply w-[30px] h-[30px] relative
 }
 
 .workspace--stat {
