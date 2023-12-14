@@ -651,7 +651,7 @@ body {
     transition: 200ms;
     -webkit-mask-size: cover;
     mask-size:cover;
-    @apply mr-2
+    @apply ml-2
 }
 
 .workspace--view {
@@ -1453,7 +1453,11 @@ background-color: #FF2950;
 }
 
 .workspace--btn {
-  @apply ml-auto flex items-center gap-x-2
+  @apply  flex items-center gap-x-2
+}
+
+.header--buttons {
+  @apply flex items-cetner gap-x-2 ml-auto
 }
 
 .workspace--btn img {

@@ -4,6 +4,9 @@
   import { fly, fade } from "svelte/transition";
   import Modal from "../../components/Modal.svelte";
   import Export from "../../components/Modals/Export.svelte";
+  import RenameWorkspace from "../../components/Modals/RenameWorkspace.svelte";
+  import DeleteWorkspace from "../../components/Modals/DeleteWorkspace.svelte";
+  import { goto } from "$app/navigation";
 
   let workspace = $workspaces[$selectedWorkspace];
 
@@ -13,6 +16,8 @@
   });
 
   let isExportModalOpen = false;
+  let isRenameModalOpen = false;
+  let isDeleteModalOpen = false;
 
   function exportWorkspace() {
     const data = JSON.stringify(workspace);
@@ -27,6 +32,18 @@
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
   }
+
+  function updateWorkspaceName(name) {
+    $workspaces[$selectedWorkspace].name = name;
+    isRenameModalOpen = false;
+    workspace = $workspaces[$selectedWorkspace];
+  }
+
+  function deleteWorkspace() {
+    $workspaces = $workspaces.filter((w) => w.name !== workspace.name);
+    isDeleteModalOpen = false;
+    goto("/");
+  }
 </script>
 
 {#if ready}
@@ -39,25 +56,60 @@
     <Export on:exportWorkspace={() => exportWorkspace()} />
   </Modal>
 
+  <!-- Rename Modal -->
+  <Modal
+    width={300}
+    bind:isOpen={isRenameModalOpen}
+    on:close={() => (isRenameModalOpen = false)}
+  >
+    <RenameWorkspace
+      workspaceName={workspace.name}
+      on:updateWorkspace={(event) => updateWorkspaceName(event.detail)}
+    />
+  </Modal>
+
+  <!-- Delete Workspace -->
+  <Modal
+    width={300}
+    bind:isOpen={isDeleteModalOpen}
+    on:close={() => (isDeleteModalOpen = false)}
+  >
+    <DeleteWorkspace
+      on:deleteWorkspace={() => deleteWorkspace()}
+      on:cancelDelete={() => (isDeleteModalOpen = false)}
+    />
+  </Modal>
+
   <div class="common--wrapper">
     <div class="tokens">
       <div class="common--slug">Viewing Workspace</div>
       <div class="common--header" style="padding-right:0;">
         <h1
           class="common--title"
-          style="margin-bottom:0"
+          style="margin-bottom:0;"
           in:fly={{ delay: 100, duration: 100, y: -10 }}
         >
           {workspace.name}
-          <div class="workspace--edit" />
         </h1>
-        <button
-          class="btn btn--primary workspace--btn btn--fit"
-          on:click={() => (isExportModalOpen = true)}
-        >
-          <img src="/export.svg" alt="Export Icon" />
-          Export
-        </button>
+        <div
+          class="workspace--edit"
+          on:click={() => (isRenameModalOpen = true)}
+        />
+        <div class="header--buttons">
+          <button
+            class="btn btn--primary workspace--btn btn--fit"
+            on:click={() => (isExportModalOpen = true)}
+          >
+            <img src="/export.svg" alt="Export Icon" />
+            Export
+          </button>
+          <button
+            class="btn btn--lava btn--fit"
+            on:click={() => (isDeleteModalOpen = true)}
+          >
+            Delete Workspace
+          </button>
+        </div>
       </div>
 
       <div class="workspace--view">
