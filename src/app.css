@@ -32,22 +32,26 @@ body {
 }
 
 .btn--lava {
-  @apply outline-none relative rounded-xl text-lava-white text-base p-2.5 transition duration-200;
+  @apply outline-none relative rounded-xl text-lava-white text-base p-2.5 transition duration-200 hover:cursor-pointer;
   border-radius: 10px;
   border: 1.25px solid #18181B;
   background: radial-gradient(75.92% 147.00% at 58.61% -47.00%, #FE9154 0%, #FE6054 100%);
   box-shadow: 0px 4px 1px 0px rgba(209, 209, 214, 0.15) inset, 0px 0px 10px 0px rgba(254, 96, 84, 0.25);
 }
 
-
-.btn--lava:hover {
-  @apply cursor-pointer;
-}
-
 .btn--primary {
   @apply outline-none font-medium relative rounded-xl text-lava-white text-base p-2.5 transition duration-200;
   border-radius: 10px;
   background: radial-gradient(75.92% 147.00% at 58.61% -47.00%, #383A41 0%, #26272B 100%);
+}
+
+
+.modal--form--warning {
+  @apply flex items-center border border-opacity-50 border-solid border-[#FFA929] bg-[#FFA929] font-medium bg-opacity-10 text-[#FFA929] text-sm rounded-lg p-2.5 px-4
+}
+
+.modal--form--warning img {
+  @apply w-[20px] h-[20px] mr-3
 }
 
 .btn--dropdown {

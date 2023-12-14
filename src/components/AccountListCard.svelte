@@ -24,6 +24,7 @@
 
   function deleteWallet(index) {
     dispatch("deleteWallet", { index });
+    deleteModal = false;
   }
 
   function editWallet(index) {
@@ -89,38 +90,58 @@
     deletingToken = index;
     deleteTokenModal = true;
   };
-  
 </script>
 
+<Modal bind:isOpen={deleteModal} on:close={() => (deleteModal = false)}>
+  <h1 class="modal--title">Confirm Delete</h1>
+  <div class="modal--form">
+    <div class="modal--form--warning">
+      <img src="/alert.svg" alt="Alert Icon" />
+      Please confirm you want to delete the selected wallet.
+    </div>
+    <div class="btns--modal" style="margin-top:20px">
+      <button
+        class="btn btn--primary"
+        on:click={() => {
+          deleteModal = false;
+        }}>Cancel</button
+      >
+      <button
+        class="btn btn--lava"
+        on:click={() => {
+          deleteWallet(deletingWallet);
+        }}>Confirm</button
+      >
+    </div>
+  </div></Modal
+>
 
-    <Modal bind:isOpen={deleteModal} on:close={() => deleteModal = false}>
-      <h1 class="modal--title">Delete</h1>
-      <div class="modal--form">
-        <div class="modal--form-title">please confirm that you whant to delet the selected Wallet</div>
-      <div class="btns--modal">
-        <button
-          class="btn btn--lava"
-          on:click={() => {
-            deleteWallet(deletingWallet);
-          }}>Remove</button
-        >
-      </div>
-    </Modal>
-
-
-    <Modal bind:isOpen={deleteTokenModal} on:close={() => deleteTokenModal = false}>
-      <h1 class="modal--title">Delete</h1>
-      <div class="modal--form">
-        <div class="modal--form-title">Please confirm that you whant to delet the selected Token account</div>
-      <div class="btns--modal">
-        <button
-          class="btn btn--lava"
-          on:click={() => {
-            deleteToken(deletingToken);
-          }}>Remove</button
-        >
-      </div>
-    </Modal>
+<Modal
+  bind:isOpen={deleteTokenModal}
+  on:close={() => (deleteTokenModal = false)}
+>
+  <h1 class="modal--title">Confirm Delete</h1>
+  <div class="modal--form">
+    <div class="modal--form--warning">
+      <img src="/alert.svg" alt="Alert Icon" />
+      Please confirm you want to delete the selected token account.
+    </div>
+    <div class="btns--modal" style="margin-top:20px">
+      <button
+        class="btn btn--primary"
+        on:click={() => {
+          deleteTokenModal = false;
+        }}>Cancel</button
+      >
+      <button
+        class="btn btn--lava"
+        on:click={() => {
+          deleteToken(deletingToken);
+        }}>Confirm</button
+      >
+    </div>
+  </div></Modal
+>
 
 {#each sortedAccounts as account, index}
   {#if account.type === "wallet"}

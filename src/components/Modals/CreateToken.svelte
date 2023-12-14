@@ -73,7 +73,13 @@
   <div class="modal--form-item">
     <div class="modal--form-inline">
       <div class="modal--form-title">Token Name</div>
-      <div class={`modal--form--label-end${name.length > 32 ? " text-lava-error": ""}`}>{name.length}/32</div>
+      <div
+        class={`modal--form--label-end${
+          name.length > 32 ? " text-lava-error" : ""
+        }`}
+      >
+        {name.length}/32
+      </div>
     </div>
     <input
       class="input--primary {!valid.name && formTouched.name
@@ -111,7 +117,7 @@
   <div class="modal--form-title">Mint Authority</div>
   <div class="assign--tokens--wallet">
     <Select
-      items={[...wallets, { label: "", value: "", color: "#8A54FE" }]}
+      items={[...wallets]}
       focused={true}
       placeholder="Select Wallet (Optional)"
       on:change={updateCreatorWallet}
@@ -120,30 +126,30 @@
       <div slot="selection" class="select--option" let:selection>
         <Icon
           size={24}
-          value={selection.label}
-          color={selection.color}
+          value={selection.name}
+          color={"#9352FF"}
           border={true}
           radius={7}
         />
-        <div class="select--text">{selection.label}</div>
+        <div class="select--text">{selection.name}</div>
       </div>
 
       <div slot="item" class="select--option" let:item>
         <Icon
           size={24}
-          value={item.label}
-          color={item.color}
+          value={item.name}
+          color={"#9352FF"}
           border={true}
           radius={7}
         />
-        <div class="select--text">{item.label}</div>
+        <div class="select--text">{item.name}</div>
       </div>
     </Select>
   </div>
   <div class="modal--form-title">Freeze Authority</div>
   <div class="assign--tokens--wallet">
     <Select
-      items={[...wallets, { label: "", value: "", color: "#8A54FE" }]}
+      items={[...wallets]}
       focused={true}
       placeholder="Select Wallet (Optional)"
       on:change={updateCreatorWallet}
@@ -152,28 +158,31 @@
       <div slot="selection" class="select--option" let:selection>
         <Icon
           size={24}
-          value={selection.label}
-          color={selection.color}
+          value={selection.name}
+          color={"#9352FF"}
           border={true}
           radius={7}
         />
-        <div class="select--text">{selection.label}</div>
+        <div class="select--text">{selection.name}</div>
       </div>
 
       <div slot="item" class="select--option" let:item>
         <Icon
           size={24}
-          value={item.label}
-          color={item.color}
+          value={item.name}
+          color={"#9352FF"}
           border={true}
           radius={7}
         />
-        <div class="select--text">{item.label}</div>
+        <div class="select--text">{item.name}</div>
       </div>
     </Select>
   </div>
   <div class="btns--modal">
-    <button class={`btn btn--lava${!valid.name || !valid.symbol || !valid.decimal ? " btn--disabled" : ""}`}
+    <button
+      class={`btn btn--lava${
+        !valid.name || !valid.symbol || !valid.decimal ? " btn--disabled" : ""
+      }`}
       on:click={() => addToken()}
       disabled={!valid.name || !valid.symbol || !valid.decimal}
       >Create Token</button
