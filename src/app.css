@@ -998,7 +998,7 @@ body {
 }
 
 .token--owners {
-  @apply text-lava-mute text-sm font-medium flex items-center space-x-1
+  @apply text-lava-mute text-sm font-medium flex items-center space-x-1 relative
 }
 
 .token--owner {

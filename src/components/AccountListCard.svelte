@@ -48,6 +48,17 @@
     deleteTokenModal = false;
   }
 
+  let freezeAuthorityHover = -1;
+  let mintAuthorityHover = -1;
+
+  function mintAuthorityHovered(index) {
+    mintAuthorityHover = index;
+  }
+
+  function freezeAuthorityHovered(index) {
+    freezeAuthorityHover = index;
+  }
+
   let m = { x: 0, y: 0 };
 
   function handleMousemove(event) {
@@ -90,6 +101,10 @@
     deletingToken = index;
     deleteTokenModal = true;
   };
+
+  $: console.log(accounts);
+  $: console.log(hoveredCardType);
+  $: console.log(hoveredCard);
 </script>
 
 <Modal bind:isOpen={deleteModal} on:close={() => (deleteModal = false)}>
@@ -148,12 +163,17 @@
     <div
       class="relative"
       style={`opacity: ${
-        (hoveredCard === account.index && hoveredCardType === "wallet") ||
+        (hoveredCard === account.originalIndex &&
+          hoveredCardType === "wallet") ||
         hoveredCard === -1 ||
         (hoveredCardType === "token" &&
           account?.tokens.some(
             (token) => token.symbol === accounts.tokens[hoveredCard]?.symbol
-          ))
+          )) ||
+        (hoveredCardType === "token" &&
+          account?.name === accounts.tokens[hoveredCard]?.mintAuthority) ||
+        (hoveredCardType === "token" &&
+          account?.name === accounts.tokens[hoveredCard]?.freezeAuthority)
           ? 1
           : 0.2
       }`}
@@ -163,7 +183,7 @@
         on:click={() => openWalletModal(account.originalIndex)}
         on:mousemove={handleMousemove}
         on:mouseover={() => (
-          (hoveredCard = account.index), (hoveredCardType = "wallet")
+          (hoveredCard = account.originalIndex), (hoveredCardType = "wallet")
         )}
         on:mouseleave={() => ((hoveredCard = -1), (hoveredCardType = ""))}
         in:fade|global={{ delay: index * 50, duration: 100 }}
@@ -218,7 +238,7 @@
                         setHoveredToken(null), (popOverOpened = false);
                       }}
                     >
-                      {#if hoveredToken === tokenIndex && hoveredCard === account.index && popOverOpened}
+                      {#if hoveredToken === tokenIndex && hoveredCard === account.originalIndex && popOverOpened}
                         <Popover
                           xOffset={25 * tokenIndex}
                           yOffset={-65}
@@ -276,12 +296,17 @@
     <div
       class="relative"
       style={`opacity: ${
-        (hoveredCardType === "token" && hoveredCard === account.index) ||
+        (hoveredCardType === "token" &&
+          hoveredCard === account.originalIndex) ||
         hoveredCard === -1 ||
         (hoveredCardType === "wallet" &&
           accounts.wallets[hoveredCard]?.tokens?.some(
             (ownedToken) => ownedToken.symbol === account.symbol
-          ))
+          )) ||
+        (hoveredCardType === "wallet" &&
+          accounts.wallets[hoveredCard]?.name === account.mintAuthority) ||
+        (hoveredCardType === "wallet" &&
+          accounts.wallets[hoveredCard]?.name === account.freezeAuthority)
           ? 1
           : 0.2
       }`}
@@ -290,7 +315,7 @@
         class="wallet--list--item"
         on:mousemove={handleMousemove}
         on:mouseover={() => (
-          (hoveredCard = account.index), (hoveredCardType = "token")
+          (hoveredCard = account.originalIndex), (hoveredCardType = "token")
         )}
         on:mouseleave={() => ((hoveredCard = -1), (hoveredCardType = ""))}
         in:fade|global={{
@@ -324,14 +349,41 @@
             {account.symbol}
           </div>
           <div class="token--owners">
-            <div class="token--owner">
+            <div
+              class="token--owner"
+              on:mouseover={() => mintAuthorityHovered(index)}
+              on:mouseout={() => (mintAuthorityHover = -1)}
+            >
+              {#if mintAuthorityHover === index}
+                <Popover
+                  xOffset={0}
+                  yOffset={-50}
+                  title={account.mintAuthority
+                    ? `Mint: ${account?.mintAuthority}`
+                    : "No Mint Authority"}
+                />
+              {/if}
               <img
                 src="./owner.svg"
                 class="token--owner-icon"
                 alt="Fingerprint Icon"
               />
             </div>
-            <div class="token--owner">
+
+            <div
+              class="token--owner"
+              on:mouseover={() => freezeAuthorityHovered(index)}
+              on:mouseout={() => (freezeAuthorityHover = -1)}
+            >
+              {#if freezeAuthorityHover === index}
+                <Popover
+                  xOffset={25}
+                  yOffset={-50}
+                  title={account.freezeAuthority
+                    ? `Freeze: ${account?.freezeAuthority}`
+                    : "No Freeze Authority"}
+                />
+              {/if}
               <img
                 src="./freeze.svg"
                 class="token--owner-icon"

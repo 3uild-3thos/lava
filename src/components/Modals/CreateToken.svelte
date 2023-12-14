@@ -11,13 +11,8 @@
   let decimal;
   export let wallets = [];
   let creator = "";
-
-  function clearCreatorWallet(e) {
-    creator = "";
-  }
-  function updateCreatorWallet(e) {
-    creator = e.detail.value;
-  }
+  let freezeAuthority = "";
+  let mintAuthority = "";
 
   let valid = {
     name: false,
@@ -56,8 +51,9 @@
         {
           name,
           symbol: symbol.toUpperCase(),
-          supply,
-          creator,
+          decimal: decimal,
+          freezeAuthority,
+          mintAuthority,
         },
       ];
       formSubmitted = true;
@@ -66,6 +62,8 @@
       formSubmitted = true;
     }
   };
+
+  $: console.log(freezeAuthority, mintAuthority);
 </script>
 
 <h1 class="modal--title">Create a new Token</h1>
@@ -120,8 +118,8 @@
       items={[...wallets]}
       focused={true}
       placeholder="Select Wallet (Optional)"
-      on:change={updateCreatorWallet}
-      on:clear={clearCreatorWallet}
+      on:change={(e) => (mintAuthority = e.detail.name)}
+      on:clear={() => (mintAuthority = "")}
     >
       <div slot="selection" class="select--option" let:selection>
         <Icon
@@ -152,8 +150,8 @@
       items={[...wallets]}
       focused={true}
       placeholder="Select Wallet (Optional)"
-      on:change={updateCreatorWallet}
-      on:clear={clearCreatorWallet}
+      on:change={(e) => (freezeAuthority = e.detail.name)}
+      on:clear={() => (freezeAuthority = "")}
     >
       <div slot="selection" class="select--option" let:selection>
         <Icon

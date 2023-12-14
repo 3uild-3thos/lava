@@ -22,8 +22,9 @@ export interface Workspace {
 export interface Token {
   name: string;
   symbol: string;
-  supply: number;
-  creator: string;
+  decimal: number;
+  mintAuthority: string;
+  freezeAuthority: string;
 }
 
 export const workspaces = persisted("workspaces", [{
