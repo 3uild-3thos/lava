@@ -52,7 +52,7 @@
       completed: workspace.wallets.length > 0,
     },
     {
-      title: "Create your first Token Account",
+      title: "Create your first Mint Account",
       subtitle: "Subtitle",
       completed: workspace.tokens.length > 0,
     },
@@ -169,7 +169,7 @@
               <div class="workspace--stat--value">
                 {workspace.tokens.length}
               </div>
-              <div class="workspace--stat--title">Token Accounts</div>
+              <div class="workspace--stat--title">Mint Accounts</div>
             </div>
           </div>
           <div

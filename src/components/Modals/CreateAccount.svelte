@@ -23,7 +23,7 @@
       >
         <img src="./token-account.svg" />
       </div>
-      Token Account
+      Mint Account
     </div>
     <div class="create--account" style="opacity:0.2;">
       <div class="create--account--card">

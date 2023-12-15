@@ -143,7 +143,7 @@
   <div class="modal--form">
     <div class="modal--form--warning">
       <img src="/alert.svg" alt="Alert Icon" />
-      Please confirm you want to delete the selected token account.
+      Please confirm you want to delete the selected mint token account.
     </div>
     <div class="btns--modal" style="margin-top:20px">
       <button
