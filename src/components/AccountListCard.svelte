@@ -59,7 +59,15 @@
     freezeAuthorityHover = index;
   }
 
+  let decimalHover = -1;
+
+  function decimalHovered(index) {
+    decimalHover = index;
+  }
+
   let m = { x: 0, y: 0 };
+
+  export let tokensShown = true;
 
   function handleMousemove(event) {
     let bounds = event.currentTarget.getBoundingClientRect();
@@ -292,7 +300,7 @@
         }}
       />
     </div>
-  {:else if account.type === "token"}
+  {:else if account.type === "token" && tokensShown === true}
     <div
       class="relative"
       style={`opacity: ${
@@ -389,6 +397,21 @@
                 class="token--owner-icon"
                 alt="Freeze Icon"
               />
+            </div>
+
+            <div
+              class="token--owner"
+              on:mouseover={() => decimalHovered(index)}
+              on:mouseout={() => (decimalHover = -1)}
+            >
+              {#if decimalHover === index}
+                <Popover
+                  xOffset={50}
+                  yOffset={-50}
+                  title={"Number of Decimals"}
+                />
+              {/if}
+              .{account.decimal}
             </div>
           </div>
         </div>

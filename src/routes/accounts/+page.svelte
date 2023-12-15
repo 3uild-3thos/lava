@@ -43,6 +43,7 @@
   let hideWallets = false;
   let openedWallet = $workspaces[$selectedWorkspace]?.wallets[0];
   let openedWalletIndex = 0;
+  let hideTokens;
 
   $: searchTerm = "";
   $: sortType = "wallets";
@@ -190,6 +191,7 @@
         <AccountFilter
           on:searchTermChange={(event) => (searchTerm = event.detail)}
           on:sortTypeChange={(event) => (sortType = event.detail)}
+          on:toggleShowTokens={() => (hideTokens = !hideTokens)}
         />
         {#if !hideWallets}
           <button
@@ -205,7 +207,7 @@
           >
         {/if}
       </div>
-      {#if ($workspaces[$selectedWorkspace]?.wallets.length > 0 || $workspaces[$selectedWorkspace]?.tokens.length  > 0) && !hideWallets}
+      {#if ($workspaces[$selectedWorkspace]?.wallets.length > 0 || $workspaces[$selectedWorkspace]?.tokens.length > 0) && !hideWallets}
         <div class="wallet--list">
           <AccountListCard
             accounts={{
@@ -232,6 +234,7 @@
             on:deleteToken={(event) => deleteToken(event.detail.index)}
             {searchTerm}
             {sortType}
+            tokensShown={!hideTokens}
           />
         </div>
       {:else}

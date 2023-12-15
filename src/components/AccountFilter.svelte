@@ -19,6 +19,13 @@
     sortType = event.detail.value;
     dispatch("sortTypeChange", sortType);
   }
+
+  let showTokens = true;
+
+  function handleToggleShowTokens(event) {
+    showTokens = event.target.checked;
+    dispatch("toggleShowTokens", showTokens);
+  }
 </script>
 
 <div class="accounts--filters">
@@ -42,6 +49,18 @@
   >
     <div slot="prepend">Sort By</div>
   </Select>
+
+  <div class="show--tokens">
+    <label class="toggle--checkbox">
+      <input
+        bind:checked={showTokens}
+        on:change={handleToggleShowTokens}
+        type="checkbox"
+      />
+      <div class="checkmark" />
+    </label>
+    Show Tokens
+  </div>
 </div>
 
 <style>
@@ -66,5 +85,69 @@
     cursor: pointer;
     flex-shrink: 0;
     text-indent: 30px;
+  }
+
+  .show--tokens {
+    @apply relative flex items-center text-sm font-medium text-lava-mute gap-x-2 ml-4 flex-shrink-0;
+  }
+  /* Hide the default checkbox */
+  .toggle--checkbox input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  .checkmark {
+    position: relative;
+    box-shadow: rgb(254, 96, 84) 0px 0px 0px 2px;
+    background-color: rgba(16, 16, 16, 0.5);
+    height: 16px;
+    width: 16px;
+    flex-shrink: 0;
+    margin-top: -1px;
+    transition: all 0.2s ease 0s;
+    cursor: pointer;
+    transform-origin: 0px 10px;
+    border-radius: 4px;
+    padding: 0px;
+    box-sizing: border-box;
+  }
+
+  .toggle--checkbox input:checked ~ .checkmark {
+    box-shadow: rgb(254, 96, 84) 0px 0px 0px 2px;
+    background-color: rgba(245, 96, 84, 0.3);
+    height: 16px;
+    width: 16px;
+    flex-shrink: 0;
+    margin-top: -1px;
+    transition: all 0.2s ease 0s;
+    cursor: pointer;
+    transform-origin: 0px 10px;
+    padding: 0px;
+    box-sizing: border-box;
+  }
+
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  .toggle--checkbox input:checked ~ .checkmark:after {
+    display: block;
+  }
+
+  /* Style the checkmark/indicator */
+  .checkmark:after {
+    left: 0.4em;
+    top: 0.2em;
+    width: 0.2em;
+    height: 0.4em;
+    border: solid white;
+    border-width: 0 0.15em 0.15em 0;
+    transform: rotate(45deg);
+    transition: all 500ms ease-in-out;
   }
 </style>

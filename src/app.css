@@ -102,7 +102,7 @@ body {
 }
 
 .accounts--filters {
-  @apply ml-auto w-2/5 flex items-center gap-x-2 justify-center
+  @apply ml-auto w-1/2 flex items-center gap-x-2 justify-center
 }
 
 .input--primary {
