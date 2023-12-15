@@ -411,7 +411,7 @@
                   title={"Number of Decimals"}
                 />
               {/if}
-              .{account.decimal}
+              {account.decimal}
             </div>
           </div>
         </div>
