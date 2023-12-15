@@ -109,10 +109,6 @@
     deletingToken = index;
     deleteTokenModal = true;
   };
-
-  $: console.log(accounts);
-  $: console.log(hoveredCardType);
-  $: console.log(hoveredCard);
 </script>
 
 <Modal bind:isOpen={deleteModal} on:close={() => (deleteModal = false)}>

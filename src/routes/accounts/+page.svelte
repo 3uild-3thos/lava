@@ -43,10 +43,17 @@
   let hideWallets = false;
   let openedWallet = $workspaces[$selectedWorkspace]?.wallets[0];
   let openedWalletIndex = 0;
-  let hideTokens;
+  let showTokens;
 
   $: searchTerm = "";
-  $: sortType = "wallets";
+  $: sortType =
+    typeof localStorage !== "undefined"
+      ? localStorage.getItem("sortType") || "wallets"
+      : "wallets";
+  $: showTokens =
+    typeof localStorage !== "undefined"
+      ? localStorage.getItem("showTokens") === "true"
+      : false;
 
   function openWalletModal(index) {
     isViewModalOpen = true;
@@ -104,6 +111,20 @@
     let result = sum % 5;
     let finalColor = tokenColors[result];
     return finalColor;
+  }
+
+  function handleSortTypeChange(event) {
+    sortType = event.detail;
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem("sortType", sortType);
+    }
+  }
+
+  function handleToggleShowTokens() {
+    showTokens = !showTokens;
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem("showTokens", showTokens);
+    }
   }
 </script>
 
@@ -190,8 +211,8 @@
         </h1>
         <AccountFilter
           on:searchTermChange={(event) => (searchTerm = event.detail)}
-          on:sortTypeChange={(event) => (sortType = event.detail)}
-          on:toggleShowTokens={() => (hideTokens = !hideTokens)}
+          on:sortTypeChange={handleSortTypeChange}
+          on:toggleShowTokens={handleToggleShowTokens}
         />
         {#if !hideWallets}
           <button
@@ -234,7 +255,7 @@
             on:deleteToken={(event) => deleteToken(event.detail.index)}
             {searchTerm}
             {sortType}
-            tokensShown={!hideTokens}
+            tokensShown={showTokens}
           />
         </div>
       {:else}

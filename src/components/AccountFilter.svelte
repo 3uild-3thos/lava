@@ -10,6 +10,11 @@
     { value: "tokens", label: "Tokens" },
   ];
 
+  $: sortType =
+    typeof localStorage !== "undefined"
+      ? localStorage.getItem("sortType") || "wallets"
+      : "wallets";
+
   function handleSearchTermChange(event) {
     searchTerm = event.target.value;
     dispatch("searchTermChange", searchTerm);
@@ -20,7 +25,10 @@
     dispatch("sortTypeChange", sortType);
   }
 
-  let showTokens = true;
+  $: showTokens =
+    typeof localStorage !== "undefined"
+      ? localStorage.getItem("showTokens") === "true"
+      : false;
 
   function handleToggleShowTokens(event) {
     showTokens = event.target.checked;
