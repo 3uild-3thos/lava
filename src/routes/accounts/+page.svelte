@@ -11,6 +11,8 @@
   import CreateAccount from "../../components/Modals/CreateAccount.svelte";
   import CreateToken from "../../components/Modals/CreateToken.svelte";
   import AccountFilter from "../../components/AccountFilter.svelte";
+  import CreatePDA from "../../components/Modals/CreatePDA.svelte";
+  
   let color = ["#9945FF", "#19FB9B"];
   let tokenColors = [
     "#8A54FE",
@@ -126,6 +128,8 @@
       localStorage.setItem("showTokens", showTokens);
     }
   }
+
+  let isCreatePDAModalOpen = false;
 </script>
 
 {#if ready}
@@ -137,10 +141,13 @@
   >
     <CreateAccount
       on:createWallet={() => (
-        (isCreateAccountModalOpen = false), (isCreateWalletModalOpen = true)
+        (isCreateAccountModalOpen = false), (isCreateWalletModalOpen = true), (isCreatePDAModalOpen = false)
       )}
       on:createToken={() => (
-        (isCreateAccountModalOpen = false), (isCreateTokenModalOpen = true)
+        (isCreateAccountModalOpen = false), (isCreateTokenModalOpen = true), (isCreatePDAModalOpen = false)
+      )}
+      on:createPDA={() => (
+        (isCreateAccountModalOpen = false), (isCreateTokenModalOpen = false), (isCreatePDAModalOpen = true)
       )}
     />
   </Modal>
@@ -198,6 +205,16 @@
       on:closeModal={() => (isAssignTokenModalOpen = false)}
     />
   </Modal>
+
+   <!-- Create PDA Modal -->
+   <Modal
+   bind:isOpen={isCreatePDAModalOpen}
+   on:close={() => (isCreatePDAModalOpen = false)}
+ >
+   <CreatePDA
+     on:closeModal={() => (isCreatePDAModalOpen = false)}
+   />
+ </Modal>
 
   <div class="common--wrapper">
     <div class="tokens">
