@@ -72,7 +72,7 @@
     {
       title: "Import IDL",
       subtitle: "An IDL is a JSON file that describes a program's interface.",
-      completed: false,
+      completed: workspace.programs.length > 0,
       buttonText: "Import",
       graphic: "import-idl.svg",
       buttonIcon: "/import.svg",
@@ -143,6 +143,7 @@
   let walletName = "";
   let walletAddress = "";
   let sol_balance = 10;
+  $: console.log($workspaces[$selectedWorkspace].programs);
 </script>
 
 <svelte:head>
