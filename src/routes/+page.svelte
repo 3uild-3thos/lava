@@ -52,6 +52,12 @@
   };
 </script>
 
+<svelte:head>
+  <title>
+    {`⬡ Lava - Workspaces`}
+  </title>
+</svelte:head>
+
 {#if isReady}
   <div class="workspace--home" in:fade|global>
     {#if createModal}

@@ -7,6 +7,9 @@
   import RenameWorkspace from "../../components/Modals/RenameWorkspace.svelte";
   import DeleteWorkspace from "../../components/Modals/DeleteWorkspace.svelte";
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
+  import CreateWallet from "../../components/Modals/CreateWallet.svelte";
+  import CreateToken from "../../components/Modals/CreateToken.svelte";
 
   let workspace = $workspaces[$selectedWorkspace];
 
@@ -98,22 +101,22 @@
   const onClickStep = (index) => {
     switch (index) {
       case 0:
-        alert("Not implemented yet")
+        isCreateWalletModalOpen = true;
         break;
       case 1:
-        alert("Not implemented yet")
+        isCreateTokenModalOpen = true;
         break;
       case 2:
         addIDL();
         break;
       case 3:
-        alert("Not implemented yet")
+        goto("/tests");
         break;
       default:
-        alert("Not implemented yet")
+        alert("Not implemented yet");
     }
   };
-  
+
   const addIDL = () => {
     const input = document.createElement("input");
     input.type = "file";
@@ -132,10 +135,47 @@
       };
     };
     input.click();
-  }
+  };
+
+  let isCreateWalletModalOpen = false;
+  let isCreateTokenModalOpen = false;
+  let editingWallet = -1;
+  let walletName = "";
+  let walletAddress = "";
+  let sol_balance = 10;
+  $: console.log($workspaces[$selectedWorkspace].programs);
 </script>
 
+<svelte:head>
+  <title>
+    {`⬡ Lava - Workspace`}
+  </title>
+</svelte:head>
+
 {#if ready}
+  <!-- Create Walllet -->
+  <Modal
+    width={300}
+    bind:isOpen={isCreateWalletModalOpen}
+    on:close={() => (isCreateWalletModalOpen = false)}
+  >
+    <CreateWallet
+      {editingWallet}
+      {walletName}
+      {sol_balance}
+      {walletAddress}
+      on:closeModal={() => (isCreateWalletModalOpen = false)}
+    />
+  </Modal>
+  <!-- Create Token-->
+  <Modal
+    width={350}
+    bind:isOpen={isCreateTokenModalOpen}
+    on:close={() => (isCreateTokenModalOpen = false)}
+  >
+    <CreateToken on:closeTokenModal={() => (isCreateTokenModalOpen = false)} />
+  </Modal>
+
   <!-- Export Modal -->
   <Modal
     width={300}
@@ -285,7 +325,6 @@
                   </div>
                   <button
                     class="btn btn--primary btn--fit getting-started--btn"
-                    disabled={!step.nextStepActive}
                     on:click={() => onClickStep(index)}
                     ><img
                       style="width:16px;height:16px;margin-right:5px;"

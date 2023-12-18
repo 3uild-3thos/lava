@@ -12,7 +12,7 @@
   import CreateToken from "../../components/Modals/CreateToken.svelte";
   import AccountFilter from "../../components/AccountFilter.svelte";
   import CreatePDA from "../../components/Modals/CreatePDA.svelte";
-  
+
   let color = ["#9945FF", "#19FB9B"];
   let tokenColors = [
     "#8A54FE",
@@ -132,6 +132,12 @@
   let isCreatePDAModalOpen = false;
 </script>
 
+<svelte:head>
+  <title>
+    {`⬡ Lava - Accounts`}
+  </title>
+</svelte:head>
+
 {#if ready}
   <!-- Create Account Modal -->
   <Modal
@@ -141,13 +147,19 @@
   >
     <CreateAccount
       on:createWallet={() => (
-        (isCreateAccountModalOpen = false), (isCreateWalletModalOpen = true), (isCreatePDAModalOpen = false)
+        (isCreateAccountModalOpen = false),
+        (isCreateWalletModalOpen = true),
+        (isCreatePDAModalOpen = false)
       )}
       on:createToken={() => (
-        (isCreateAccountModalOpen = false), (isCreateTokenModalOpen = true), (isCreatePDAModalOpen = false)
+        (isCreateAccountModalOpen = false),
+        (isCreateTokenModalOpen = true),
+        (isCreatePDAModalOpen = false)
       )}
       on:createPDA={() => (
-        (isCreateAccountModalOpen = false), (isCreateTokenModalOpen = false), (isCreatePDAModalOpen = true)
+        (isCreateAccountModalOpen = false),
+        (isCreateTokenModalOpen = false),
+        (isCreatePDAModalOpen = true)
       )}
     />
   </Modal>
@@ -206,15 +218,13 @@
     />
   </Modal>
 
-   <!-- Create PDA Modal -->
-   <Modal
-   bind:isOpen={isCreatePDAModalOpen}
-   on:close={() => (isCreatePDAModalOpen = false)}
- >
-   <CreatePDA
-     on:closeModal={() => (isCreatePDAModalOpen = false)}
-   />
- </Modal>
+  <!-- Create PDA Modal -->
+  <Modal
+    bind:isOpen={isCreatePDAModalOpen}
+    on:close={() => (isCreatePDAModalOpen = false)}
+  >
+    <CreatePDA on:closeModal={() => (isCreatePDAModalOpen = false)} />
+  </Modal>
 
   <div class="common--wrapper">
     <div class="tokens">
