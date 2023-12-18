@@ -11,7 +11,7 @@
   export let walletColors: any = [];
   export let tokenColors: any = [];
   export let searchTerm = "";
-  export let sortType = "wallets"; // or 'tokens'
+  export let sortType = "name";
 
   let hoveredLink = "";
   let editingWallet = -1;
@@ -89,10 +89,31 @@
     )
     .map((token, index) => ({ ...token, itemType: "token", index }));
 
-  $: sortedAccounts =
-    sortType === "wallets"
-      ? [...filteredWallets, ...filteredTokens]
-      : [...filteredTokens, ...filteredWallets];
+  $: sortedAccounts = [...filteredWallets, ...filteredTokens];
+
+  $: if (sortType === "name") {
+    sortedAccounts.sort((a, b) => {
+      if (a.name < b.name) {
+        return -1;
+      }
+      if (a.name > b.name) {
+        return 1;
+      }
+      return 0;
+    });
+    sortedAccounts = sortedAccounts;
+  } else if (sortType === "type") {
+    sortedAccounts = sortedAccounts.sort((a, b) => {
+      if (a.itemType > b.itemType) {
+        return -1;
+      }
+      if (a.itemType < b.itemType) {
+        return 1;
+      }
+      return 0;
+    });
+    sortedAccounts = sortedAccounts;
+  }
 
   let deletingWallet = -1;
   let deleteModal = false;

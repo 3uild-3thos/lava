@@ -4,16 +4,16 @@
   const dispatch = createEventDispatcher();
 
   let searchTerm = "";
-  let sortType = "wallets"; // or 'tokens'
+  let sortType = "type";
   let sortTypes = [
-    { value: "wallets", label: "Wallets" },
-    { value: "tokens", label: "Tokens" },
+    { value: "name", label: "Name" },
+    { value: "type", label: "Type" },
   ];
 
   $: sortType =
     typeof localStorage !== "undefined"
-      ? localStorage.getItem("sortType") || "wallets"
-      : "wallets";
+      ? localStorage.getItem("sortType") || "name"
+      : "name";
 
   function handleSearchTermChange(event) {
     searchTerm = event.target.value;
@@ -73,11 +73,12 @@
 
 <style>
   :global(.cursor--pointer .selected-item) {
-    width: 80%;
+    width: 75%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
+    @apply truncate;
   }
 
   :global(.cursor--pointer .prepend) {
