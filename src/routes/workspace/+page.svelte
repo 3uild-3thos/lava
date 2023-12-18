@@ -7,6 +7,7 @@
   import RenameWorkspace from "../../components/Modals/RenameWorkspace.svelte";
   import DeleteWorkspace from "../../components/Modals/DeleteWorkspace.svelte";
   import { goto } from "$app/navigation";
+  import { page } from "$app/stores";
 
   let workspace = $workspaces[$selectedWorkspace];
 
@@ -98,22 +99,22 @@
   const onClickStep = (index) => {
     switch (index) {
       case 0:
-        alert("Not implemented yet")
+        alert("Not implemented yet");
         break;
       case 1:
-        alert("Not implemented yet")
+        alert("Not implemented yet");
         break;
       case 2:
         addIDL();
         break;
       case 3:
-        alert("Not implemented yet")
+        alert("Not implemented yet");
         break;
       default:
-        alert("Not implemented yet")
+        alert("Not implemented yet");
     }
   };
-  
+
   const addIDL = () => {
     const input = document.createElement("input");
     input.type = "file";
@@ -132,8 +133,14 @@
       };
     };
     input.click();
-  }
+  };
 </script>
+
+<svelte:head>
+  <title>
+    {`⬡ Lava - Workspace`}
+  </title>
+</svelte:head>
 
 {#if ready}
   <!-- Export Modal -->
