@@ -67,15 +67,6 @@
       color: "#FE9154",
     },
     {
-      title: "Create a Program Test",
-      subtitle: "Testing your program is the best way to ensure it works.",
-      completed: false,
-      buttonText: "Create",
-      buttonIcon: "/add.svg",
-      graphic: "create-test.svg",
-      color: "#FE6054",
-    },
-    {
       title: "Import IDL",
       subtitle: "An IDL is a JSON file that describes a program's interface.",
       completed: false,
@@ -83,6 +74,15 @@
       graphic: "import-idl.svg",
       buttonIcon: "/import.svg",
       color: "#0066FF",
+    },
+    {
+      title: "Create a Program Test",
+      subtitle: "Testing your program is the best way to ensure it works.",
+      completed: false,
+      buttonText: "Create",
+      buttonIcon: "/add.svg",
+      graphic: "create-test.svg",
+      color: "#FE6054",
     },
   ].map((step, index, array) => {
     if (index === 0) {
