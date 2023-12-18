@@ -98,6 +98,8 @@
     }
   });
 
+  let token;
+
   const onClickStep = (index) => {
     switch (index) {
       case 0:
@@ -169,11 +171,14 @@
   </Modal>
   <!-- Create Token-->
   <Modal
-    width={350}
+    width={400}
     bind:isOpen={isCreateTokenModalOpen}
     on:close={() => (isCreateTokenModalOpen = false)}
   >
-    <CreateToken on:closeTokenModal={() => (isCreateTokenModalOpen = false)} />
+    <CreateToken
+      {token}
+      on:closeTokenModal={() => (isCreateTokenModalOpen = false)}
+    />
   </Modal>
 
   <!-- Export Modal -->
@@ -271,13 +276,15 @@
           </div>
           <div
             class="workspace--stat"
-            style={`--color: #00FFC2`}
+            style={`--color: #FE6054`}
             in:fade={{ delay: 100, duration: 200 }}
           >
-            <img src="./metadata-account.svg" class="workspace--stat--icon" />
+            <img src="./create-pda.svg" class="workspace--stat--icon" />
             <div class="workspace--stat--content">
-              <div class="workspace--stat--value">0</div>
-              <div class="workspace--stat--title">Metadata Accounts</div>
+              <div class="workspace--stat--value">
+                {workspace.programs.length}
+              </div>
+              <div class="workspace--stat--title">Program</div>
             </div>
           </div>
         </div>
@@ -295,6 +302,7 @@
                 class="workspace--getting-started--card"
                 on:mouseover={() => (hoveredStep = index)}
                 on:mouseout={() => (hoveredStep = -1)}
+                on:click={() => onClickStep(index)}
                 style={`--color: ${step.color}; opacity: ${
                   hoveredStep !== -1 && hoveredStep !== index ? 0.2 : 1
                 }`}

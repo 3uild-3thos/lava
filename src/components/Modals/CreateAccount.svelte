@@ -23,7 +23,7 @@
       >
         <img src="./token-account.svg" />
       </div>
-      Mint Account
+      Mint
     </div>
     <div class="create--account">
       <div class="create--account--card" on:click={() => dispatch("createPDA")}>

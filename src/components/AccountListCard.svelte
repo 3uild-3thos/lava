@@ -43,6 +43,10 @@
     hoveredToken = index;
   }
 
+  function onEditToken(index) {
+    dispatch("editToken", { index });
+  }
+
   function deleteToken(index) {
     dispatch("deleteToken", { index });
     deleteTokenModal = false;
@@ -440,8 +444,14 @@
           duration: 300,
         }}
       >
-        Token
+        Mint
       </div>
+      <div
+        class="edit-icon"
+        on:click={() => {
+          onEditToken(account.originalIndex);
+        }}
+      />
       <div
         class="trash-icon"
         on:click={() => {

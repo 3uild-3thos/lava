@@ -5,14 +5,20 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
-  let name = "";
-  let symbol = "";
-  let supply;
-  let decimal;
+  export let token;
+  let name = token ? token.name : "";
+  let symbol = token ? token.symbol : "";
+  let decimal = token ? token.decimal : null;
   export let wallets = [];
+  $: console.log(wallets);
   let creator = "";
-  let freezeAuthority = "";
-  let mintAuthority = "";
+
+  let freezeAuthority = token
+    ? wallets.find((wallet) => wallet.name === token.freezeAuthority)
+    : "";
+  let mintAuthority = token
+    ? wallets.find((wallet) => wallet.name === token.mintAuthority)
+    : "";
 
   let valid = {
     name: false,
@@ -46,27 +52,42 @@
 
   const addToken = () => {
     if (valid.name && valid.symbol && valid.decimal) {
-      $workspaces[$selectedWorkspace].tokens = [
-        ...$workspaces[$selectedWorkspace].tokens,
-        {
-          name,
-          symbol: symbol.toUpperCase(),
-          decimal: decimal,
-          freezeAuthority,
-          mintAuthority,
-        },
-      ];
+      if (token) {
+        // Edit mode
+        const index = $workspaces[$selectedWorkspace].tokens.findIndex(
+          (t) => t.name === token.name
+        );
+        if (index !== -1) {
+          $workspaces[$selectedWorkspace].tokens[index] = {
+            name,
+            symbol: symbol.toUpperCase(),
+            decimal: decimal,
+            freezeAuthority: freezeAuthority?.name,
+            mintAuthority: mintAuthority.name,
+          };
+        }
+      } else {
+        // Create mode
+        $workspaces[$selectedWorkspace].tokens = [
+          ...$workspaces[$selectedWorkspace].tokens,
+          {
+            name,
+            symbol: symbol.toUpperCase(),
+            decimal: decimal,
+            freezeAuthority: freezeAuthority?.name,
+            mintAuthority: mintAuthority?.name,
+          },
+        ];
+      }
       formSubmitted = true;
       dispatch("closeTokenModal");
     } else {
       formSubmitted = true;
     }
   };
-
-  $: console.log(freezeAuthority, mintAuthority);
 </script>
 
-<h1 class="modal--title">Create a new Token</h1>
+<h1 class="modal--title">{token ? "Edit Token" : "Create a New Mint"}</h1>
 <div class="modal--form">
   <div class="modal--form-item">
     <div class="modal--form-inline">
@@ -115,10 +136,14 @@
   <div class="modal--form-title">Mint Authority</div>
   <div class="assign--tokens--wallet">
     <Select
-      items={[...wallets]}
-      focused={true}
+      id="test"
+      items={(wallets = wallets.map((wallet, index) => ({
+        ...wallet,
+        value: index,
+      })))}
       placeholder="Select Wallet (Optional)"
-      on:change={(e) => (mintAuthority = e.detail.name)}
+      searchable={false}
+      bind:value={mintAuthority}
       on:clear={() => (mintAuthority = "")}
     >
       <div slot="selection" class="select--option" let:selection>
@@ -147,10 +172,12 @@
   <div class="modal--form-title">Freeze Authority</div>
   <div class="assign--tokens--wallet">
     <Select
-      items={[...wallets]}
-      focused={true}
+      items={(wallets = wallets.map((wallet, index) => ({
+        ...wallet,
+        value: index,
+      })))}
       placeholder="Select Wallet (Optional)"
-      on:change={(e) => (freezeAuthority = e.detail.name)}
+      bind:value={freezeAuthority}
       on:clear={() => (freezeAuthority = "")}
     >
       <div slot="selection" class="select--option" let:selection>

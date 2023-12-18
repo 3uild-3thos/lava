@@ -28,7 +28,7 @@
   $: showTokens =
     typeof localStorage !== "undefined"
       ? localStorage.getItem("showTokens") === "true"
-      : false;
+      : true;
 
   function handleToggleShowTokens(event) {
     showTokens = event.target.checked;
@@ -58,7 +58,7 @@
     <div slot="prepend">Sort By</div>
   </Select>
 
-  <div class="show--tokens">
+  <!-- <div class="show--tokens">
     <label class="toggle--checkbox">
       <input
         bind:checked={showTokens}
@@ -68,7 +68,7 @@
       <div class="checkmark" />
     </label>
     Show Tokens
-  </div>
+  </div> -->
 </div>
 
 <style>

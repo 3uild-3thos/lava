@@ -129,6 +129,13 @@
     }
   }
 
+  let token;
+
+  function editToken(index) {
+    token = $workspaces[$selectedWorkspace].tokens[index];
+    isCreateTokenModalOpen = true;
+  }
+
   let isCreatePDAModalOpen = false;
 </script>
 
@@ -171,6 +178,7 @@
     on:close={() => (isCreateTokenModalOpen = false)}
   >
     <CreateToken
+      {token}
       wallets={$workspaces[$selectedWorkspace]?.wallets ?? []}
       on:closeTokenModal={() => (isCreateTokenModalOpen = false)}
     />
@@ -245,7 +253,8 @@
           <button
             class="btn btn--primary btn--fit btn--end"
             on:click={() => (
-              (editingWallet = -1), (isCreateAccountModalOpen = true)
+              ((editingWallet = -1), (token = undefined)),
+              (isCreateAccountModalOpen = true)
             )}
             ><img
               src="./add.svg"
@@ -283,6 +292,7 @@
             {searchTerm}
             {sortType}
             tokensShown={showTokens}
+            on:editToken={(event) => editToken(event.detail.index)}
           />
         </div>
       {:else}
