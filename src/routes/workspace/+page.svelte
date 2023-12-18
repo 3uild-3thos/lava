@@ -94,6 +94,45 @@
       };
     }
   });
+
+  const onClickStep = (index) => {
+    switch (index) {
+      case 0:
+        alert("Not implemented yet")
+        break;
+      case 1:
+        alert("Not implemented yet")
+        break;
+      case 2:
+        addIDL();
+        break;
+      case 3:
+        alert("Not implemented yet")
+        break;
+      default:
+        alert("Not implemented yet")
+    }
+  };
+  
+  const addIDL = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.readAsText(file, "UTF-8");
+      reader.onload = (readerEvent) => {
+        const content = readerEvent.target.result;
+        const idl = JSON.parse(content);
+        $workspaces[$selectedWorkspace].programs = [
+          ...$workspaces[$selectedWorkspace].programs,
+          idl,
+        ];
+      };
+    };
+    input.click();
+  }
 </script>
 
 {#if ready}
@@ -247,7 +286,7 @@
                   <button
                     class="btn btn--primary btn--fit getting-started--btn"
                     disabled={!step.nextStepActive}
-                    on:click={() => alert("Not implemented yet")}
+                    on:click={() => onClickStep(index)}
                     ><img
                       style="width:16px;height:16px;margin-right:5px;"
                       src={step.buttonIcon}

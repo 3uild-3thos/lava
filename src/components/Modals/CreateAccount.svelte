@@ -25,11 +25,14 @@
       </div>
       Mint Account
     </div>
-    <div class="create--account" style="opacity:0.2;">
-      <div class="create--account--card">
+    <div class="create--account">
+      <div
+        class="create--account--card"
+        on:click={() => dispatch("createPDA")}
+      >
         <img src="./new-workspace.svg" />
       </div>
-      Option
+      PDA
     </div>
   </div>
 </div>
