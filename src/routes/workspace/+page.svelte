@@ -69,7 +69,7 @@
     {
       title: "Import IDL",
       subtitle: "An IDL is a JSON file that describes a program's interface.",
-      completed: false,
+      completed: workspace.programs.length > 0,
       buttonText: "Import",
       graphic: "import-idl.svg",
       buttonIcon: "/import.svg",
