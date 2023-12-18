@@ -80,6 +80,7 @@
       subtitle: "An IDL is a JSON file that describes a program's interface.",
       completed: false,
       buttonText: "Import",
+      graphic: "import-idl.svg",
       buttonIcon: "/import.svg",
       color: "#0066FF",
     },
