@@ -1557,3 +1557,10 @@ background-color: #FF2950;
 .completed--badge {
   @apply absolute top-4 left-4 text-xs font-medium border-lava-success border-solid border-opacity-30 bg-lava-success bg-opacity-10 text-lava-success rounded-full p-1 px-2
 }
+
+.remove--seed {
+  @apply absolute h-full w-full flex items-center justify-end
+} 
+.remove--seed img {
+  @apply w-[20px] h-[20px] absolute right-2 cursor-pointer
+}
