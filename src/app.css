@@ -659,7 +659,7 @@ body {
 }
 
 .workspace--stats {
-  @apply w-full z-10 relative grid grid-cols-1 lg:grid-cols-3 gap-2 box-border
+  @apply w-full z-10 relative grid grid-cols-1 lg:grid-cols-4 gap-2 box-border
 }
 
 .workspace--stat--icon {

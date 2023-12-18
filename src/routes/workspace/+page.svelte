@@ -76,7 +76,7 @@
       buttonText: "Import",
       graphic: "import-idl.svg",
       buttonIcon: "/import.svg",
-      color: "#0066FF",
+      color: "#FE6054",
     },
     {
       title: "Create a Program Test",
@@ -85,7 +85,7 @@
       buttonText: "Create",
       buttonIcon: "/add.svg",
       graphic: "create-test.svg",
-      color: "#FE6054",
+      color: "#54FE98",
     },
   ].map((step, index, array) => {
     if (index === 0) {
@@ -284,7 +284,18 @@
               <div class="workspace--stat--value">
                 {workspace.programs.length}
               </div>
-              <div class="workspace--stat--title">Program</div>
+              <div class="workspace--stat--title">Programs</div>
+            </div>
+          </div>
+          <div
+            class="workspace--stat"
+            style={`--color: #54FE98`}
+            in:fade={{ delay: 100, duration: 200 }}
+          >
+            <img src="./test.svg" class="workspace--stat--icon" />
+            <div class="workspace--stat--content">
+              <div class="workspace--stat--value">0</div>
+              <div class="workspace--stat--title">Tests</div>
             </div>
           </div>
         </div>
