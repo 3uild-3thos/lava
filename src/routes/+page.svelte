@@ -31,6 +31,25 @@
     $selectedWorkspace = index;
     goto("/workspace");
   };
+
+  const importWorkspace = () => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.readAsText(file, "UTF-8");
+      reader.onload = (readerEvent) => {
+        const content = readerEvent.target.result;
+        const workspace = JSON.parse(content);
+        $workspaces = [...$workspaces, workspace];
+        $selectedWorkspace = $workspaces.length - 1;
+        goto("/workspace");
+      };
+    };
+    input.click();
+  };
 </script>
 
 {#if isReady}
@@ -113,9 +132,7 @@
             </div>
             <button
               class="btn btn--primary workspace--option-btn"
-              on:click={() => {
-                alert("Not implemented yet");
-              }}>Import</button
+              on:click={importWorkspace}>Import</button
             >
           </div>
         </div>
