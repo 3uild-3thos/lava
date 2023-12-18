@@ -19,6 +19,8 @@
   let isRenameModalOpen = false;
   let isDeleteModalOpen = false;
 
+  let hoveredStep = -1;
+
   function exportWorkspace() {
     const data = JSON.stringify(workspace);
     const blob = new Blob([data], { type: "text/plain" });
@@ -47,24 +49,40 @@
 
   let gettingStarted = [
     {
-      title: "Create your first Wallet Account",
-      subtitle: "Subtitle",
+      title: "Create a Wallet Account",
+      subtitle: "A wallet account is used to sign transactions.",
       completed: workspace.wallets.length > 0,
+      buttonText: "Create",
+      buttonIcon: "/add.svg",
+      graphic: "create-wallet.svg",
+      color: "#8A54FE",
     },
     {
-      title: "Create your first Mint Account",
-      subtitle: "Subtitle",
+      title: "Create a Mint Account",
+      subtitle: "A mint account is used to create tokens.",
       completed: workspace.tokens.length > 0,
-    },
-    {
-      title: "Assign a token to a wallet",
-      subtitle: "Subtitle",
-      completed: workspace.wallets.some((tokens) => tokens.tokens.length > 0),
+      buttonText: "Create",
+      buttonIcon: "/add.svg",
+      graphic: "create-token.svg",
+      color: "#FE9154",
     },
     {
       title: "Import IDL",
-      subtitle: "Subtitle",
+      subtitle: "An IDL is a JSON file that describes a program's interface.",
       completed: false,
+      buttonText: "Import",
+      graphic: "import-idl.svg",
+      buttonIcon: "/import.svg",
+      color: "#0066FF",
+    },
+    {
+      title: "Create a Program Test",
+      subtitle: "Testing your program is the best way to ensure it works.",
+      completed: false,
+      buttonText: "Create",
+      buttonIcon: "/add.svg",
+      graphic: "create-test.svg",
+      color: "#FE6054",
     },
   ].map((step, index, array) => {
     if (index === 0) {
@@ -148,7 +166,7 @@
         <div class="workspace--stats">
           <div
             class="workspace--stat"
-            style={`--color: #00FFC2`}
+            style={`--color: #8A54FE`}
             in:fade={{ duration: 200 }}
           >
             <img src="./standard-wallet.svg" class="workspace--stat--icon" />
@@ -174,18 +192,7 @@
           </div>
           <div
             class="workspace--stat"
-            style={`--color: #8A54FE`}
-            in:fade={{ delay: 100, duration: 200 }}
-          >
-            <img src="./mint-account.svg" class="workspace--stat--icon" />
-            <div class="workspace--stat--content">
-              <div class="workspace--stat--value">0</div>
-              <div class="workspace--stat--title">Mint Accounts</div>
-            </div>
-          </div>
-          <div
-            class="workspace--stat"
-            style={`--color: #5498FE`}
+            style={`--color: #00FFC2`}
             in:fade={{ delay: 100, duration: 200 }}
           >
             <img src="./metadata-account.svg" class="workspace--stat--icon" />
@@ -196,27 +203,33 @@
           </div>
         </div>
 
-        <div class="workspace--items">
-          <div class="workspace--getting-started">
-            <div class="workspace--getting-started--title">
-              Getting Started <span style="color: #A0A0AB"
-                >({gettingStarted.filter((step) => step.completed)
-                  .length}/{gettingStarted.length})</span
+        <div class="workspace--getting-started">
+          <div class="workspace--getting-started--title">
+            Getting Started <span style="color: #A0A0AB"
+              >({gettingStarted.filter((step) => step.completed)
+                .length}/{gettingStarted.length})</span
+            >
+          </div>
+          <div class="workspace--getting-started--grid">
+            {#each gettingStarted as step, index}
+              <div
+                class="workspace--getting-started--card"
+                on:mouseover={() => (hoveredStep = index)}
+                on:mouseout={() => (hoveredStep = -1)}
+                style={`--color: ${step.color}; opacity: ${
+                  hoveredStep !== -1 && hoveredStep !== index ? 0.2 : 1
+                }`}
+                in:fade|global={{ delay: (index + 1) * 100, duration: 200 }}
               >
-            </div>
-            <div class="workspace--getting-started--card">
-              {#each gettingStarted as step, index}
-                <div
-                  class="workspace--getting-started--step"
-                  style={`opacity: ${step.nextStepActive ? "100%" : "40%"}
-                  
-                  ;--color: ${step.completed ? "#54FE98" : "#A0A0AB40"}
-                  
-                  ;--opacity: ${
-                    index === gettingStarted.length - 1 ? "0%" : "100%"
-                  }`}
-                >
-                  {#if step.completed}
+                {#if step.completed}
+                  <div class="completed--badge">Completed</div>
+                {/if}
+                <div class="workspace--getting-started--step">
+                  <img
+                    src={step.graphic}
+                    class="workspace--getting-started--graphic"
+                  />
+                  <!-- {#if step.completed}
                     <div class="workspace--getting-started--step-icon">
                       <img src="/check.svg" />
                     </div>
@@ -224,20 +237,28 @@
                     <div class="workspace--getting-started--step-icon">
                       <img src="/dash.svg" />
                     </div>
-                  {/if}
-                  <div class="workspace--getting-started--step--text">
-                    <div class="workspace--getting-started--step--title">
-                      {step.title}
-                    </div>
-                    <div class="workspace--getting-started--step--subtitle">
-                      {step.subtitle}
-                    </div>
+                  {/if} -->
+                  <div class="workspace--getting-started--step--title">
+                    {step.title}
                   </div>
+                  <div class="workspace--getting-started--step--subtitle">
+                    {step.subtitle}
+                  </div>
+                  <button
+                    class="btn btn--primary btn--fit getting-started--btn"
+                    disabled={!step.nextStepActive}
+                    on:click={() => alert("Not implemented yet")}
+                    ><img
+                      style="width:16px;height:16px;margin-right:5px;"
+                      src={step.buttonIcon}
+                      alt="Step Icon"
+                    />{step.buttonText}</button
+                  >
                 </div>
-              {/each}
-            </div>
+              </div>
+            {/each}
           </div>
-          <div class="workspace--idl">
+          <!-- <div class="workspace--idl">
             <div class="workspace--idl--header">
               <div class="workspace--getting-started--title">IDL</div>
               <button
@@ -249,7 +270,7 @@
               </button>
             </div>
             <div class="workspace--idl--card" />
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
