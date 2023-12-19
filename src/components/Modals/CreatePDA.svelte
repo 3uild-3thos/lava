@@ -16,6 +16,7 @@
     "u128",
   ];
   let selectedSeed = null;
+  let selectedProgram = null;
   let seeds = [];
   const addSeed = (e) => {
     seeds = [...seeds, e.detail.value];
@@ -43,13 +44,19 @@
       </div>
     </div>
   {/each}
-  <!--dropdow with an option to add each type of seed-->
+
   <Select
     class="modal--form-select"
     bind:value={selectedSeed}
     items={seedsTypes}
     on:change={addSeed}
     placeholder="Add another seed"
+  />
+  <Select
+    class="modal--form-select"
+    bind:value={selectedProgram}
+    items={$workspaces[$selectedWorkspace]?.programs?.map((p) => p?.metadata?.address ?? p.name)}
+    placeholder="Select program"
   />
 </div>
 <div class="btns--modal">
