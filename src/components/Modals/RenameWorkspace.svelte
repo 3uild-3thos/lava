@@ -25,7 +25,7 @@
   <div class="modal--form-inline">
     <div class="modal--form-title">Workspace Name</div>
     <div
-      class={`modal--form--label-end${
+      class={`modal--form--label-end ${
         workspaceName?.length > 32 ? "text-lava-error" : ""
       }`}
     >

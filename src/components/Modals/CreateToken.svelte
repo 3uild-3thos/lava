@@ -93,7 +93,7 @@
     <div class="modal--form-inline">
       <div class="modal--form-title">Token Name</div>
       <div
-        class={`modal--form--label-end${
+        class={`modal--form--label-end ${
           name.length > 32 ? " text-lava-error" : ""
         }`}
       >

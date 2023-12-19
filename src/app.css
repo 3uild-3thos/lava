@@ -106,7 +106,7 @@ body {
 }
 
 .input--primary {
-  @apply relative w-full font-medium h-[42px] text-lava-white p-4 box-border outline-none rounded-[10px] bg-lava-bg border border-solid border-lava-800 focus:border-lava-700 focus:border-opacity-100 transition duration-200;
+  @apply relative w-full font-medium h-[42px] text-lava-white p-4 box-border outline-none rounded-[10px] bg-lava-bg border border-solid border-lava-800 focus:border-lava-700 focus:border-opacity-100 transition transition-all duration-200;
 }
 
 .input--invalid {
@@ -1501,6 +1501,10 @@ a {
   opacity:1;
 }
 
+.input--disabled {
+  opacity:0.2; 
+  @apply transition ease-in
+}
 .card:hover .trash-icon {
   opacity:1;
 }
