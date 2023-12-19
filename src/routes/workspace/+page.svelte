@@ -291,7 +291,7 @@
         </div>
         <button
       class={`btn btn--primary`}
-      on:click={addWithProvider}>Use it!</button
+      on:click={addWithouthChange}>Use it!</button
     >
       {:else}
         <div class="modal--form-title">
