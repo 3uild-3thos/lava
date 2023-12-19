@@ -10,6 +10,7 @@
   import { page } from "$app/stores";
   import CreateWallet from "../../components/Modals/CreateWallet.svelte";
   import CreateToken from "../../components/Modals/CreateToken.svelte";
+  import { PublicKey } from "@solana/web3.js";
 
   let workspace = $workspaces[$selectedWorkspace];
 
@@ -100,7 +101,7 @@
 
   let token;
 
-  const onClickStep = (index) => {
+  const onClickStep = (e, index) => {
     switch (index) {
       case 0:
         isCreateWalletModalOpen = true;
@@ -109,17 +110,19 @@
         isCreateTokenModalOpen = true;
         break;
       case 2:
-        addIDL();
+        addIDL(e);
         break;
       case 3:
         goto("/tests");
         break;
-      default:
-        alert("Not implemented yet");
     }
   };
 
-  const addIDL = () => {
+  let idlModal = false;
+  let idlToAdd;
+
+  const addIDL = (e) => {
+    e.preventDefault();
     const input = document.createElement("input");
     input.type = "file";
     input.accept = ".json";
@@ -128,12 +131,13 @@
       const reader = new FileReader();
       reader.readAsText(file, "UTF-8");
       reader.onload = (readerEvent) => {
+        idlModal = true;
         const content = readerEvent.target.result;
-        const idl = JSON.parse(content);
-        $workspaces[$selectedWorkspace].programs = [
+        idlToAdd = JSON.parse(content);
+        /*$workspaces[$selectedWorkspace].programs = [
           ...$workspaces[$selectedWorkspace].programs,
           idl,
-        ];
+        ];*/
       };
     };
     input.click();
@@ -146,6 +150,63 @@
   let walletAddress = "";
   let sol_balance = 10;
   $: console.log($workspaces[$selectedWorkspace].programs);
+  let customProgramId = "";
+
+  const isValidAddress = (address) => {
+    if (address.trim() === "") {
+      return true;
+    } else {
+      try {
+        new PublicKey(address);
+        return true;
+      } catch (err) {
+        return false;
+      }
+    }
+  };
+
+  const addWithCustomProgramID = () => {
+    if (isValidAddress(customProgramId)) {
+      $workspaces[$selectedWorkspace].programs = [
+        ...$workspaces[$selectedWorkspace].programs,
+        {
+          ...idlToAdd,
+          metadata: {
+            ...idlToAdd.metadata,
+            address: customProgramId,
+          },
+        },
+      ];
+      idlModal = false;
+      idlToAdd = null;
+      customProgramId = "";
+    }
+  };
+
+  const addWithProvider= () => {
+    if (isValidAddress(customProgramId)) {
+      $workspaces[$selectedWorkspace].programs = [
+        ...$workspaces[$selectedWorkspace].programs,
+        {
+          ...idlToAdd,
+          metadata: undefined,
+        },
+      ];
+      idlModal = false;
+      idlToAdd = null;
+    }
+  };
+
+  const addWithouthChange= () => {
+    if (isValidAddress(customProgramId)) {
+      $workspaces[$selectedWorkspace].programs = [
+        ...$workspaces[$selectedWorkspace].programs,
+        idlToAdd,
+      ];
+      idlModal = false;
+      idlToAdd = null;
+    }
+  };
 </script>
 
 <svelte:head>
@@ -213,6 +274,62 @@
       on:cancelDelete={() => (isDeleteModalOpen = false)}
     />
   </Modal>
+
+  <!-- Add IDL Modal -->
+  <Modal width={400} bind:isOpen={idlModal} on:close={() => (idlModal = false)}>
+    <h1 class="modal--title">Adding IDL</h1>
+    <div class="modal--form">
+      <div class="modal--form-title">
+        you are adding an IDL
+        {#if idlToAdd?.name?.length > 0}
+          <span>for a program named <strong class="font-black">{idlToAdd?.name}</strong></span>
+        {/if}
+      </div>
+      {#if idlToAdd?.metadata?.address}
+        <div class="modal--form-title">
+          your IDL has the programId: <strong class="font-black">{idlToAdd?.metadata?.address}</strong> do you whan't to use this one?
+        </div>
+        <button
+      class={`btn btn--primary`}
+      on:click={addWithProvider}>Use it!</button
+    >
+      {:else}
+        <div class="modal--form-title">
+          Your IDL doent' have a metadata.address value defined for the
+          programId
+        </div>
+      {/if}
+      <div class="modal--form-title">
+        Do you whant the <strong class="font-black">Anchor Provider</strong> to set one for you?
+      </div>
+      <button
+      class={`btn btn--primary`}
+      on:click={addWithProvider}>Provider Set</button
+    >
+
+      <div class="modal--form-title">Or you whant to set one manualy</div>
+      <input
+        class="input--primary {!isValidAddress(customProgramId)
+          ? 'input--invalid'
+          : ''}"
+        type="text"
+        placeholder="Custom programId"
+        bind:value={customProgramId}
+      />
+      <div class="btns--modal">
+        <button
+          class={`btn btn--primary${
+            !isValidAddress(customProgramId) || customProgramId.length == 0
+              ? " btn--disabled"
+              : ""
+          }`}
+          disabled={!isValidAddress(customProgramId) ||
+            customProgramId.length == 0}
+          on:click={addWithCustomProgramID}>Manually Set</button
+        >
+      </div>
+    </div></Modal
+  >
 
   <div class="common--wrapper">
     <div class="tokens">
@@ -344,7 +461,7 @@
                   </div>
                   <button
                     class="btn btn--primary btn--fit getting-started--btn"
-                    on:click={() => onClickStep(index)}
+                    on:click={(e) => onClickStep(e, index)}
                     ><img
                       style="width:16px;height:16px;margin-right:5px;"
                       src={step.buttonIcon}
