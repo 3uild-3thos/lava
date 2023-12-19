@@ -87,10 +87,14 @@ body {
 
 
 .instruction--list {
-  @apply text-sm items-center flex gap-x-2
+  @apply flex flex-col gap-y-2
 }
 
-.instruction--list img {
+.instruction--list--value {
+  @apply  items-center flex gap-x-2
+}
+
+.instruction--list--value img {
   @apply w-[12px] h-[12px]
 }
 
@@ -134,6 +138,15 @@ body {
   @apply w-[20px] h-[20px] absolute right-4 top-5 cursor-pointer;
   background-image:url('./close.svg');
   background-size:cover;
+}
+
+.test--nested {
+  @apply pl-3 space-y-1 border-solid border-l border-lava-error border-opacity-20 border-r-0 border-t-0 border-b-0;
+  width: calc(100% - 1.5rem);
+}
+
+.nest--break {
+  @apply !mt-4
 }
 
 .input--primary::placeholder {
@@ -307,7 +320,7 @@ body {
 }
 
 .content {
-  @apply flex overflow-hidden w-full
+  @apply flex overflow-hidden w-full 
 }
 
 .accounts {
@@ -331,7 +344,7 @@ body {
 }
 
 .tests--sidebar {
-  @apply left-1 top-1 flex-shrink-0 w-[300px] overflow-hidden flex flex-col h-[99%] bg-lava-900 border-solid border-1 border-lava-800 p-3 relative rounded-lg box-border;
+  @apply left-1 top-1 flex-shrink-0 w-[350px] overflow-hidden flex flex-col h-[99%] bg-lava-900 border-solid border-1 border-lava-800 p-3 relative rounded-lg box-border;
 }
 
 .gradient {
@@ -431,32 +444,31 @@ body {
 }
 
 .tests--list--item {
-  @apply p-3 h-auto flex flex-col relative justify-center items-start border border-solid w-full border-lava-mute border-opacity-10 flex-shrink-0 transition duration-200 box-border bg-lava-bg hover:border-opacity-20 rounded-xl cursor-pointer;
+  @apply h-auto w-full overflow-y-auto max-h-[85vh]
+}
+
+.tests--list--item--card {
+  @apply p-3 h-auto flex flex-col relative justify-start items-start border border-solid w-full border-lava-mute border-opacity-10 flex-shrink-0 transition duration-200 box-border bg-lava-bg hover:border-opacity-20 rounded-xl cursor-pointer;
 }
 
 .test--content {
-  @apply mt-4 font-mono
+  @apply mt-4 w-full
 }
 
 .content--header {
   @apply flex items-center space-x-1
 }
 
-.instruction--list {
-  @apply ml-3
-}
-
 .arg--type {
   @apply text-lava-mute text-sm
 }
-
 
 .test--version {
   @apply text-lava-mute text-sm font-medium font-mono
 }
 
 .test--content--list {
-  @apply flex flex-col space-y-2
+  @apply flex flex-col space-y-2 font-mono
 }
 
 .test--content--title {

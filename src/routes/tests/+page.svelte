@@ -72,7 +72,7 @@
               version={fakeTests[selectedTest]?.program?.version}
               type={"program"}
             >
-              <div slot="content">
+              <div slot="content" style="width:100%;">
                 <ProgramData program={fakeTests[selectedTest].program} />
               </div>
             </TestItem>
