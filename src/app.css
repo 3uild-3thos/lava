@@ -1036,7 +1036,7 @@ body {
 }
 
 .wallet--tokens--list {
-  @apply flex relative items-center gap-x-1;
+  @apply flex relative items-center gap-x-1 mt-2;
 }
 
 .wallet--tokens {
@@ -1047,12 +1047,21 @@ body {
   @apply font-mono text-lava-mute text-sm tracking-wider
 }
 
+.ata--title {
+  @apply font-mono text-lava-mute text-sm tracking-wider
+ 
+}
+
 .token--name {
-  @apply text-[20px] font-medium !mt-auto truncate font-mono; 
+  @apply text-[20px] font-medium truncate font-mono; 
 }
 
 .token--header {
   @apply flex items-center w-[60%]
+}
+
+.token--info {
+  @apply flex flex-col space-y-2
 }
 
 .token--supply {
@@ -1431,20 +1440,13 @@ a {
 .border-lava-error {
   @apply border-lava-error
 }
-.relative:hover .edit-icon {
-  opacity:1;
-}
-
-.relative:hover .trash-icon {
-  opacity:1;
-}
 
 .edit img {
   width: 100%;
   height: 100%;
 }
 
-.relative .tokens-button {
+.tokens-button {
   display: none;
 }
 
@@ -1495,12 +1497,19 @@ a {
   cursor:pointer;
   transition: 200ms;
 }
+.card:hover .edit-icon {
+  opacity:1;
+}
+
+.card:hover .trash-icon {
+  opacity:1;
+}
 
 .trash-icon:hover {
 background-color: #FF2950;
 }
 
-.relative:hover .tokens-button {
+ .tokens-button {
   display: inline;
   background: transparent;
   color: white;
@@ -1510,6 +1519,11 @@ background-color: #FF2950;
   width: 1.2rem;
   z-index:99999999;
   position:relative;
+  @apply transition-all
+}
+
+.tokens-button:hover {
+  @apply transform scale-110 duration-200 cursor-pointer
 }
 
 .create--account--grid {
@@ -1562,4 +1576,9 @@ background-color: #FF2950;
 } 
 .remove--seed img {
   @apply w-[20px] h-[20px] absolute right-2 cursor-pointer
+}
+
+
+.ata--assign {
+  @apply flex flex-row items-center gap-x-1;
 }

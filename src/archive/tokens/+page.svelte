@@ -13,14 +13,7 @@
 
   let color = ["#9945FF", "#19FB9B"];
 
-  let tokenColors = [
-    "#8A54FE",
-    "#5498FE",
-    "#FEBC2E",
-    "#19FB9B",
-    "#FE6054",
-    "#DC30C0",
-  ];
+  let tokenColors = ["#5498FE", "#FEBC2E", "#19FB9B", "#FE6054", "#DC30C0"];
 
   function getTokenColor(stringParam) {
     let sum = 0;

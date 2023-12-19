@@ -69,6 +69,8 @@
     token_symbol: symbol?.length > 0,
     token_amount: amount > 0,
   };
+
+  $: console.log(editingWallet);
 </script>
 
 <h1 class="modal--title">Assign a Token</h1>

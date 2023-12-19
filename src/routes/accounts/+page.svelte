@@ -63,11 +63,6 @@
     openedWalletIndex = index;
   }
 
-  function openAssignTokenModal(index) {
-    isAssignTokenModalOpen = true;
-    editingWallet = index;
-  }
-
   const deleteToken = (index) => {
     const tokenToDelete = $workspaces[$selectedWorkspace].tokens[index];
     $workspaces[$selectedWorkspace].tokens = $workspaces[
@@ -214,18 +209,6 @@
     />
   </Modal>
 
-  <!-- Assign token modal -->
-  <Modal
-    bind:isOpen={isAssignTokenModalOpen}
-    on:close={() => (isAssignTokenModalOpen = false)}
-  >
-    <AssignToken
-      tokenColors={colorsTokens}
-      {editingWallet}
-      on:closeModal={() => (isAssignTokenModalOpen = false)}
-    />
-  </Modal>
-
   <!-- Create PDA Modal -->
   <Modal
     bind:isOpen={isCreatePDAModalOpen}
@@ -284,8 +267,6 @@
             tokenColors={colorsTokens}
             walletColors={colorsWallets}
             on:openWalletModal={(event) => openWalletModal(event.detail.index)}
-            on:openAssignTokenModal={(event) =>
-              openAssignTokenModal(event.detail.index)}
             on:deleteWallet={(event) => deleteWallet(event.detail.index)}
             on:editWallet={(event) => editWallet(event.detail.index)}
             on:deleteToken={(event) => deleteToken(event.detail.index)}

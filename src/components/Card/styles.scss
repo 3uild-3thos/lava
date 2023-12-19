@@ -1,0 +1,94 @@
+.card {
+    @apply w-full h-[200px] bg-lava-card rounded-2xl box-border relative overflow-hidden p-[1.5px] flex flex-col transition ease-in;
+    z-index: 0;
+  }
+  
+  .card::after {
+    content: "";
+    @apply absolute h-[60%] w-full top-0 left-0;
+    opacity: 1;
+    background: linear-gradient(180deg, var(--bgColor), transparent 100%);
+    z-index: 0;
+  }
+  
+  .card:hover::before {
+    opacity: 0;
+    @apply transition duration-500
+  }
+  
+  .card::before {
+    border-radius: 15px;
+    @apply transition duration-500;
+    content: "";
+    inset: 0px;
+    -webkit-mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+    mask: linear-gradient(black 0 0) content-box, linear-gradient(black 0 0);
+    mask-composite: xor;
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    padding: 1.5px;
+    pointer-events: none;
+    position: absolute;
+    z-index: 0;
+    opacity: 0.6;
+    background: linear-gradient(30deg, transparent, transparent, #A0A0AB50,  #A0A0AB50, transparent, transparent 100%);
+  }
+
+  .card--header {
+    @apply flex gap-x-2 items-center w-full
+  }
+
+  .card--type {
+    @apply ml-auto
+  }
+
+.card--content {
+    @apply items-start cursor-pointer transition-all box-border w-full h-full bg-lava-card bg-opacity-90 rounded-2xl p-5 py-4 box-border relative overflow-hidden space-y-2 flex flex-col;
+    aspect-ratio: 4/3;
+    z-index: 999;
+  }
+
+  .card--content::after {
+    content: "";
+    @apply absolute h-[60%] w-full top-0 left-0;
+    opacity: 1;
+    background: linear-gradient(180deg, var(--bgColor), transparent 100%);
+    z-index: 0;
+  }
+
+.card--title {
+    @apply my-0 text-lg text-lava-primary font-bold truncate
+  }
+
+
+  .card--shimmer {
+    position: absolute;
+    top: calc(var(--top) * 1px - 100px);
+    left: calc(var(--left) * 1px - 100px);
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(var(--hoveredColor) 0%, transparent 100%);
+    z-index: 0;
+    display: none;
+    border-radius: 999999px;
+    filter: blur(20px)
+  }
+  
+  .card:hover>.card--shimmer {
+    display: block;
+    opacity: 0.5;
+  }
+
+
+  .card--type {
+    @apply text-misc rounded-xl capitalize items-center flex gap-x-1 border-lava-700 bg-lava-card font-medium bg-opacity-50 border-solid border p-1.5 px-2 text-xs font-medium absolute top-4 right-4 transition duration-200
+  }
+
+  .card:hover .card--type {
+    opacity:0 !important;
+  }
+
+  .card--footer {
+    @apply text-base text-lava-secondary font-medium flex-col items-center gap-y-2;
+    margin-top:auto !important;
+  }
