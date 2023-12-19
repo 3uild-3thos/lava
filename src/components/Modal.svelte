@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from "svelte";
   import { backInOut, expoIn, expoOut } from "svelte/easing";
   const dispatch = createEventDispatcher();
@@ -15,7 +15,7 @@
     window.removeEventListener("keydown", closeOnEscape);
   }
 
-  function closeOnEscape(event) {
+  function closeOnEscape(event: KeyboardEvent) {
     if (event.key === "Escape") {
       isOpen = false;
       dispatch("close");

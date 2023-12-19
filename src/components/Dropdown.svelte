@@ -1,11 +1,12 @@
-<script>
+<script lang="ts">
   import { createEventDispatcher } from "svelte";
   import { backInOut, expoIn, expoOut } from "svelte/easing";
   const dispatch = createEventDispatcher();
 
   export let isOpen = false;
   export let title = "Dropdown";
-  export let options = [];
+  // TODO: Make this type better defined
+  export let options: any[] = [];
   import { fade, fly, scale, slide } from "svelte/transition";
 
   $: if (isOpen) {
@@ -14,7 +15,7 @@
     window.removeEventListener("keydown", closeOnEscape);
   }
 
-  function closeOnEscape(event) {
+  function closeOnEscape(event: KeyboardEvent) {
     if (event.key === "Escape") {
       isOpen = false;
       dispatch("close");

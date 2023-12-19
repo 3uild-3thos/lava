@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
     export let colors = ["#FEBC2E", "#FE6054", "#8A54FE"];
     $: colors;
 </script>

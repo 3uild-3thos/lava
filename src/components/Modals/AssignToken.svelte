@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Select from "svelte-select/no-styles/Select.svelte";
   import { writable } from "svelte/store";
   import { workspaces, selectedWorkspace } from "../../stores/store";
@@ -8,7 +8,7 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   import Icon from "../avatars/index.svelte";
-  export let tokenColors;
+  export let tokenColors: string[];
 
   function updateToken(event) {
     symbol = event.detail;

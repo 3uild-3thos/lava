@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   export let title = "";
   export let yOffset = 0;
   export let xOffset = 0;

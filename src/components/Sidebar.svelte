@@ -1,7 +1,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import { fade, fly } from "svelte/transition";
-  let path;
+  let path: string;
 
   $: path = $page.url.pathname;
   $: console.log(path);
@@ -27,15 +27,15 @@
 
   let m = { x: 0, y: 0 };
 
-  function handleMousemove(event) {
-    let bounds = event.currentTarget.getBoundingClientRect();
+  function handleMousemove(event: MouseEvent) {
+    let bounds = (event.currentTarget as HTMLElement)?.getBoundingClientRect();
     m.x = event.clientX - bounds.left;
     m.y = event.clientY - bounds.top;
   }
 
-  let hoveredLink: number;
+  let hoveredLink: number | null;
 
-  function hovered(index) {
+  function hovered(index: number | null) {
     hoveredLink = index;
   }
 </script>

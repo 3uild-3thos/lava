@@ -4,6 +4,7 @@
   import TokenIcon from "./avatars/index.svelte";
   import { createEventDispatcher } from "svelte";
   import Modal from "./Modal.svelte";
+  import type { MouseEventHandler } from "svelte/elements";
 
   export let walletsLength: number;
   export let accounts: any = [];
@@ -22,32 +23,32 @@
 
   const dispatch = createEventDispatcher();
 
-  function deleteWallet(index) {
+  function deleteWallet(index: number) {
     dispatch("deleteWallet", { index });
     deleteModal = false;
   }
 
-  function editWallet(index) {
+  function editWallet(index: number) {
     dispatch("editWallet", { index });
   }
 
-  function openAssignTokenModal(index) {
+  function openAssignTokenModal(index: number) {
     dispatch("openAssignTokenModal", { index });
   }
 
-  function openWalletModal(index) {
+  function openWalletModal(index: number) {
     dispatch("openWalletModal", { index });
   }
 
-  function setHoveredToken(index) {
+  function setHoveredToken(index: number) {
     hoveredToken = index;
   }
 
-  function onEditToken(index) {
+  function onEditToken(index: number) {
     dispatch("editToken", { index });
   }
 
-  function deleteToken(index) {
+  function deleteToken(index: number) {
     dispatch("deleteToken", { index });
     deleteTokenModal = false;
   }
@@ -55,17 +56,17 @@
   let freezeAuthorityHover = -1;
   let mintAuthorityHover = -1;
 
-  function mintAuthorityHovered(index) {
+  function mintAuthorityHovered(index: number) {
     mintAuthorityHover = index;
   }
 
-  function freezeAuthorityHovered(index) {
+  function freezeAuthorityHovered(index: number) {
     freezeAuthorityHover = index;
   }
 
   let decimalHover = -1;
 
-  function decimalHovered(index) {
+  function decimalHovered(index: number) {
     decimalHover = index;
   }
 
@@ -73,25 +74,25 @@
 
   export let tokensShown = true;
 
-  function handleMousemove(event) {
-    let bounds = event.currentTarget.getBoundingClientRect();
+  function handleMousemove(event: MouseEvent) {
+    let bounds = (event.currentTarget as HTMLElement)?.getBoundingClientRect();
     m.x = event.clientX - bounds.left;
     m.y = event.clientY - bounds.top;
   }
 
   $: filteredWallets = accounts.wallets
-    .map((wallet, index) => ({ ...wallet, originalIndex: index }))
+    .map((wallet, index: number) => ({ ...wallet, originalIndex: index }))
     .filter((wallet) =>
       wallet.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
-    .map((wallet, index) => ({ ...wallet, itemType: "wallet", index }));
+    .map((wallet, index: number) => ({ ...wallet, itemType: "wallet", index }));
 
   $: filteredTokens = accounts.tokens
-    .map((token, index) => ({ ...token, originalIndex: index }))
+    .map((token, index: number) => ({ ...token, originalIndex: index }))
     .filter((token) =>
       token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
     )
-    .map((token, index) => ({ ...token, itemType: "token", index }));
+    .map((token, index: number) => ({ ...token, itemType: "token", index }));
 
   $: sortedAccounts = [...filteredWallets, ...filteredTokens];
 
@@ -122,7 +123,7 @@
   let deletingWallet = -1;
   let deleteModal = false;
 
-  const onDeleteWallet = (index) => {
+  const onDeleteWallet = (index: number) => {
     deletingWallet = index;
     deleteModal = true;
   };
@@ -130,7 +131,7 @@
   let deletingToken = -1;
   let deleteTokenModal = false;
 
-  const onDeleteToken = (index) => {
+  const onDeleteToken = (index: number) => {
     deletingToken = index;
     deleteTokenModal = true;
   };
@@ -209,10 +210,10 @@
     >
       <div
         class="wallet--list--item"
-        on:click={() => openWalletModal(account.originalIndex)}
+        on:click={() => openWalletModal(account.originalindex)}
         on:mousemove={handleMousemove}
         on:mouseover={() => (
-          (hoveredCard = account.originalIndex), (hoveredCardType = "wallet")
+          (hoveredCard = account.originalindex), (hoveredCardType = "wallet")
         )}
         on:mouseleave={() => ((hoveredCard = -1), (hoveredCardType = ""))}
         in:fade|global={{ delay: index * 50, duration: 100 }}
@@ -244,7 +245,7 @@
               on:click={(event) => {
                 editingWallet = account.originalIndex;
                 event.stopPropagation();
-                openAssignTokenModal(account.originalIndex);
+                openAssignTokenModal(account.originalindex);
               }}
               >+
 
@@ -260,7 +261,7 @@
                       class="wallet--token"
                       on:mouseover={() => {
                         hoveredCard = account.originalIndex;
-                        setHoveredToken(tokenIndex), (popOverOpened = true);
+                        setHoveredToken(tokenindex), (popOverOpened = true);
                       }}
                       on:mouseleave={() => {
                         hoveredCard = null;
@@ -311,13 +312,13 @@
       <div
         class="trash-icon"
         on:click={() => {
-          onDeleteWallet(account.originalIndex);
+          onDeleteWallet(account.originalindex);
         }}
       />
       <div
         class="edit-icon"
         on:click={() => {
-          editWallet(account.originalIndex);
+          editWallet(account.originalindex);
         }}
       />
     </div>
@@ -326,7 +327,7 @@
       class="relative"
       style={`opacity: ${
         (hoveredCardType === "token" &&
-          hoveredCard === account.originalIndex) ||
+          hoveredCard === account.originalindex) ||
         hoveredCard === -1 ||
         (hoveredCardType === "wallet" &&
           accounts.wallets[hoveredCard]?.tokens?.some(
@@ -344,7 +345,7 @@
         class="wallet--list--item"
         on:mousemove={handleMousemove}
         on:mouseover={() => (
-          (hoveredCard = account.originalIndex), (hoveredCardType = "token")
+          (hoveredCard = account.originalindex), (hoveredCardType = "token")
         )}
         on:mouseleave={() => ((hoveredCard = -1), (hoveredCardType = ""))}
         in:fade|global={{
@@ -449,13 +450,13 @@
       <div
         class="edit-icon"
         on:click={() => {
-          onEditToken(account.originalIndex);
+          onEditToken(account.originalindex);
         }}
       />
       <div
         class="trash-icon"
         on:click={() => {
-          onDeleteToken(account.originalIndex);
+          onDeleteToken(account.originalindex);
         }}
       />
     </div>

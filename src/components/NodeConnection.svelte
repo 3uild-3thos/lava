@@ -12,7 +12,7 @@
   let selectedNetwork = "localnet"; //  'mainnet';
   let connectionStatus = "disconnected";
   let slotHeight = 0;
-  let interval: number;
+  let interval: NodeJS.Timeout;
   let hovered = false;
 
   function connect() {
