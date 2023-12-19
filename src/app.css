@@ -1656,11 +1656,15 @@ background-color: #FF2950;
 .remove--seed {
   @apply absolute h-full w-full flex items-center justify-end
 } 
+
 .remove--seed img {
   @apply w-[20px] h-[20px] absolute right-2 cursor-pointer
 }
 
-
 .ata--assign {
   @apply flex flex-row items-center gap-x-1;
+}
+
+.font-black{
+  @apply font-black
 }
