@@ -20,28 +20,77 @@
   let seeds = [];
   const addSeed = (e) => {
     seeds = [...seeds, e.detail.value];
-    // reset the selected value
     selectedSeed = null;
   };
+  let formData = [];
+let pdaSeeds = [];
+function handleInput(event) {
+  const { name, value } = event.target;
+  formData[name]= value ;
+}
+
+  function handleSubmit() {
+    pdaSeeds = seeds?.map((seed, index) => {
+      return {
+        value: formData[index],
+        type: seed,
+      };
+    });
+    pdaSeeds = [...pdaSeeds, { value: selectedProgram, type: "Program" }];
+    if ($workspaces[$selectedWorkspace].pdas === undefined) {
+      $workspaces[$selectedWorkspace].pdas = [];
+    }
+    $workspaces[$selectedWorkspace].pdas = [
+      ...$workspaces[$selectedWorkspace].pdas,
+      {
+        seeds: pdaSeeds,
+      },
+    ];
+    dispatch("closePDAModal");
+  }
+
+  function typeFromSeed(seed) {
+    switch (seed) {
+      case "String":
+        return "text";
+      case "Pubkey":
+        return "text";
+      case "Bytes":
+        return "text";
+      case "u8":
+        return "number";
+      case "u16":
+        return "number";
+      case "u32":
+        return "number";
+      case "u64":
+        return "number";
+      case "u128":
+        return "number";
+      default:
+        return "text";
+    }
+  }
 </script>
 
 <h1 class="modal--title">Create PDA</h1>
-<div class="modal--form">
+<form on:submit|preventDefault={handleSubmit} class="modal--form">
   <div class="modal--form-title">Seeds</div>
+
   {#each seeds as seed, index}
     <div
       class="modal--form-seed"
       style="display: flex; position:relative; justify-content: space-between; align-items: center; margin-bottom:0.5rem;"
     >
-      <input class="input--primary" type={seed} placeholder={seed} />
-      <div
+      <input class="input--primary" type={typeFromSeed(seed)} placeholder={seed}  on:input={handleInput} name={`${index}`}/>
+      <!--div
         class="remove--seed"
         on:click={() => {
           seeds = seeds.filter((s, i) => i != index);
         }}
       >
         <img src="./remove.svg" alt="Remove" />
-      </div>
+      </div-->
     </div>
   {/each}
 
@@ -55,15 +104,18 @@
   <Select
     class="modal--form-select"
     bind:value={selectedProgram}
-    items={$workspaces[$selectedWorkspace]?.programs?.map((p) => p?.metadata?.address ?? p.name)}
+    items={$workspaces[$selectedWorkspace]?.programs?.map(
+      (p) => p?.metadata?.address ?? p.name
+    )}
     placeholder="Select program"
   />
-</div>
+
 <div class="btns--modal">
   <button
+    type="submit"
     class="btn btn--lava"
-    on:click={() => {
-      console.log("pp");
-    }}>Create</button
   >
+    Create
+  </button>
 </div>
+</form>

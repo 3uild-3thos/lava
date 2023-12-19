@@ -17,6 +17,7 @@ export interface Workspace {
   programs: string[];
   wallets: Wallet[];
   tokens: Token[];
+  pdas: PDA[];
 }
 
 export interface Token {
@@ -25,6 +26,11 @@ export interface Token {
   decimal: number;
   mintAuthority: string;
   freezeAuthority: string;
+}
+
+export interface PDA {
+  value: any;
+  type: string;
 }
 
 export const workspaces = persisted("workspaces", [{
