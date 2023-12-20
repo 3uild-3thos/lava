@@ -57,6 +57,17 @@
   }
 
   $: console.log($inputValues);
+
+  function beforeUnload() {
+    if (selectedTest !== -1) {
+      // Cancel the event as stated by the standard.
+      event.preventDefault();
+      // Chrome requires returnValue to be set.
+      event.returnValue = "";
+      // more compatibility
+      return "...";
+    }
+  }
 </script>
 
 <svelte:head>
@@ -64,6 +75,8 @@
     {`⬡ Lava - Tests`}
   </title>
 </svelte:head>
+
+<svelte:window on:beforeunload={beforeUnload} />
 
 {#if ready}
   <!-- Create Test Modal -->
