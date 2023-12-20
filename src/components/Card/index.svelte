@@ -1,10 +1,10 @@
 <script lang="ts">
-  export let title: string = "";
   export let ticker: string = "";
   export let type: string = "";
   export let footer: any = null;
   export let color: string = "";
   export let cardPosition: number;
+  export let title: string = `${type}`;
   $: hoveredCard = -1;
   import TokenIcon from "../avatars/index.svelte";
   let m = { x: 0, y: 0 };

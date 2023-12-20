@@ -56,10 +56,9 @@
     z-index: 0;
   }
 
-.card--title {
-    @apply my-0 text-lg text-lava-primary font-bold truncate
+  .card--title {
+    @apply my-0 text-lg text-lava-primary font-bold truncate capitalize;
   }
-
 
   .card--shimmer {
     position: absolute;

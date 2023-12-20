@@ -222,7 +222,7 @@
         />
       </div>
       <div slot="footer">
-        {#if account.type === "wallet"}
+        {#if account.type === "wallet" || account.type === "pda"}
           <AtaList
             {account}
             walletTokenColors={walletColors}

@@ -26,6 +26,15 @@
       Mint
     </div>
     <div class="create--account">
+      <div
+        class="create--account--card"
+        on:click={() => dispatch("createProgram")}
+      >
+        <img src="./create-pda.svg" />
+      </div>
+      Program
+    </div>
+    <div class="create--account">
       <div class="create--account--card" on:click={() => dispatch("createPDA")}>
         <img src="./create-pda.svg" />
       </div>

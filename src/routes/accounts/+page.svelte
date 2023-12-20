@@ -12,6 +12,7 @@
   import CreateToken from "../../components/Modals/CreateToken.svelte";
   import AccountFilter from "../../components/AccountFilter.svelte";
   import CreatePDA from "../../components/Modals/CreatePDA.svelte";
+  import CreateProgram from "../../components/Modals/CreateProgram.svelte";
 
   let tokenColors = ["#5498FE", "#FEBC2E", "#19FB9B", "#DC30C0", "#F0FE54"];
 
@@ -33,6 +34,7 @@
   let isCreateAccountModalOpen = false;
   let isCreateWalletModalOpen = false;
   let isCreateTokenModalOpen = false;
+  let isCreateProgramModalOpen = false;
   let isViewModalOpen = false;
   let hideWallets = false;
   let openedWallet = $workspaces[$selectedWorkspace]?.wallets[0];
@@ -137,7 +139,7 @@
 {#if ready}
   <!-- Create Account Modal -->
   <Modal
-    width={400}
+    width={300}
     bind:isOpen={isCreateAccountModalOpen}
     on:close={() => (isCreateAccountModalOpen = false)}
   >
@@ -145,18 +147,38 @@
       on:createWallet={() => (
         (isCreateAccountModalOpen = false),
         (isCreateWalletModalOpen = true),
-        (isCreatePDAModalOpen = false)
+        (isCreatePDAModalOpen = false),
+        (isCreateProgramModalOpen = false)
       )}
       on:createToken={() => (
         (isCreateAccountModalOpen = false),
         (isCreateTokenModalOpen = true),
-        (isCreatePDAModalOpen = false)
+        (isCreatePDAModalOpen = false),
+        (isCreateProgramModalOpen = false)
       )}
       on:createPDA={() => (
         (isCreateAccountModalOpen = false),
         (isCreateTokenModalOpen = false),
-        (isCreatePDAModalOpen = true)
+        (isCreatePDAModalOpen = true),
+        (isCreateProgramModalOpen = false)
       )}
+      on:createProgram={() => (
+        (isCreateAccountModalOpen = false),
+        (isCreateTokenModalOpen = false),
+        (isCreatePDAModalOpen = false),
+        (isCreateProgramModalOpen = true)
+      )}
+    />
+  </Modal>
+
+  <!-- Create Program Modal -->
+  <Modal
+    width={300}
+    bind:isOpen={isCreateProgramModalOpen}
+    on:close={() => (isCreateProgramModalOpen = false)}
+  >
+    <CreateProgram
+      on:closeTokenModal={() => (isCreateProgramModalOpen = false)}
     />
   </Modal>
 
