@@ -3,13 +3,12 @@
   import { fade } from "svelte/transition";
 
   export let program: any;
-  $: console.log(program);
 </script>
 
 <!-- Instructions -->
-{#if program.instructions[0]}
-  {#key program}
-    <div class="test--content" in:fade>
+{#key program}
+  {#if program.instructions[0]}
+    <div class="test--content">
       <div class="test--form">
         <div class="content--header">
           <div class="test--content--title">Accounts</div>
@@ -39,7 +38,7 @@
           </div>
           <div class="instruction--list" in:fade|global={{ duration: 100 }}>
             <div class="test--content--list">
-              {#each program.instructions[0].args as args}
+              {#each program.instructions[0].args as args, index}
                 <div class="argument">
                   {args.name}
                   <span class="arg--type">{args.type}</span>
@@ -51,5 +50,5 @@
         </div>
       {/if}
     </div>
-  {/key}
-{/if}
+  {/if}
+{/key}

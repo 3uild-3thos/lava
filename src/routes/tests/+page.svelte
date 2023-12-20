@@ -9,7 +9,9 @@
   import TestForm from "../../components/TestForm.svelte";
   import { fade, slide } from "svelte/transition";
   import DeleteTest from "../../components/Modals/DeleteTest.svelte";
-  let programs = $workspaces[$selectedWorkspace]?.programs;
+  import Select from "svelte-select/no-styles/Select.svelte";
+  import { writable } from "svelte/store";
+  let programs = $workspaces[$selectedWorkspace]?.programs as any[];
   let color = ["#9945FF", "#19FB9B"];
   let isCreateTestModalOpen = false;
   let isDeleteTestModalOpen = false;
@@ -33,6 +35,28 @@
       program: programs[0],
     },
   ];
+
+  let inputValues = writable<[]>([]);
+
+  $: {
+    if (selectedTest !== -1) {
+      inputValues.update((values) => {
+        if (!values[selectedTest]) {
+          values[selectedTest] = fakeTests[
+            selectedTest
+          ].program.instructions[0].args.map((arg) => {
+            return {
+              name: arg.name,
+              value: "",
+            };
+          });
+        }
+        return values;
+      });
+    }
+  }
+
+  $: console.log($inputValues);
 </script>
 
 <svelte:head>
@@ -110,8 +134,56 @@
             Select a test to get started
           </div>
         </div>
-      {:else}
-        <TestForm program={fakeTests[selectedTest].program} />
+
+        <!-- Accounts -->
+      {:else if fakeTests[selectedTest].program?.instructions[0]}
+        <div class="test--content">
+          <div class="test--form">
+            <div class="content--header">
+              <div class="test--content--title">Accounts</div>
+            </div>
+            <div class="instruction--list" in:fade|global={{ duration: 100 }}>
+              {#each fakeTests[selectedTest].program.instructions[0].accounts as account, index}
+                <div class="test--form--item">
+                  <div class="instruction--list--value">
+                    {account.name}
+                    {#if account.isMut}
+                      <img src="./modify.svg" alt="Mut Icon" />
+                    {/if}
+                    {#if account.isSigner}
+                      <img src="./signer.svg" alt="Signer Icon" />
+                    {/if}
+                  </div>
+                  <Select />
+                </div>
+              {/each}
+            </div>
+          </div>
+
+          <!-- Args -->
+          {#if fakeTests[selectedTest].program.instructions[0].args}
+            <div class="test--form">
+              <div class="content--header">
+                <div class="test--content--title">Arguments</div>
+              </div>
+              <div class="instruction--list" in:fade|global={{ duration: 100 }}>
+                <div class="test--content--list">
+                  {#each fakeTests[selectedTest].program.instructions[0].args as args, index}
+                    <div class="argument">
+                      {args.name}
+                      <span class="arg--type">{args.type}</span>
+                    </div>
+                    <input
+                      class="input--primary"
+                      bind:value={$inputValues[selectedTest][index].value}
+                      placeholder="Value"
+                    />
+                  {/each}
+                </div>
+              </div>
+            </div>
+          {/if}
+        </div>
       {/if}
     </div>
   </div>
