@@ -3,6 +3,8 @@
   import Icon from "../avatars/index.svelte";
   import { workspaces, selectedWorkspace } from "../../stores/store";
 
+  export let selectedTest: number = -1;
+
   let testName: string = "";
 
   let formTouched: any = { name: false };
@@ -32,7 +34,9 @@
   let selectedInstruction: string;
 </script>
 
-<h1 class="modal--title">Create a Test</h1>
+<h1 class="modal--title">
+  {selectedTest === -1 ? "Create a Test" : "Edit Test"}
+</h1>
 <div class="modal--form">
   <div class="modal--form-inline">
     <div class="modal--form-title">Test name</div>

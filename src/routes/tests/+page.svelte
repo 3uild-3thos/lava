@@ -6,10 +6,13 @@
   import CreateTest from "../../components/Modals/CreateTest.svelte";
   import Icon from "../../components/avatars/index.svelte";
   import TestItem from "../../components/TestItem.svelte";
-  import ProgramData from "../../components/ProgramData.svelte";
+  import TestForm from "../../components/TestForm.svelte";
+  import { fade, slide } from "svelte/transition";
+  import DeleteTest from "../../components/Modals/DeleteTest.svelte";
   let programs = $workspaces[$selectedWorkspace]?.programs;
   let color = ["#9945FF", "#19FB9B"];
   let isCreateTestModalOpen = false;
+  let isDeleteTestModalOpen = false;
   let ready = false;
   onMount(() => {
     ready = true;
@@ -19,6 +22,14 @@
   let fakeTests = [
     {
       name: "Test 1",
+      program: programs[0],
+    },
+    {
+      name: "Test 2",
+      program: programs[0],
+    },
+    {
+      name: "Test 3",
       program: programs[0],
     },
   ];
@@ -37,65 +48,70 @@
     bind:isOpen={isCreateTestModalOpen}
     on:close={() => (isCreateTestModalOpen = false)}
   >
-    <CreateTest />
+    <CreateTest {selectedTest} />
   </Modal>
+
+  <!-- Delete Test Modal -->
+  <Modal
+    width={350}
+    bind:isOpen={isDeleteTestModalOpen}
+    on:close={() => (isDeleteTestModalOpen = false)}
+  >
+    <DeleteTest on:cancelDelete={() => (isDeleteTestModalOpen = false)} />
+  </Modal>
+
   <div class="tests">
     <div class="tests--sidebar">
       <div class="tests--sidebar-header">
-        <div class="tests--sidebar-back" on:click={() => (selectedTest = -1)}>
-          <img src="./arrow-back.svg" />
-        </div>
-        <div class="tests--sidebar-title">
-          {selectedTest !== -1 ? fakeTests[selectedTest].name : "Tests"}
-        </div>
+        <div class="tests--sidebar-title">Tests</div>
       </div>
       <div class="tests--list" style={`--color: #54FE98`}>
-        {#if selectedTest === -1}
-          {#each fakeTests as test, index}
-            {#key index}
-              <TestItem
-                title={test.name}
-                {index}
-                on:updateSelectedTest={(event) =>
-                  (selectedTest = event.detail.index)}
-                type={"test"}
-              />
-            {/key}
-          {/each}
-        {:else}
-          <div class="tests--title">Program</div>
-          {#if fakeTests[selectedTest]?.program}
+        {#each fakeTests as test, index}
+          {#key index}
             <TestItem
-              title={fakeTests[selectedTest]?.program?.name}
+              title={test.name}
+              isSelected={selectedTest === index}
+              {index}
               on:updateSelectedTest={(event) =>
                 (selectedTest = event.detail.index)}
-              version={fakeTests[selectedTest]?.program?.version}
-              type={"program"}
+              type={"test"}
             >
-              <div slot="content" style="width:100%;">
-                <ProgramData program={fakeTests[selectedTest].program} />
+              <div slot="content" class="test--slot">
+                <div
+                  class="edit-icon always--shown"
+                  on:click={() => (isCreateTestModalOpen = true)}
+                />
+                <div
+                  class="trash-icon always--shown"
+                  on:click={() => (isDeleteTestModalOpen = true)}
+                />
               </div>
             </TestItem>
-          {/if}
-        {/if}
+          {/key}
+        {/each}
       </div>
-      {#if selectedTest === -1}
-        <div class="tests--bottom">
-          <button
-            class="btn btn--primary"
-            on:click={() => (isCreateTestModalOpen = true)}
-          >
-            Create a Test
-          </button>
-        </div>
-      {/if}
+      <div class="tests--bottom">
+        <button
+          class="btn btn--primary"
+          on:click={() => {
+            (selectedTest = -1), (isCreateTestModalOpen = true);
+          }}
+        >
+          Create a Test
+        </button>
+      </div>
     </div>
 
     <div class="test--builder">
       {#if selectedTest === -1}
         <div class="test--builder--empty-state">
           <img src="./select-test.svg" alt="Select a Test" />
+          <div class="test--builder--empty-state--title">
+            Select a test to get started
+          </div>
         </div>
+      {:else}
+        <TestForm program={fakeTests[selectedTest].program} />
       {/if}
     </div>
   </div>

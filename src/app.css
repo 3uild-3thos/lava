@@ -87,6 +87,10 @@ body {
 
 
 .instruction--list {
+  @apply flex flex-col gap-y-4 mt-4
+}
+
+.test--form--item {
   @apply flex flex-col gap-y-2
 }
 
@@ -95,7 +99,7 @@ body {
 }
 
 .instruction--list--value img {
-  @apply w-[12px] h-[12px]
+  @apply w-[16px] h-[16px]
 }
 
 .input--group .input--primary {
@@ -138,6 +142,16 @@ body {
   @apply w-[20px] h-[20px] absolute right-4 top-5 cursor-pointer;
   background-image:url('./close.svg');
   background-size:cover;
+}
+
+.test--opened {
+  @apply flex-col
+}
+
+.test--opened .tests--sidebar {
+  width: calc(100% - 10px) !important;
+  height:60px !important;
+  @apply transition duration-200
 }
 
 .test--nested {
@@ -328,11 +342,15 @@ body {
 }
 
 .tests {
-  @apply flex w-full
+  @apply flex w-full max-h-[99vh]
 }
 
+.test--form {
+  @apply w-1/2 mx-auto
+}
 .test--builder {
-  @apply w-full h-full flex
+  @apply relative top-1 ml-2 mr-2 overflow-y-scroll flex flex-col h-[99%] bg-lava-bg border-solid border-1 border-lava-800 p-3 relative rounded-lg box-border;
+  width: calc(100% - 24px) !important;
 }
 
 .test--builder--empty-state {
@@ -344,7 +362,7 @@ body {
 }
 
 .tests--sidebar {
-  @apply left-1 top-1 flex-shrink-0 w-[350px] overflow-hidden flex flex-col h-[99%] bg-lava-900 border-solid border-1 border-lava-800 p-3 relative rounded-lg box-border;
+  @apply left-1 top-1 max-h-[99%] flex-shrink-0 w-[350px] overflow-hidden flex flex-col h-[99%] bg-lava-900 border-solid border-1 border-lava-800 p-3 relative rounded-lg box-border;
 }
 
 .gradient {
@@ -452,7 +470,7 @@ body {
 }
 
 .test--content {
-  @apply mt-4 w-full
+  @apply mt-4 w-full space-y-8 pb-12 pr-4
 }
 
 .content--header {
@@ -472,7 +490,7 @@ body {
 }
 
 .test--content--title {
-  @apply font-sans font-medium text-[#FE6054] text-sm mb-1 
+  @apply font-sans font-medium text-[#FE6054] text-lg mb-1 
 }
 
 .test--title {
@@ -1516,8 +1534,6 @@ a {
 .edit-icon {
     opacity:0;
     position: absolute;
-    top: 1.5rem;
-    right: 3.25rem;
     z-index: 100; 
     overflow: hidden;
     background-color: #9292AD;
@@ -1529,6 +1545,24 @@ a {
     transition: 200ms;
     -webkit-mask-size: cover;
     mask-size:cover;
+}
+
+.test--slot .edit-icon, .test--slot .trash-icon {
+  top: inherit;
+  right: inherit;
+  @apply relative;
+}
+
+.tests--list--item:hover .edit-icon {
+  opacity:1;
+}
+
+.tests--list--item:hover .trash-icon {
+  opacity:1;
+}
+
+.test--slot {
+  @apply ml-auto flex items-center gap-x-2;
 }
 
 .caret {
