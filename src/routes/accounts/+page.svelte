@@ -214,7 +214,7 @@
     bind:isOpen={isCreatePDAModalOpen}
     on:close={() => (isCreatePDAModalOpen = false)}
   >
-    <CreatePDA on:closeModal={() => (isCreatePDAModalOpen = false)} />
+    <CreatePDA on:closePDAModal={() => (isCreatePDAModalOpen = false)} />
   </Modal>
 
   <div class="common--wrapper">

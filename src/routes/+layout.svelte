@@ -60,6 +60,9 @@
     if ($selectedWorkspace === undefined) {
       $selectedWorkspace = 0;
     }
+    if ( $workspaces[$selectedWorkspace].pdas === undefined) {
+      $workspaces[$selectedWorkspace].pdas = [];
+    }
   });
 </script>
 
