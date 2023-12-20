@@ -24,9 +24,15 @@
   };
   let formData = [];
 let pdaSeeds = [];
+
 function handleInput(event) {
   const { name, value } = event.target;
   formData[name]= value ;
+}
+
+function handleSelect(event, index) {
+  const {value} = event.detail;
+  formData[index] = value;
 }
 
   function handleSubmit() {
@@ -82,7 +88,19 @@ function handleInput(event) {
       class="modal--form-seed"
       style="display: flex; position:relative; justify-content: space-between; align-items: center; margin-bottom:0.5rem;"
     >
+    {#if seed === "Pubkey"}
+      <Select
+        class="modal--form-select block"
+        items={$workspaces[$selectedWorkspace]?.wallets?.map(
+          (w) => w?.address.length > 0 ? w?.address : w.name
+        )}
+        id={`${index}`}
+        on:change={(e) => handleSelect(e, index)}
+        placeholder="Select wallet"
+      />
+    {:else}
       <input class="input--primary" type={typeFromSeed(seed)} placeholder={seed}  on:input={handleInput} name={`${index}`}/>
+      {/if}
       <!--div
         class="remove--seed"
         on:click={() => {
