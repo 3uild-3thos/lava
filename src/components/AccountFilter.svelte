@@ -1,7 +1,6 @@
 <script lang="ts">
   import Select from "svelte-select/no-styles/Select.svelte";
   import { createEventDispatcher } from "svelte";
-  import type { FormEventHandler } from "svelte/elements";
   const dispatch = createEventDispatcher();
 
   let searchTerm = "";
@@ -13,16 +12,21 @@
 
   $: sortType =
     typeof localStorage !== "undefined"
-      ? localStorage.getItem("sortType") || "name"
-      : "name";
+      ? localStorage.getItem("sortType") || "type"
+      : "type";
 
-  function handleSearchTermChange(event: Event & { currentTarget: EventTarget & HTMLInputElement; }) {
+  function handleSearchTermChange(
+    event: Event & { currentTarget: EventTarget & HTMLInputElement }
+  ) {
     searchTerm = (event.target as HTMLInputElement)?.value;
     dispatch("searchTermChange", searchTerm);
   }
 
   function handleSortTypeChange(event: CustomEvent) {
     sortType = event.detail.value;
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem("sortType", sortType);
+    }
     dispatch("sortTypeChange", sortType);
   }
 
@@ -58,18 +62,6 @@
   >
     <div slot="prepend">Sort By</div>
   </Select>
-
-  <!-- <div class="show--tokens">
-    <label class="toggle--checkbox">
-      <input
-        bind:checked={showTokens}
-        on:change={handleToggleShowTokens}
-        type="checkbox"
-      />
-      <div class="checkmark" />
-    </label>
-    Show Tokens
-  </div> -->
 </div>
 
 <style>

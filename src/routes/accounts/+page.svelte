@@ -13,15 +13,7 @@
   import AccountFilter from "../../components/AccountFilter.svelte";
   import CreatePDA from "../../components/Modals/CreatePDA.svelte";
 
-  let color = ["#9945FF", "#19FB9B"];
-  let tokenColors = [
-    "#8A54FE",
-    "#5498FE",
-    "#FEBC2E",
-    "#19FB9B",
-    "#FE6054",
-    "#DC30C0",
-  ];
+  let tokenColors = ["#5498FE", "#FEBC2E", "#19FB9B", "#DC30C0", "#F0FE54"];
 
   $: colorsTokens = $workspaces[$selectedWorkspace]?.tokens.map((token) => {
     return getTokenColor(token.symbol);
@@ -50,8 +42,9 @@
   $: searchTerm = "";
   $: sortType =
     typeof localStorage !== "undefined"
-      ? localStorage.getItem("sortType") || "wallets"
-      : "wallets";
+      ? localStorage.getItem("sortType") || "name"
+      : "name";
+
   $: showTokens =
     typeof localStorage !== "undefined"
       ? localStorage.getItem("showTokens") === "true"
@@ -132,6 +125,7 @@
   }
 
   let isCreatePDAModalOpen = false;
+  $: console.log($workspaces[$selectedWorkspace]);
 </script>
 
 <svelte:head>
@@ -230,7 +224,6 @@
         <AccountFilter
           on:searchTermChange={(event) => (searchTerm = event.detail)}
           on:sortTypeChange={handleSortTypeChange}
-          on:toggleShowTokens={handleToggleShowTokens}
         />
         {#if !hideWallets}
           <button
@@ -256,6 +249,16 @@
                   ...wallet,
                   type: "wallet",
                 })) ?? [],
+              pdas:
+                $workspaces[$selectedWorkspace]?.pdas.map((pda) => ({
+                  ...pda,
+                  type: "pda",
+                })) ?? [],
+              programs:
+                $workspaces[$selectedWorkspace]?.programs.map((program) => ({
+                  ...program,
+                  type: "pda",
+                })) ?? [],
               tokens:
                 $workspaces[$selectedWorkspace]?.tokens.map((token) => ({
                   ...token,
@@ -263,7 +266,6 @@
                 })) ?? [],
             }}
             walletsLength={$workspaces[$selectedWorkspace]?.wallets.length}
-            {color}
             tokenColors={colorsTokens}
             walletColors={colorsWallets}
             on:openWalletModal={(event) => openWalletModal(event.detail.index)}

@@ -28,7 +28,14 @@
       {#if type === "wallet"}
         <img src={`/SOL.svg`} alt={`Sol Icon`} style="width:32px;height:32px" />
       {:else}
-        <TokenIcon value={ticker} size={32} border={true} radius={7} {color} />
+        <TokenIcon
+          style={type === "token" ? "character" : "symbol"}
+          value={ticker ? ticker : title}
+          size={32}
+          border={true}
+          radius={7}
+          {color}
+        />
       {/if}
       <div class="card--title">{title}</div>
       <div class="card--type">

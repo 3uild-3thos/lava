@@ -63,7 +63,7 @@
             symbol: symbol.toUpperCase(),
             decimal: decimal,
             freezeAuthority: freezeAuthority?.name,
-            mintAuthority: mintAuthority.name,
+            mintAuthority: mintAuthority?.name,
           };
         }
       } else {

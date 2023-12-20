@@ -7,7 +7,6 @@
 
   export let walletsLength: number;
   export let accounts: any = [];
-  export let color: any = [];
   export let walletColors: any = [];
   export let tokenColors: any = [];
   export let searchTerm = "";
@@ -39,14 +38,29 @@
     deleteTokenModal = false;
   }
 
-  export let tokensShown = true;
-
   $: filteredWallets = accounts.wallets
     .map((wallet, index: number) => ({ ...wallet, originalIndex: index }))
     .filter((wallet) =>
       wallet.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .map((wallet, index: number) => ({ ...wallet, itemType: "wallet", index }));
+
+  $: filteredPrograms = accounts.programs
+    .map((program, index: number) => ({ ...program, originalIndex: index }))
+    .filter((program) =>
+      program.name.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .map((program, index: number) => ({
+      ...program,
+      itemType: "program",
+      index,
+    }));
+
+  $: filteredPDAs = accounts.pdas.map((pda, index: number) => ({
+    ...pda,
+    originalIndex: index,
+    itemType: "pda",
+  }));
 
   $: filteredTokens = accounts.tokens
     .map((token, index: number) => ({ ...token, originalIndex: index }))
@@ -55,30 +69,35 @@
     )
     .map((token, index: number) => ({ ...token, itemType: "token", index }));
 
-  $: sortedAccounts = [...filteredWallets, ...filteredTokens];
+  $: sortedAccounts = [
+    ...filteredWallets,
+    ...filteredPrograms,
+    ...filteredPDAs,
+    ...filteredTokens,
+  ];
 
   $: if (sortType === "name") {
-    sortedAccounts.sort((a, b) => {
-      if (a.name < b.name) {
-        return -1;
-      }
-      if (a.name > b.name) {
-        return 1;
+    sortedAccounts = [...sortedAccounts].sort((a, b) => {
+      if (a.name && b.name) {
+        if (a.name < b.name) {
+          return -1;
+        }
+        if (a.name > b.name) {
+          return 1;
+        }
       }
       return 0;
     });
-    sortedAccounts = sortedAccounts;
   } else if (sortType === "type") {
-    sortedAccounts = sortedAccounts.sort((a, b) => {
-      if (a.itemType > b.itemType) {
-        return -1;
-      }
-      if (a.itemType < b.itemType) {
-        return 1;
-      }
-      return 0;
+    sortedAccounts = [...sortedAccounts].sort((a, b) => {
+      const typeOrder = {
+        wallet: 1,
+        program: 2,
+        pda: 3,
+        token: 4,
+      };
+      return typeOrder[a.itemType] - typeOrder[b.itemType];
     });
-    sortedAccounts = sortedAccounts;
   }
 
   let deletingWallet = -1;
@@ -101,6 +120,8 @@
     editingWallet = index;
     isAssignTokenModalOpen = true;
   }
+
+  $: console.log(sortedAccounts);
 </script>
 
 <Modal bind:isOpen={deleteModal} on:close={() => (deleteModal = false)}>
@@ -166,13 +187,15 @@
 >
 
 {#each sortedAccounts as account, index}
-  {#key index}
+  {#key sortType}
     <Card
       color={account.type === "token"
         ? tokenColors[account.originalIndex]
-        : color[0]}
+        : account.type === "wallet"
+        ? "#8A54FE"
+        : "#FE6054"}
       title={account.name}
-      type={account.type}
+      type={account.itemType}
       ticker={account.symbol ? account.symbol : ""}
       cardPosition={index}
     >
