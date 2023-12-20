@@ -1535,6 +1535,8 @@ a {
     opacity:0;
     position: absolute;
     z-index: 100; 
+    top: 1.5rem;
+    right: 3.5rem;
     overflow: hidden;
     background-color: #9292AD;
     width:20px;
