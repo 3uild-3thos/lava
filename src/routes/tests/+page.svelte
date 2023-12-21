@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import AccountListCard from "../../components/AccountListCard.svelte";
   import Modal from "../../components/Modal.svelte";
-  import { workspaces, selectedWorkspace } from "../../stores/store";
+  import { workspaces, selectedWorkspace, type Workspace } from "../../stores/store";
   import CreateTest from "../../components/Modals/CreateTest.svelte";
   import Icon from "../../components/avatars/index.svelte";
   import TestItem from "../../components/TestItem.svelte";
@@ -16,7 +16,11 @@
   let isCreateTestModalOpen = false;
   let isDeleteTestModalOpen = false;
   let ready = false;
+  
   onMount(() => {
+    if ($workspaces[$selectedWorkspace].tests === undefined) {
+      $workspaces[$selectedWorkspace].tests = [];
+    }
     ready = true;
   });
 
@@ -103,7 +107,7 @@
         <div class="tests--sidebar-title">Tests</div>
       </div>
       <div class="tests--list" style={`--color: #54FE98`}>
-        {#each fakeTests as test, index}
+        {#each $workspaces[$selectedWorkspace].tests as test, index}
           {#key index}
             <TestItem
               title={test.name}

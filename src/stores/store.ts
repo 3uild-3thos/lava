@@ -1,23 +1,24 @@
 import { persisted } from "./persisted";
-import {writable, type Writable} from 'svelte/store'
+import { writable, type Writable } from "svelte/store";
 
 export interface Wallet {
   name: string;
   address: string;
   sol_balance: number;
   tokens: TokenBalance[];
-  }
+}
 
 export interface TokenBalance {
-    symbol: string,
-    amount: number,
-  }
+  symbol: string;
+  amount: number;
+}
 export interface Workspace {
   name: string;
   programs: string[];
   wallets: Wallet[];
   tokens: Token[];
   pdas: PDA[];
+  tests: Test[];
 }
 
 export interface Token {
@@ -28,17 +29,32 @@ export interface Token {
   freezeAuthority: string;
 }
 
-export interface PDA {
+export interface Seed {
   value: any;
-  type: string;
+  seed: string;
+}
+export interface PDA {
+  seeds: Seed[];
   name: string;
 }
 
-export const workspaces = persisted("workspaces", [{
-  name: "Empty Workspace",
-  programs: [],
-  wallets: [],
-  tokens: [],
-}] as Workspace[]);
+export interface Test {
+  name: string;
+  programId: string;
+  instruction: string;
+  accounts: any[];
+  parameters: any[];
+}
+
+export const workspaces = persisted("workspaces", [
+  {
+    name: "Empty Workspace",
+    programs: [],
+    wallets: [],
+    tokens: [],
+    pdas: [],
+    tests: [],
+  },
+] as Workspace[]);
 
 export const selectedWorkspace = persisted("selectedWorkspace", 0);

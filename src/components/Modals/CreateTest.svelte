@@ -32,6 +32,23 @@
   ];
 
   let selectedInstruction: string;
+
+  const createTest = () => {
+    console.log(testName, selectedProgram, selectedInstruction);
+
+    if (valid.name) {
+      $workspaces[$selectedWorkspace].tests = [
+        ...$workspaces[$selectedWorkspace].tests,
+        {
+          name: testName,
+          programId: selectedProgram.name,
+          instruction: selectedInstruction,
+          accounts: [],
+          parameters: [],
+        },
+      ];
+    }
+  };
 </script>
 
 <h1 class="modal--title">
@@ -119,5 +136,8 @@
 </div>
 
 <div class="btns--modal">
-  <button class="btn btn--lava">Create</button>
+  <button
+    class="btn btn--lava"
+    on:click={createTest}
+  >Create</button>
 </div>
