@@ -14,6 +14,7 @@
   import CreatePDA from "../../components/Modals/CreatePDA.svelte";
   import CreateProgram from "../../components/Modals/CreateProgram.svelte";
   import EditProgram from "../../components/Modals/EditProgram.svelte";
+  import AtaList from "../../components/ATAList.svelte";
 
   let tokenColors = [
     "#FEBC2E",
@@ -304,7 +305,10 @@
       )}
       editingPda={selectedPda}
       pdaName={selectedPdaName}
-      selectedProgram={pdaAddress}
+      selectedProgram={$workspaces[$selectedWorkspace]?.pdas[selectedPda]?.seeds.find(
+        (seed) => {
+          return seed.type === "Program"}
+      )?.value.value}
       seeds={selectedPdaSeeds}
     />
   </Modal>
