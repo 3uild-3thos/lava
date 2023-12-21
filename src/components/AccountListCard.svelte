@@ -289,10 +289,13 @@
 {#each sortedAccounts as account, index}
   {#key sortType}
     <Card
+      on:mouseover={() => (hoveredCard = index)}
+      on:mouseleave={() => (hoveredCard = -1)}
       on:showTokens={() =>
         dispatch("openWalletModal", { index: account.originalIndex })}
       color={getColorByAccountType(account.itemType, account.originalIndex)}
       title={account.name}
+      {hoveredCard}
       type={account.itemType}
       ticker={account.symbol ? account.symbol : ""}
       cardPosition={index}

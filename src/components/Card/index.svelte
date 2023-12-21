@@ -8,7 +8,7 @@
   export let color: string = "";
   export let cardPosition: number;
   export let title: string = `${type}`;
-  $: hoveredCard = -1;
+  export let hoveredCard: number = -1;
   import TokenIcon from "../avatars/index.svelte";
   let m = { x: 0, y: 0 };
   function handleMousemove(event: MouseEvent) {
@@ -23,14 +23,21 @@
       dispatch("showTokens");
     }
   }
+
+  $: console.log(hoveredCard);
 </script>
 
 <div
   class="card"
+  on:mouseleave
+  on:mouseover
   on:mousemove={handleMousemove}
   on:click={() => showTokens()}
   in:fade|global={{ delay: cardPosition * 50, duration: 100 }}
-  style={`--hoveredColor: ${color}; --bgColor: ${color}10; --left:${m.x}; --top:${m.y};`}
+  style={`--hoveredColor: ${color}; --bgColor: ${color}10; --left:${
+    m.x
+  }; --top:${m.y};
+  opacity: ${hoveredCard !== -1 && hoveredCard !== cardPosition ? 0.2 : 1}`}
 >
   <div class="card--shimmer" />
   <div class="card--content">
