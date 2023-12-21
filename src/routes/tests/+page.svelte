@@ -2,7 +2,7 @@
   import { onMount } from "svelte";
   import AccountListCard from "../../components/AccountListCard.svelte";
   import Modal from "../../components/Modal.svelte";
-  import { workspaces, selectedWorkspace } from "../../stores/store";
+  import { workspaces, selectedWorkspace, type Workspace } from "../../stores/store";
   import CreateTest from "../../components/Modals/CreateTest.svelte";
   import Icon from "../../components/avatars/index.svelte";
   import TestItem from "../../components/TestItem.svelte";
@@ -11,12 +11,32 @@
   import DeleteTest from "../../components/Modals/DeleteTest.svelte";
   import Select from "svelte-select/no-styles/Select.svelte";
   import { writable } from "svelte/store";
+  import type { Idl } from "@coral-xyz/anchor"
+  import { SubmitForm } from '@restspace/svelte-schema-form';
+
+
+// a function that takes an Idl's instructions arguments and returns an schema for SubmitForm
+const getSchema = (args: any[]) => {
+  let schema = {
+    type: "object",
+    properties: {}
+  };
+  args.forEach(arg => {
+    schema.properties[arg.name] = { type: arg.type };
+  });
+  return schema;
+}
+
   let programs = $workspaces[$selectedWorkspace]?.programs as any[];
   let color = ["#9945FF", "#19FB9B"];
   let isCreateTestModalOpen = false;
   let isDeleteTestModalOpen = false;
   let ready = false;
+  
   onMount(() => {
+    if ($workspaces[$selectedWorkspace].tests === undefined) {
+      $workspaces[$selectedWorkspace].tests = [];
+    }
     ready = true;
   });
 
@@ -35,19 +55,24 @@
       program: programs[0],
     },
   ];
+  let value = {};
 
   let inputValues = writable<[]>([]);
+
+  let inputAccounts = writable<[]>([]);
 
   $: {
     if (selectedTest !== -1) {
       inputValues.update((values) => {
         if (!values[selectedTest]) {
-          values[selectedTest] = fakeTests[
-            selectedTest
-          ].program.instructions[0].args.map((arg) => {
+          let program = $workspaces[$selectedWorkspace].programs.find(
+            (program) => program.name === $workspaces[$selectedWorkspace].tests[selectedTest].programId  || program.metadata?.address === $workspaces[$selectedWorkspace].tests[selectedTest].programId
+          );
+          values[selectedTest] = program?.instructions[0].args.map((arg) => {
             return {
-              name: arg.name,
               value: "",
+              type: arg.type,
+              name: arg.name,
             };
           });
         }
@@ -55,8 +80,28 @@
       });
     }
   }
+  
+  $: {
+    if (selectedTest !== -1) {
+      inputAccounts.update((accounts) => {
+        if (!accounts[selectedTest]) {
+          let program = $workspaces[$selectedWorkspace].programs.find(
+            (program) => program.name === $workspaces[$selectedWorkspace].tests[selectedTest].programId  || program.metadata?.address === $workspaces[$selectedWorkspace].tests[selectedTest].programId
+          );
+          accounts[selectedTest] = program?.instructions[0].accounts.map((account) => {
+            return {
+              name: account.name,
+              isMut: account.isMut,
+              isSigner: account.isSigner,
+            };
+          });
+        }
+        return accounts;
+      });
+    }
+  }
 
-  $: console.log($inputValues);
+  $: console.log($inputValues, selectedTest, $inputValues[selectedTest], selectedProgram);
 
   function beforeUnload() {
     if (selectedTest !== -1) {
@@ -68,6 +113,23 @@
       return "...";
     }
   }
+
+  let selectedProgram: Idl|String = "";
+
+  const updateSelectedProgram = (event) => {
+    selectedProgram = event.detail.value;
+  };
+  
+  const submit = (e) => {
+	  console.log(JSON.stringify(e.detail.value, undefined, 2));
+  }
+  let schema = {
+	  type: "object",
+	  properties: {
+		  "x": { "type": "string" }
+	  }
+  };
+ 
 </script>
 
 <svelte:head>
@@ -85,7 +147,7 @@
     bind:isOpen={isCreateTestModalOpen}
     on:close={() => (isCreateTestModalOpen = false)}
   >
-    <CreateTest {selectedTest} />
+    <CreateTest {selectedTest} {selectedProgram} on:updateSelectedProgram={updateSelectedProgram} />
   </Modal>
 
   <!-- Delete Test Modal -->
@@ -103,7 +165,7 @@
         <div class="tests--sidebar-title">Tests</div>
       </div>
       <div class="tests--list" style={`--color: #54FE98`}>
-        {#each fakeTests as test, index}
+        {#each $workspaces[$selectedWorkspace].tests as test, index}
           {#key index}
             <TestItem
               title={test.name}
@@ -149,14 +211,14 @@
         </div>
 
         <!-- Accounts -->
-      {:else if fakeTests[selectedTest].program?.instructions[0]}
+      {:else if $inputAccounts[selectedTest]?.length > 0}
         <div class="test--content">
           <div class="test--form">
             <div class="content--header">
               <div class="test--content--title">Accounts</div>
             </div>
             <div class="instruction--list" in:fade|global={{ duration: 100 }}>
-              {#each fakeTests[selectedTest].program.instructions[0].accounts as account, index}
+              {#each $inputAccounts[selectedTest] as account, index}
                 <div class="test--form--item">
                   <div class="instruction--list--value">
                     {account.name}
@@ -174,17 +236,17 @@
           </div>
 
           <!-- Args -->
-          {#if fakeTests[selectedTest].program.instructions[0].args}
+          {#if $inputValues[selectedTest].length > 0}
             <div class="test--form">
               <div class="content--header">
                 <div class="test--content--title">Arguments</div>
               </div>
               <div class="instruction--list" in:fade|global={{ duration: 100 }}>
                 <div class="test--content--list">
-                  {#each fakeTests[selectedTest].program.instructions[0].args as args, index}
+                  {#each $inputValues[selectedTest] as args, index}
                     <div class="argument">
                       {args.name}
-                      <span class="arg--type">{args.type}</span>
+                      <span class="arg--type">{typeof args.type === "string" ? args.type : JSON.stringify(args.type)}</span>
                     </div>
                     <input
                       class="input--primary"
@@ -192,12 +254,18 @@
                       placeholder="Value"
                     />
                   {/each}
+                  <!--SubmitForm schema={{
+                    type: "object",
+                    properties: {
+                      "x": { "type": "string" }
+                    }}} {value} on:submit={submit} /-->
                 </div>
               </div>
             </div>
           {/if}
         </div>
       {/if}
+
     </div>
   </div>
 {/if}

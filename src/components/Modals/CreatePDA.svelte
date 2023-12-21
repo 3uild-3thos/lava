@@ -1,4 +1,4 @@
-<script>
+<script lang="ts">
   import Select from "svelte-select/no-styles/Select.svelte";
   import { workspaces, selectedWorkspace } from "../../stores/store";
   export let editingPda = -1;
@@ -6,6 +6,7 @@
   export let pdaAddress = "";
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
+
   let selectedSeed = null;
   export let selectedProgram = "";
   export let seeds = [];
@@ -34,10 +35,57 @@
   $: if (selectedProgram === "") {
     pdaAddress = "";
   }
+  let invalid_fields = [];
+
+  function isStringArrayInRange(str) {
+    const trimmedStr = str.replace(/[\[\]]/g, '');
+    const numbersArray = trimmedStr.split(',');
+    const numericArray = numbersArray.map(Number);
+    console.log(numericArray)
+    const isInRange = numericArray.every(num => typeof num === 'number' && num >= 0 && num <= 255);
+    console.log(isInRange)
+    if (isInRange) {
+      return numericArray;
+    } else {
+      return false;
+    }
+}
 
   function handleInput(event) {
     const { name, value } = event.target;
-    formData[name] = value;
+    if (seeds[name]=== "String"){
+    formData[name] = value as string;
+    } else if (seeds[name]=== "Pubkey"){
+      formData[name] = value as string;
+    } else if (seeds[name]=== "Bytes"){
+      // Check if it's a valid hexadecimal string with "0x" appended
+    const hexRegex = /^0x([0-9A-Fa-f]+)$/;
+
+      // Check if it's a valid array of numbers
+
+      if (hexRegex.test(value)) {
+        console.log('hex')
+        formData[name] = value;
+        invalid_fields = invalid_fields.filter((field) => field !== name);
+    } else if (isStringArrayInRange(value)) {
+        formData[name] = value;
+        invalid_fields = invalid_fields.filter((field) => field !== name);
+    } else {
+      invalid_fields = [...invalid_fields, name];
+    }
+
+
+    } else if (seeds[name]=== "u8"){
+      formData[name] = value as number;
+    } else if (seeds[name]=== "u16"){
+      formData[name] = value as number;
+    } else if (seeds[name]=== "u32"){
+      formData[name] = value as number;
+    } else if (seeds[name]=== "u64"){
+      formData[name] = value as number;
+    } else if (seeds[name]=== "u128"){
+      formData[name] = value as number;
+    }
   }
 
   function handleSelect(event, index) {
@@ -129,7 +177,7 @@
     seeds = [];
   }
 
-  $: validSeeds = seeds.every((seed, index) => formData[index]?.length > 1);
+  $: validSeeds = seeds.every((seed, index) => formData[index]?.length > 1) && invalid_fields.length == 0;
 </script>
 
 <h1 class="modal--title">{editingPda === -1 ? "Create PDA" : "Edit PDA"}</h1>
@@ -173,6 +221,14 @@
           on:change={(e) => handleSelect(e, index)}
           placeholder="Select wallet"
         />
+      {:else if seed === "Bytes"}
+        <input
+          class={"input--primary" + (invalid_fields.includes(index) ? " input--invalid" : "")}
+          type={typeFromSeed(seed)}
+          placeholder={seed}
+          on:input={handleInput}
+          name={`${index}`}
+        />
       {:else}
         <input
           class="input--primary"
@@ -186,6 +242,7 @@
         class="remove--seed"
         style={seed === "Pubkey" ? "right: 20px;" : ""}
         on:click={() => {
+          invalid_fields = invalid_fields.filter((field) => field !== index);
           seeds = seeds.filter((s, i) => i != index);
         }}
       >
