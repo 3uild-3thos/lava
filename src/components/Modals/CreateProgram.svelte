@@ -7,6 +7,71 @@
   let editingProgram = -1;
   let programId = "";
   let programName = "";
+  let idlToAdd = null;
+  let programAlreadyExists = false;
+
+  const addIDL = (e) => {
+    e.preventDefault();
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = ".json";
+    input.onchange = (e) => {
+      const file = e.target.files[0];
+      const reader = new FileReader();
+      reader.readAsText(file, "UTF-8");
+      reader.onload = (readerEvent) => {
+        const content = readerEvent.target.result;
+        idlToAdd = JSON.parse(content);
+        programName = idlToAdd.name;
+        programId = idlToAdd.metadata.address;
+      };
+    };
+    input.click();
+  };
+
+  function createProgram() {
+    if (idlToAdd) {
+      const existingProgram = $workspaces[$selectedWorkspace].programs.find(
+        (program) => program.name === programName
+      );
+      if (existingProgram) {
+        programAlreadyExists = true;
+        return;
+      }
+
+      $workspaces[$selectedWorkspace].programs = [
+        ...$workspaces[$selectedWorkspace].programs,
+        {
+          ...idlToAdd,
+          name: programName,
+          metadata: {
+            ...idlToAdd.metadata,
+            address: programId,
+          },
+        },
+      ];
+      dispatch("closeProgramModal");
+    } else {
+      const existingProgram = $workspaces[$selectedWorkspace].programs.find(
+        (program) => program.name === programName
+      );
+      if (existingProgram) {
+        programAlreadyExists = true;
+        return;
+      }
+
+      $workspaces[$selectedWorkspace].programs = [
+        ...$workspaces[$selectedWorkspace].programs,
+        {
+          name: programName,
+          metadata: {
+            address: programId ? programId : undefined,
+          },
+        },
+      ];
+      dispatch("closeProgramModal");
+    }
+  }
 
   const isValidAddress = (address: string) => {
     if (address.trim() === "") {
@@ -44,6 +109,18 @@
 </h1>
 <div class="modal--form">
   <div class="modal--form-inline">
+    <div class="modal--form-title">Import IDL (Optional)</div>
+  </div>
+  <div class="modal--form-inline">
+    <button class="btn btn--primary btn--fit" on:click={addIDL}>
+      Import
+    </button>
+    {#if idlToAdd}
+      <img src="/check.svg" alt="Check Icon" style="width:16px;height:16px;" />
+    {/if}
+  </div>
+
+  <div class="modal--form-inline">
     <div class="modal--form-title">Program Name</div>
     <div
       class={`modal--form--label-end ${
@@ -66,18 +143,33 @@
 <div class="modal--form-title">Program ID</div>
 <input
   class="input--primary {!valid.id && formTouched.id ? 'input--invalid' : ''}"
-  type="number"
-  placeholder="1234567890"
+  placeholder="Optional"
   bind:value={programId}
 />
 
+{#if !programId}
+  <div class="anchor--provider">
+    Your program will be deployed using the Anchor Provider.
+  </div>
+{/if}
+
+{#if programAlreadyExists}
+  <div class="already--exists">
+    A program with this name already exists in this workspace.
+  </div>
+{/if}
+
 <div class="btns--modal">
   <button
-    class={`btn btn--lava ${valid.id && valid.name ? "" : " btn--disabled"}`}
-    disabled={true}
+    class={`btn btn--lava ${
+      (programId.length > 0 && !isValidAddress(programId)) || !valid.name
+        ? " btn--disabled"
+        : ""
+    }`}
+    disabled={(programId.length > 0 && !isValidAddress(programId)) ||
+      !valid.name}
     on:click={() => {
-      handleInputTouch("id");
-      handleInputTouch("name");
+      createProgram();
     }}>Create Program</button
   >
 </div>

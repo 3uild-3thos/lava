@@ -13,50 +13,53 @@
   import AccountFilter from "../../components/AccountFilter.svelte";
   import CreatePDA from "../../components/Modals/CreatePDA.svelte";
   import CreateProgram from "../../components/Modals/CreateProgram.svelte";
+  import EditProgram from "../../components/Modals/EditProgram.svelte";
 
-  let tokenColors = ["#5498FE", "#FEBC2E", "#19FB9B", "#DC30C0", "#F0FE54"];
-
-  $: colorsTokens = $workspaces[$selectedWorkspace]?.tokens.map((token) => {
-    return getTokenColor(token.symbol);
-  });
-
-  $: colorsWallets = $workspaces[$selectedWorkspace]?.wallets.map((wallet) => {
-    return wallet.tokens.map((token) => {
-      return getTokenColor(token.symbol);
-    });
-  });
-
+  let tokenColors = [
+    "#FEBC2E",
+    "#19FB9B",
+    "#DC30C0",
+    "#F0FE54",
+    "#FEBC2E",
+    "#19FB9B",
+    "#DC30C0",
+    "#F0FE54",
+  ];
+  let isCreatePDAModalOpen = false;
+  let editingProgram = -1;
+  let programAddress = "";
+  let programName = "";
+  let walletName = "";
+  let walletAddress = "";
+  let pdaAddress = "";
+  let sol_balance = 10;
+  let selectedPda = -1;
+  let selectedPdaName = "";
+  let selectedPdaSeeds = [];
+  let editingWallet = -1;
   let ready = false;
-  onMount(() => {
-    ready = true;
-  });
-
   let isCreateAccountModalOpen = false;
   let isCreateWalletModalOpen = false;
   let isCreateTokenModalOpen = false;
   let isCreateProgramModalOpen = false;
   let isViewModalOpen = false;
+  let isEditProgramModalOpen = false;
   let hideWallets = false;
   let openedWallet = $workspaces[$selectedWorkspace]?.wallets[0];
   let openedWalletIndex = 0;
   let showTokens;
-
-  $: searchTerm = "";
-  $: sortType =
-    typeof localStorage !== "undefined"
-      ? localStorage.getItem("sortType") || "name"
-      : "name";
-
-  $: showTokens =
-    typeof localStorage !== "undefined"
-      ? localStorage.getItem("showTokens") === "true"
-      : false;
+  let token;
+  let programAlreadyExists = false;
 
   function openWalletModal(index) {
     isViewModalOpen = true;
     openedWallet = $workspaces[$selectedWorkspace].wallets[index];
     openedWalletIndex = index;
   }
+
+  onMount(() => {
+    ready = true;
+  });
 
   const deleteToken = (index) => {
     const tokenToDelete = $workspaces[$selectedWorkspace].tokens[index];
@@ -74,9 +77,17 @@
     });
   };
 
-  let walletName = "";
-  let walletAddress = "";
-  let sol_balance = 10;
+  const deleteProgram = (index) => {
+    $workspaces[$selectedWorkspace].programs = $workspaces[
+      $selectedWorkspace
+    ].programs.filter((program, i) => i !== index);
+  };
+
+  const deletePda = (index) => {
+    $workspaces[$selectedWorkspace].pdas = $workspaces[
+      $selectedWorkspace
+    ].pdas.filter((pda, i) => i !== index);
+  };
 
   const deleteWallet = (index) => {
     $workspaces[$selectedWorkspace].wallets = $workspaces[
@@ -84,7 +95,6 @@
     ].wallets.filter((wallet, i) => i !== index);
   };
 
-  let editingWallet = -1;
   const editWallet = (index) => {
     editingWallet = index;
     walletName = $workspaces[$selectedWorkspace].wallets[index].name;
@@ -93,14 +103,32 @@
     isCreateWalletModalOpen = true;
   };
 
-  let isAssignTokenModalOpen = false;
+  function updateProgram(event) {
+    const programNameExists = $workspaces[$selectedWorkspace].programs.some(
+      (program) => program.name === event.name
+    );
+    if (programNameExists) {
+      programAlreadyExists = true;
+      return;
+    }
+
+    $workspaces[$selectedWorkspace].programs[event.index] = {
+      ...$workspaces[$selectedWorkspace].programs[event.index],
+      name: event.name,
+      metadata: {
+        ...$workspaces[$selectedWorkspace].programs[event.index].metadata,
+        address: event.address,
+      },
+    };
+    isEditProgramModalOpen = false;
+  }
 
   function getTokenColor(stringParam) {
     let sum = 0;
     for (let i = 0; i < stringParam.length; i++) {
       sum += stringParam.charCodeAt(i);
     }
-    let result = sum % 5;
+    let result = sum % 7;
     let finalColor = tokenColors[result];
     return finalColor;
   }
@@ -112,22 +140,45 @@
     }
   }
 
-  function handleToggleShowTokens() {
-    showTokens = !showTokens;
-    if (typeof localStorage !== "undefined") {
-      localStorage.setItem("showTokens", showTokens);
-    }
-  }
-
-  let token;
-
   function editToken(index) {
     token = $workspaces[$selectedWorkspace].tokens[index];
     isCreateTokenModalOpen = true;
   }
 
-  let isCreatePDAModalOpen = false;
-  $: console.log($workspaces[$selectedWorkspace]);
+  function editPdaModal(index) {
+    selectedPda = index;
+    selectedPdaName = $workspaces[$selectedWorkspace].pdas[index].name;
+    isCreatePDAModalOpen = true;
+    selectedPdaSeeds = $workspaces[$selectedWorkspace].pdas[index].seeds;
+  }
+  function editProgram(index) {
+    editingProgram = index;
+    isEditProgramModalOpen = true;
+    programAddress =
+      $workspaces[$selectedWorkspace].programs[index].metadata.address;
+    programName = $workspaces[$selectedWorkspace].programs[index].name;
+  }
+
+  $: searchTerm = "";
+  $: sortType =
+    typeof localStorage !== "undefined"
+      ? localStorage.getItem("sortType") || "name"
+      : "name";
+
+  $: showTokens =
+    typeof localStorage !== "undefined"
+      ? localStorage.getItem("showTokens") === "true"
+      : false;
+
+  $: colorsTokens = $workspaces[$selectedWorkspace]?.tokens.map((token) => {
+    return getTokenColor(token.symbol);
+  });
+
+  $: colorsWallets = $workspaces[$selectedWorkspace]?.wallets.map((wallet) => {
+    return wallet.tokens.map((token) => {
+      return getTokenColor(token.symbol);
+    });
+  });
 </script>
 
 <svelte:head>
@@ -173,12 +224,12 @@
 
   <!-- Create Program Modal -->
   <Modal
-    width={300}
+    width={350}
     bind:isOpen={isCreateProgramModalOpen}
     on:close={() => (isCreateProgramModalOpen = false)}
   >
     <CreateProgram
-      on:closeTokenModal={() => (isCreateProgramModalOpen = false)}
+      on:closeProgramModal={() => (isCreateProgramModalOpen = false)}
     />
   </Modal>
 
@@ -225,12 +276,37 @@
     />
   </Modal>
 
+  <!-- Edit Program Modal -->
+  <Modal
+    bind:isOpen={isEditProgramModalOpen}
+    on:close={() => (isEditProgramModalOpen = false)}
+    width={300}
+    modalVariant={true}
+    color={"#A0A0AB"}
+  >
+    <EditProgram
+      on:updateProgram={(event) => updateProgram(event.detail)}
+      programExists={programAlreadyExists}
+      {editingProgram}
+      {programName}
+      {programAddress}
+    />
+  </Modal>
+
   <!-- Create PDA Modal -->
   <Modal
     bind:isOpen={isCreatePDAModalOpen}
     on:close={() => (isCreatePDAModalOpen = false)}
   >
-    <CreatePDA on:closePDAModal={() => (isCreatePDAModalOpen = false)} />
+    <CreatePDA
+      on:closePDAModal={() => (
+        (isCreatePDAModalOpen = false), (pdaAddress = "")
+      )}
+      editingPda={selectedPda}
+      pdaName={selectedPdaName}
+      selectedProgram={pdaAddress}
+      seeds={selectedPdaSeeds}
+    />
   </Modal>
 
   <div class="common--wrapper">
@@ -251,7 +327,7 @@
           <button
             class="btn btn--primary btn--fit btn--end"
             on:click={() => (
-              ((editingWallet = -1), (token = undefined)),
+              ((editingWallet = -1), (selectedPda = -1), (token = undefined)),
               (isCreateAccountModalOpen = true)
             )}
             ><img
@@ -294,10 +370,16 @@
             on:deleteWallet={(event) => deleteWallet(event.detail.index)}
             on:editWallet={(event) => editWallet(event.detail.index)}
             on:deleteToken={(event) => deleteToken(event.detail.index)}
+            on:deletePda={(event) => deletePda(event.detail.index)}
+            on:deleteProgram={(event) => deleteProgram(event.detail.index)}
+            on:editToken={(event) => editToken(event.detail.index)}
+            on:editPdaModal={(event) => editPdaModal(event.detail.index)}
+            on:editProgram={(event) => editProgram(event.detail.index)}
+            on:openCreatePda={(event) => (
+              (pdaAddress = event.detail.data), (isCreatePDAModalOpen = true)
+            )}
             {searchTerm}
             {sortType}
-            tokensShown={showTokens}
-            on:editToken={(event) => editToken(event.detail.index)}
           />
         </div>
       {:else}

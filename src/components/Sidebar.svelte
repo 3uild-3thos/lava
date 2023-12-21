@@ -1,6 +1,7 @@
 <script lang="ts">
   import { page } from "$app/stores";
   import { fade, fly } from "svelte/transition";
+  import { selectedWorkspace, workspaces } from "../stores/store";
   let path: string;
 
   $: path = $page.url.pathname;
@@ -45,30 +46,32 @@
     <a href="/">
       <img class="sidebar--logo" src="./logo-glyph.svg" alt="Logo Glyph" />
     </a>
-    {#each routes as route, index}
-      <div class="sidebar--link-wrapper">
-        {#if route.link === path}
-          <div class="sidebar--active-link" in:fade={{ duration: 150 }} />
-        {/if}
-        {#if hoveredLink === index}
-          <Popover title={route.title} xOffset={55} yOffset={2.5} blur={25} />
-        {/if}
-        <a
-          class="sidebar--link"
-          href={route.link}
-          on:mouseover={() => hovered(index)}
-          on:mouseleave={() => hovered(null)}
-          on:mousemove={handleMousemove}
-          style={`--left:${m.x}; --top:${m.y}`}
-        >
-          <img
-            class="sidebar--link-icon"
-            src={`./${route.icon}`}
-            alt={`${route.link} Icon`}
-          />
-        </a>
-      </div>
-    {/each}
+    {#if $workspaces.length > 0}
+      {#each routes as route, index}
+        <div class="sidebar--link-wrapper">
+          {#if route.link === path}
+            <div class="sidebar--active-link" in:fade={{ duration: 150 }} />
+          {/if}
+          {#if hoveredLink === index}
+            <Popover title={route.title} xOffset={55} yOffset={2.5} blur={25} />
+          {/if}
+          <a
+            class="sidebar--link"
+            href={route.link}
+            on:mouseover={() => hovered(index)}
+            on:mouseleave={() => hovered(null)}
+            on:mousemove={handleMousemove}
+            style={`--left:${m.x}; --top:${m.y}`}
+          >
+            <img
+              class="sidebar--link-icon"
+              src={`./${route.icon}`}
+              alt={`${route.link} Icon`}
+            />
+          </a>
+        </div>
+      {/each}
+    {/if}
     <div class="sidebar--bottom">
       <NodeConnection />
     </div>

@@ -11,15 +11,20 @@
   $: formTouched = name.length > 0;
   $: isValid = name.length > 0 && name.length < 32;
   let isReady = false;
+  let workspaceAlreadyExists = false;
   onMount(() => {
     isReady = true;
   });
   const addWorkspace = () => {
     formTouched = true;
     if (isValid) {
+      if ($workspaces.some((workspace) => workspace.name === name)) {
+        workspaceAlreadyExists = true;
+        return;
+      }
       $workspaces = [
         ...$workspaces,
-        { name, programs: [], wallets: [], tokens: [] },
+        { name, programs: [], wallets: [], tokens: [], pdas: [] },
       ];
       $selectedWorkspace = $workspaces.length - 1;
       createModal = false;
@@ -50,6 +55,8 @@
     };
     input.click();
   };
+
+  $: console.log($workspaces);
 </script>
 
 <svelte:head>
@@ -64,7 +71,16 @@
       <Modal bind:isOpen={createModal} on:close={() => (createModal = false)}>
         <h1 class="modal--title">Create a new Workspace</h1>
         <div class="modal--form">
-          <div class="modal--form-title">Workspace Name</div>
+          <div class="modal--form-inline">
+            <div class="modal--form-title">Workspace Name</div>
+            <div
+              class={`modal--form--label-end ${
+                name.length > 32 ? " text-lava-error" : ""
+              }`}
+            >
+              {name.length}/32
+            </div>
+          </div>
           <input
             class="input--primary {!isValid && formTouched
               ? 'input--invalid'
@@ -74,9 +90,15 @@
           />
         </div>
 
+        {#if workspaceAlreadyExists}
+          <div class="already--exists">
+            A workspace with this name already exists
+          </div>
+        {/if}
         <div class="btns--modal">
           <button
-            class="btn btn--lava"
+            class="btn btn--lava {!isValid ? 'btn--disabled' : ''}"
+            disabled={!isValid}
             on:click={() => {
               addWorkspace();
             }}>Create</button
@@ -147,28 +169,29 @@
 
     <div class="workspace--right">
       <div class="workspace--home--recents">
-        <div class="workspace--create--title">Workspaces</div>
-        <div class="workspace--create--options">
-          {#each $workspaces as workspace, index}
-            <div
-              class="workspace--list--item"
-              in:fade|global={{ delay: index * 100, duration: 100 }}
-            >
+        {#if $workspaces.length > 0}
+          <div class="workspace--create--title">Workspaces</div>
+          <div class="workspace--create--options">
+            {#each $workspaces as workspace, index}
               <div
-                class={`workspace--list--item--text${
-                  $selectedWorkspace === index ? " active" : ""
-                }`}
+                class="workspace--list--item"
+                in:fade|global={{ delay: index * 100, duration: 100 }}
               >
                 <div
-                  on:click={() => {
-                    $selectedWorkspace = index;
-                  }}
-                  class={`workspace--list--item--text--title`}
+                  class={`workspace--list--item--text${
+                    $selectedWorkspace === index ? " active" : ""
+                  }`}
                 >
-                  {workspace.name}
+                  <div
+                    on:click={() => {
+                      $selectedWorkspace = index;
+                    }}
+                    class={`workspace--list--item--text--title`}
+                  >
+                    {workspace.name}
+                  </div>
                 </div>
-              </div>
-              <!-- <button
+                <!-- <button
               class="btn btn--primary workspace--option-btn"
               on:click={() => {
                 const data = JSON.stringify(workspace);
@@ -184,34 +207,35 @@
                 window.URL.revokeObjectURL(url);
               }}>Save</button
             > -->
-              <button
-                class="btn btn--primary workspace--option-btn"
-                on:click={() => setActiveWorkspace(index)}
-              >
-                {#if $selectedWorkspace === index}
-                  View
-                {:else}
-                  Use
-                {/if}
-              </button>
-            </div>
-            {#if index < $workspaces.length - 1}
-              <hr class="divider" />
-            {/if}
-          {/each}
-          {#if $workspaces.length == 0}
-            <div class="workspace--create--option">
-              <div class="workspace--create--text">
-                <div class="workspace--create--text--title">
-                  No workspaces found
-                </div>
-                <div class="workspace--create--text--subtitle">
-                  Create a new workspace or import an existing one
+                <button
+                  class="btn btn--primary workspace--option-btn"
+                  on:click={() => setActiveWorkspace(index)}
+                >
+                  {#if $selectedWorkspace === index}
+                    View
+                  {:else}
+                    Use
+                  {/if}
+                </button>
+              </div>
+              {#if index < $workspaces.length - 1}
+                <hr class="divider" />
+              {/if}
+            {/each}
+            {#if $workspaces.length == 0}
+              <div class="workspace--create--option">
+                <div class="workspace--create--text">
+                  <div class="workspace--create--text--title">
+                    No workspaces found
+                  </div>
+                  <div class="workspace--create--text--subtitle">
+                    Create a new workspace or import an existing one
+                  </div>
                 </div>
               </div>
-            </div>
-          {/if}
-        </div>
+            {/if}
+          </div>
+        {/if}
       </div>
     </div>
   </div>

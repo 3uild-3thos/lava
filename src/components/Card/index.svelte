@@ -1,7 +1,10 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
   export let ticker: string = "";
   export let type: string = "";
   export let footer: any = null;
+  export let balance: string = "";
   export let color: string = "";
   export let cardPosition: number;
   export let title: string = `${type}`;
@@ -14,11 +17,18 @@
     m.y = event.clientY - bounds.top;
   }
   import { fade } from "svelte/transition";
+
+  function showTokens() {
+    if (type === "wallet") {
+      dispatch("showTokens");
+    }
+  }
 </script>
 
 <div
   class="card"
   on:mousemove={handleMousemove}
+  on:click={() => showTokens()}
   in:fade|global={{ delay: cardPosition * 50, duration: 100 }}
   style={`--hoveredColor: ${color}; --bgColor: ${color}10; --left:${m.x}; --top:${m.y};`}
 >
@@ -50,6 +60,11 @@
         <slot name="options" />
       </div>
     </div>
+    {#if type === "wallet"}
+      <div class="card--balance">
+        {balance} SOL
+      </div>
+    {/if}
     <div class="card--footer">
       <slot name="footer" />
     </div>

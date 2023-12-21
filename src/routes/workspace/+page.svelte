@@ -13,6 +13,9 @@
   import { PublicKey } from "@solana/web3.js";
 
   let workspace = $workspaces[$selectedWorkspace];
+  let programAlreadyExists = false;
+  let workspaceAlreadyExists = false;
+  let programExists = false;
 
   let ready = false;
   onMount(() => {
@@ -40,6 +43,10 @@
   }
 
   function updateWorkspaceName(name) {
+    if ($workspaces.some((w) => w.name === name)) {
+      workspaceAlreadyExists = true;
+      return;
+    }
     $workspaces[$selectedWorkspace].name = name;
     isRenameModalOpen = false;
     workspace = $workspaces[$selectedWorkspace];
@@ -48,6 +55,7 @@
   function deleteWorkspace() {
     $workspaces = $workspaces.filter((w) => w.name !== workspace.name);
     isDeleteModalOpen = false;
+    $selectedWorkspace = 0;
     goto("/");
   }
 
@@ -55,25 +63,25 @@
     {
       title: "Create a Wallet Account",
       subtitle: "A wallet account is used to sign transactions.",
-      completed: workspace.wallets.length > 0,
+      completed: workspace.wallets?.length > 0,
       buttonText: "Create",
       buttonIcon: "/add.svg",
-      graphic: "create-wallet.svg",
+      graphic: "get-started-wallet.svg",
       color: "#8A54FE",
     },
     {
       title: "Create a Mint Account",
       subtitle: "A mint account is used to create tokens.",
-      completed: workspace.tokens.length > 0,
+      completed: workspace.tokens?.length > 0,
       buttonText: "Create",
       buttonIcon: "/add.svg",
-      graphic: "create-token.svg",
+      graphic: "get-started-token.svg",
       color: "#FE9154",
     },
     {
       title: "Import IDL",
       subtitle: "An IDL is a JSON file that describes a program's interface.",
-      completed: workspace.programs.length > 0,
+      completed: workspace.programs?.length > 0,
       buttonText: "Import",
       graphic: "import-idl.svg",
       buttonIcon: "/import.svg",
@@ -85,7 +93,7 @@
       completed: false,
       buttonText: "Create",
       buttonIcon: "/add.svg",
-      graphic: "create-test.svg",
+      graphic: "get-started-test.svg",
       color: "#54FE98",
     },
   ].map((step, index, array) => {
@@ -134,10 +142,8 @@
         idlModal = true;
         const content = readerEvent.target.result;
         idlToAdd = JSON.parse(content);
-        /*$workspaces[$selectedWorkspace].programs = [
-          ...$workspaces[$selectedWorkspace].programs,
-          idl,
-        ];*/
+        customProgramId = idlToAdd?.metadata?.address; // Set customProgramId to idlToAdd.metadata.address
+        customProgramName = idlToAdd?.name; // Set customProgramName to idlToAdd.name
       };
     };
     input.click();
@@ -149,8 +155,8 @@
   let walletName = "";
   let walletAddress = "";
   let sol_balance = 10;
-  $: console.log($workspaces[$selectedWorkspace].programs);
   let customProgramId = "";
+  let customProgramName = "";
 
   const isValidAddress = (address) => {
     if (address.trim() === "") {
@@ -165,48 +171,37 @@
     }
   };
 
-  const addWithCustomProgramID = () => {
-    if (isValidAddress(customProgramId)) {
+  function finishIDL() {
+    if (
+      (customProgramId.length === 0 || isValidAddress(customProgramId)) &&
+      customProgramName.length > 0
+    ) {
+      const programAlreadyExists = $workspaces[
+        $selectedWorkspace
+      ].programs.some((program) => program.name === customProgramName);
+      if (programAlreadyExists) {
+        programExists = true; // Set programExists to true
+        return;
+      }
+
       $workspaces[$selectedWorkspace].programs = [
         ...$workspaces[$selectedWorkspace].programs,
         {
           ...idlToAdd,
+          name: customProgramName,
           metadata: {
             ...idlToAdd.metadata,
-            address: customProgramId,
+            address: customProgramId.length === 0 ? undefined : customProgramId,
           },
         },
       ];
-      idlModal = false;
-      idlToAdd = null;
-      customProgramId = "";
-    }
-  };
 
-  const addWithProvider= () => {
-    if (isValidAddress(customProgramId)) {
-      $workspaces[$selectedWorkspace].programs = [
-        ...$workspaces[$selectedWorkspace].programs,
-        {
-          ...idlToAdd,
-          metadata: undefined,
-        },
-      ];
       idlModal = false;
       idlToAdd = null;
     }
-  };
+  }
 
-  const addWithouthChange= () => {
-    if (isValidAddress(customProgramId)) {
-      $workspaces[$selectedWorkspace].programs = [
-        ...$workspaces[$selectedWorkspace].programs,
-        idlToAdd,
-      ];
-      idlModal = false;
-      idlToAdd = null;
-    }
-  };
+  $: stat = $workspaces[$selectedWorkspace];
 </script>
 
 <svelte:head>
@@ -237,6 +232,7 @@
     on:close={() => (isCreateTokenModalOpen = false)}
   >
     <CreateToken
+      wallets={$workspaces[$selectedWorkspace]?.wallets ?? []}
       {token}
       on:closeTokenModal={() => (isCreateTokenModalOpen = false)}
     />
@@ -259,6 +255,7 @@
   >
     <RenameWorkspace
       workspaceName={workspace.name}
+      workspaceExists={workspaceAlreadyExists}
       on:updateWorkspace={(event) => updateWorkspaceName(event.detail)}
     />
   </Modal>
@@ -276,56 +273,48 @@
   </Modal>
 
   <!-- Add IDL Modal -->
-  <Modal width={400} bind:isOpen={idlModal} on:close={() => (idlModal = false)}>
+  <Modal width={350} bind:isOpen={idlModal} on:close={() => (idlModal = false)}>
     <h1 class="modal--title">Adding IDL</h1>
     <div class="modal--form">
-      <div class="modal--form-title">
-        you are adding an IDL
-        {#if idlToAdd?.name?.length > 0}
-          <span>for a program named <strong class="font-black">{idlToAdd?.name}</strong></span>
-        {/if}
-      </div>
-      {#if idlToAdd?.metadata?.address}
-        <div class="modal--form-title">
-          your IDL has the programId: <strong class="font-black">{idlToAdd?.metadata?.address}</strong> do you whan't to use this one?
-        </div>
-        <button
-      class={`btn btn--primary`}
-      on:click={addWithouthChange}>Use it!</button
-    >
-      {:else}
-        <div class="modal--form-title">
-          Your IDL doent' have a metadata.address value defined for the
-          programId
+      <div class="modal--form-title">Name</div>
+      <input
+        class="input--primary"
+        value={idlToAdd?.name}
+        placeholder="My Program"
+        on:input={(e) => (customProgramName = e.currentTarget.value)}
+      />
+
+      <div class="modal--form-title">Program ID</div>
+      <input
+        class="input--primary"
+        placeholder="Optional"
+        value={customProgramId}
+        on:input={(e) => (customProgramId = e.currentTarget.value)}
+      />
+      {#if !customProgramId}
+        <div class="anchor--provider">
+          Your program will be deployed using the Anchor Provider.
         </div>
       {/if}
-      <div class="modal--form-title">
-        Do you whant the <strong class="font-black">Anchor Provider</strong> to set one for you?
-      </div>
-      <button
-      class={`btn btn--primary`}
-      on:click={addWithProvider}>Provider Set</button
-    >
 
-      <div class="modal--form-title">Or you whant to set one manualy</div>
-      <input
-        class="input--primary {!isValidAddress(customProgramId)
-          ? 'input--invalid'
-          : ''}"
-        type="text"
-        placeholder="Custom programId"
-        bind:value={customProgramId}
-      />
+      {#if programExists}
+        <div class="already--exists">
+          A program with this name already exists.
+        </div>
+      {/if}
+
       <div class="btns--modal">
         <button
-          class={`btn btn--primary${
-            !isValidAddress(customProgramId) || customProgramId.length == 0
+          class={`btn btn--lava ${
+            (customProgramId.length > 0 && !isValidAddress(customProgramId)) ||
+            customProgramName.length === 0
               ? " btn--disabled"
               : ""
           }`}
-          disabled={!isValidAddress(customProgramId) ||
-            customProgramId.length == 0}
-          on:click={addWithCustomProgramID}>Manually Set</button
+          disabled={(customProgramId.length > 0 &&
+            !isValidAddress(customProgramId)) ||
+            customProgramName.length === 0}
+          on:click={() => finishIDL()}>Finish</button
         >
       </div>
     </div></Modal
@@ -370,10 +359,10 @@
             style={`--color: #8A54FE`}
             in:fade={{ duration: 200 }}
           >
-            <img src="./standard-wallet.svg" class="workspace--stat--icon" />
+            <img src="./create-wallet.svg" class="workspace--stat--icon" />
             <div class="workspace--stat--content">
               <div class="workspace--stat--value">
-                {workspace.wallets.length}
+                {stat.wallets.length}
               </div>
               <div class="workspace--stat--title">Wallets</div>
             </div>
@@ -383,10 +372,10 @@
             style={`--color: #FFBE41`}
             in:fade={{ delay: 100, duration: 200 }}
           >
-            <img src="./token-account.svg" class="workspace--stat--icon" />
+            <img src="./create-token.svg" class="workspace--stat--icon" />
             <div class="workspace--stat--content">
               <div class="workspace--stat--value">
-                {workspace.tokens.length}
+                {stat.tokens.length}
               </div>
               <div class="workspace--stat--title">Mint Accounts</div>
             </div>
@@ -396,10 +385,10 @@
             style={`--color: #FE6054`}
             in:fade={{ delay: 100, duration: 200 }}
           >
-            <img src="./create-pda.svg" class="workspace--stat--icon" />
+            <img src="./create-program.svg" class="workspace--stat--icon" />
             <div class="workspace--stat--content">
               <div class="workspace--stat--value">
-                {workspace.programs.length}
+                {stat.programs.length}
               </div>
               <div class="workspace--stat--title">Programs</div>
             </div>
@@ -409,9 +398,11 @@
             style={`--color: #54FE98`}
             in:fade={{ delay: 100, duration: 200 }}
           >
-            <img src="./test.svg" class="workspace--stat--icon" />
+            <img src="./create-test.svg" class="workspace--stat--icon" />
             <div class="workspace--stat--content">
-              <div class="workspace--stat--value">0</div>
+              <div class="workspace--stat--value">
+                {stat.tests?.length || 0}
+              </div>
               <div class="workspace--stat--title">Tests</div>
             </div>
           </div>
@@ -445,14 +436,14 @@
                     class="workspace--getting-started--graphic"
                   />
                   <!-- {#if step.completed}
-                    <div class="workspace--getting-started--step-icon">
-                      <img src="/check.svg" />
-                    </div>
-                  {:else}
-                    <div class="workspace--getting-started--step-icon">
-                      <img src="/dash.svg" />
-                    </div>
-                  {/if} -->
+                        <div class="workspace--getting-started--step-icon">
+                          <img src="/check.svg" />
+                        </div>
+                      {:else}
+                        <div class="workspace--getting-started--step-icon">
+                          <img src="/dash.svg" />
+                        </div>
+                      {/if} -->
                   <div class="workspace--getting-started--step--title">
                     {step.title}
                   </div>
@@ -473,18 +464,18 @@
             {/each}
           </div>
           <!-- <div class="workspace--idl">
-            <div class="workspace--idl--header">
-              <div class="workspace--getting-started--title">IDL</div>
-              <button
-                class="btn btn--primary workspace--btn btn--fit"
-                on:click={() => alert("Not implemented yet")}
-              >
-                <img src="/import.svg" alt="Export Icon" />
-                Import
-              </button>
-            </div>
-            <div class="workspace--idl--card" />
-          </div> -->
+                <div class="workspace--idl--header">
+                  <div class="workspace--getting-started--title">IDL</div>
+                  <button
+                    class="btn btn--primary workspace--btn btn--fit"
+                    on:click={() => alert("Not implemented yet")}
+                  >
+                    <img src="/import.svg" alt="Export Icon" />
+                    Import
+                  </button>
+                </div>
+                <div class="workspace--idl--card" />
+              </div> -->
         </div>
       </div>
     </div>

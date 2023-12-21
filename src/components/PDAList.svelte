@@ -3,7 +3,6 @@
   import Popover from "./Popover.svelte";
   import { createEventDispatcher } from "svelte";
   export let account: any = {};
-  export let walletTokenColors: any;
   let hoveredLink: string = "";
   export let hoveredCard: number = -1;
   let popOverOpened: boolean = false;
@@ -15,32 +14,32 @@
     hoveredToken = index;
   }
 
-  function openAssignToken(index) {
-    dispatch("openAssign", {
-      index,
+  function openCreatePda() {
+    dispatch("openCreatePda", {
+      data: account.metadata.address,
     });
   }
 </script>
 
 <div class="ata--assign">
-  <div class="ata--title">TOKENS</div>
+  <div class="ata--title">PDAs</div>
   <button
     class="tokens-button"
     type="button"
-    on:mouseover={() => (hoveredLink = "tokens")}
+    on:mouseover={() => (hoveredLink = "program")}
     on:mouseleave={() => (hoveredLink = "")}
     on:click={(event) => {
-      openAssignToken(account.originalIndex);
+      openCreatePda();
       event.stopPropagation();
     }}
     >+
 
-    {#if hoveredLink === "tokens"}
-      <Popover blur={25} yOffset={-50} title="Assign a Token" />
+    {#if hoveredLink === "program"}
+      <Popover blur={25} yOffset={-50} title="Create PDA using Program" />
     {/if}</button
   >
 </div>
-{#if account?.tokens?.length > 0}
+<!-- {#if account?.tokens?.length > 0}
   <div class="wallet--tokens--list">
     {#each account.tokens as ownedToken, tokenIndex}
       {#if tokenIndex < 4}
@@ -83,4 +82,4 @@
       </div>
     {/if}
   </div>
-{/if}
+{/if} -->

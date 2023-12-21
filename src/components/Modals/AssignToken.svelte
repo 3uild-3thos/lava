@@ -1,14 +1,22 @@
 <script lang="ts">
-  import Select from "svelte-select/no-styles/Select.svelte";
-  import { writable } from "svelte/store";
-  import { workspaces, selectedWorkspace } from "../../stores/store";
+  export let tokenColors: string[];
   export let editingWallet = -1;
+  import { createEventDispatcher } from "svelte";
+  import Select from "svelte-select/no-styles/Select.svelte";
+  import { workspaces, selectedWorkspace } from "../../stores/store";
+  import Icon from "../avatars/index.svelte";
   let amount = 1000000000;
   let symbol = "";
-  import { createEventDispatcher } from "svelte";
+  let formSubmitted = false;
   const dispatch = createEventDispatcher();
-  import Icon from "../avatars/index.svelte";
-  export let tokenColors: string[];
+
+  let valid = {
+    token_amount: false,
+  };
+
+  let formTouched = {
+    token_amount: false,
+  };
 
   function updateToken(event) {
     symbol = event.detail;
@@ -48,29 +56,13 @@
     }
   }
 
-  let valid = {
-    token_symbol: false,
-    token_amount: false,
-  };
-
-  let formTouched = {
-    token_symbol: false,
-    token_amount: false,
-  };
-
-  let formSubmitted = false;
-
   $: formTouched = {
-    token_symbol: symbol?.length > 0 || formSubmitted,
     token_amount: amount > 0 || formSubmitted,
   };
 
   $: valid = {
-    token_symbol: symbol?.length > 0,
-    token_amount: amount > 0,
+    token_amount: amount > 0 && amount <= 1000000000000000,
   };
-
-  $: console.log(editingWallet);
 </script>
 
 <h1 class="modal--title">Assign a Token</h1>
@@ -119,6 +111,13 @@
     on:blur={() => handleInputTouch("token_amount")}
   />
 </div>
+<!-- Form Submit -->
 <div class="btns--modal">
-  <button class="btn btn--lava" on:click={assignToken}>Assign</button>
+  <button
+    class="btn btn--lava {!valid.token_amount || !symbol
+      ? 'btn--disabled'
+      : ''}"
+    disabled={!valid.token_amount || !symbol}
+    on:click={assignToken}>Assign</button
+  >
 </div>

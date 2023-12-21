@@ -91,3 +91,8 @@
     @apply text-base text-lava-secondary font-medium flex-col items-center gap-y-2;
     margin-top:auto !important;
   }
+
+
+  .card--balance {
+    @apply font-mono text-lava-mute mt-2
+  }

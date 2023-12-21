@@ -31,6 +31,7 @@ export interface Token {
 export interface PDA {
   value: any;
   type: string;
+  name: string;
 }
 
 export const workspaces = persisted("workspaces", [{

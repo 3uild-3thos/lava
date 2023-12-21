@@ -39,29 +39,12 @@
     document.getElementById("gradient").innerHTML += "";
   }
 
-  let ready = false;
-  let templateSelected = false;
-  let creatingNewWorkspace = false;
-
-  function newWorkspace() {
-    console.log("new workspace");
-    creatingNewWorkspace = true;
-  }
-
-  function selectTemplate() {
-    templateSelected = true;
-  }
-
   onMount(() => {
-    ready = true;
     if ($workspaces === undefined) {
       $workspaces = [];
     }
     if ($selectedWorkspace === undefined) {
       $selectedWorkspace = 0;
-    }
-    if ( $workspaces[$selectedWorkspace].pdas === undefined) {
-      $workspaces[$selectedWorkspace].pdas = [];
     }
   });
 </script>

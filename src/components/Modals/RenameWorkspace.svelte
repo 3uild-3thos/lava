@@ -2,6 +2,7 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
+  export let workspaceExists = false;
   export let workspaceName: string;
 
   let formTouched = { name: false };
@@ -41,6 +42,11 @@
     bind:value={workspaceName}
     on:blur={() => handleInputTouch("name")}
   />
+
+  {#if workspaceExists}
+    <div class="already--exists">A Workspace with this name already exists</div>
+  {/if}
+
   <div class="btns--modal">
     <button
       class={`btn btn--lava${!valid.name ? " btn--disabled" : ""}`}

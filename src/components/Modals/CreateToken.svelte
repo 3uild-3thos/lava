@@ -9,6 +9,7 @@
   let name = token ? token.name : "";
   let symbol = token ? token.symbol : "";
   let decimal = token ? token.decimal : null;
+  let tokenAlreadyExists = false;
   export let wallets = [];
   $: console.log(wallets);
   let creator = "";
@@ -68,6 +69,16 @@
         }
       } else {
         // Create mode
+        const tokenNameExists = $workspaces[$selectedWorkspace].tokens.some(
+          (t) => t.name === name
+        );
+        const tokenSymbolExists = $workspaces[$selectedWorkspace].tokens.some(
+          (t) => t.symbol === symbol.toUpperCase()
+        );
+        if (tokenNameExists || tokenSymbolExists) {
+          tokenAlreadyExists = true;
+          return;
+        }
         $workspaces[$selectedWorkspace].tokens = [
           ...$workspaces[$selectedWorkspace].tokens,
           {
@@ -87,7 +98,7 @@
   };
 </script>
 
-<h1 class="modal--title">{token ? "Edit Token" : "Create a New Mint"}</h1>
+<h1 class="modal--title">{token ? "Edit Mint" : "Create a New Mint"}</h1>
 <div class="modal--form">
   <div class="modal--form-item">
     <div class="modal--form-inline">
@@ -203,6 +214,13 @@
       </div>
     </Select>
   </div>
+
+  {#if tokenAlreadyExists}
+    <div class="already--exists">
+      A token with this name or ticker already exists.
+    </div>
+  {/if}
+
   <div class="btns--modal">
     <button
       class={`btn btn--lava${
@@ -210,7 +228,7 @@
       }`}
       on:click={() => addToken()}
       disabled={!valid.name || !valid.symbol || !valid.decimal}
-      >Create Token</button
+      >{token ? "Update Mint" : "Create Mint"}</button
     >
   </div>
 </div>

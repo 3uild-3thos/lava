@@ -7,6 +7,7 @@
   import { workspaces, selectedWorkspace } from "../../stores/store";
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
+  let walletAlreadyExists = false;
 
   const isValidAddress = (address: string) => {
     if (address.trim() === "") {
@@ -32,7 +33,7 @@
 
   $: valid = {
     name: walletName.length > 0 && walletName.length <= 32,
-    sol_balance: sol_balance > 0,
+    sol_balance: sol_balance > 0 && sol_balance <= 1000000000,
   };
 
   function handleInputTouch(field: string) {
@@ -42,6 +43,16 @@
 
   function onEditWallet() {
     if (walletName) {
+      // Check if wallet name already exists
+      const wallets = $workspaces[$selectedWorkspace].wallets;
+      const walletIndex = wallets.findIndex(
+        (wallet) => wallet.name === walletName
+      );
+      if (walletIndex !== -1) {
+        walletAlreadyExists = true;
+        return;
+      }
+
       $workspaces[$selectedWorkspace].wallets[editingWallet] = {
         name: walletName,
         address: walletAddress,
@@ -58,6 +69,16 @@
 
   function addWallet() {
     if (valid.name && valid.sol_balance) {
+      // Check if wallet name already exists
+      const wallets = $workspaces[$selectedWorkspace].wallets;
+      const walletIndex = wallets.findIndex(
+        (wallet) => wallet.name === walletName
+      );
+      if (walletIndex !== -1) {
+        walletAlreadyExists = true;
+        return;
+      }
+
       $workspaces[$selectedWorkspace].wallets = [
         ...$workspaces[$selectedWorkspace].wallets,
         {
@@ -98,13 +119,15 @@
 </div>
 <div class="modal--form-title">SOL Balance</div>
 <input
-  class="input--primary {!valid.sol_balance && formTouched.sol_balance
-    ? 'input--invalid'
-    : ''}"
+  class="input--primary {!valid.sol_balance ? 'input--invalid' : ''}"
   type="number"
   placeholder="10"
   bind:value={sol_balance}
 />
+
+{#if walletAlreadyExists}
+  <div class="already--exists">A wallet with this name already exists</div>
+{/if}
 
 <div class="btns--modal">
   <button
