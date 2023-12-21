@@ -121,16 +121,19 @@
       index,
     }));
 
-  $: filteredPDAs = accounts.pdas.map((pda, index: number) => ({
-    ...pda,
-    originalIndex: index,
-    itemType: "pda",
-  }));
+  $: filteredPDAs = accounts.pdas
+    .map((pda, index: number) => ({ ...pda, originalIndex: index }))
+    .filter((pda) => pda.name?.toLowerCase().includes(searchTerm.toLowerCase()))
+    .map((pda, index: number) => ({
+      ...pda,
+      itemType: "pda",
+      index,
+    }));
 
   $: filteredTokens = accounts.tokens
     .map((token, index: number) => ({ ...token, originalIndex: index }))
     .filter((token) =>
-      token.symbol.toLowerCase().includes(searchTerm.toLowerCase())
+      token.name.toLowerCase().includes(searchTerm.toLowerCase())
     )
     .map((token, index: number) => ({ ...token, itemType: "token", index }));
 
@@ -144,12 +147,7 @@
   $: if (sortType === "name") {
     sortedAccounts = [...sortedAccounts].sort((a, b) => {
       if (a.name && b.name) {
-        if (a.name < b.name) {
-          return -1;
-        }
-        if (a.name > b.name) {
-          return 1;
-        }
+        return a.name.localeCompare(b.name);
       }
       return 0;
     });
