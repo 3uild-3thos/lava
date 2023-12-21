@@ -12,6 +12,20 @@
   import Select from "svelte-select/no-styles/Select.svelte";
   import { writable } from "svelte/store";
   import type { Idl } from "@coral-xyz/anchor"
+  import { SubmitForm } from '@restspace/svelte-schema-form';
+
+
+// a function that takes an Idl's instructions arguments and returns an schema for SubmitForm
+const getSchema = (args: any[]) => {
+  let schema = {
+    type: "object",
+    properties: {}
+  };
+  args.forEach(arg => {
+    schema.properties[arg.name] = { type: arg.type };
+  });
+  return schema;
+}
 
   let programs = $workspaces[$selectedWorkspace]?.programs as any[];
   let color = ["#9945FF", "#19FB9B"];
@@ -41,6 +55,7 @@
       program: programs[0],
     },
   ];
+  let value = {};
 
   let inputValues = writable<[]>([]);
 
@@ -104,7 +119,17 @@
   const updateSelectedProgram = (event) => {
     selectedProgram = event.detail.value;
   };
-
+  
+  const submit = (e) => {
+	  console.log(JSON.stringify(e.detail.value, undefined, 2));
+  }
+  let schema = {
+	  type: "object",
+	  properties: {
+		  "x": { "type": "string" }
+	  }
+  };
+ 
 </script>
 
 <svelte:head>
@@ -229,12 +254,18 @@
                       placeholder="Value"
                     />
                   {/each}
+                  <!--SubmitForm schema={{
+                    type: "object",
+                    properties: {
+                      "x": { "type": "string" }
+                    }}} {value} on:submit={submit} /-->
                 </div>
               </div>
             </div>
           {/if}
         </div>
       {/if}
+
     </div>
   </div>
 {/if}
