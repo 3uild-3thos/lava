@@ -15,8 +15,8 @@
     selectedSeed = null;
   };
 
-  let formData = [];
-  let pdaSeeds = [];
+  let formData = editingPda!==-1 ? seeds.filter((s)=>s.type!="Program").map(({value})=>value) : [];
+  let pdaSeeds = editingPda!==-1 ? seeds.filter((s)=>s.type!="Program").map(({type})=>type) : [];
   let formTouched = { pdaName: false };
   let valid = { pdaName: false };
   let pdaAlreadyExists = false;
@@ -206,7 +206,7 @@
 
   <div class="modal--form-title">Seeds</div>
 
-  {#each seeds as seed, index}
+  {#each seeds.filter((s)=>s.type!="Program") as seed, index}
     <div
       class="modal--form-seed"
       style="display: flex; position:relative; justify-content: space-between; align-items: center; margin-bottom:0.5rem;"
@@ -220,6 +220,16 @@
           id={`${index}`}
           on:change={(e) => handleSelect(e, index)}
           placeholder="Select wallet"
+          value={formData[index]}
+        />
+      {:else if seed === "Bytes"}
+        <input
+          class={"input--primary" + (invalid_fields.includes(index) ? " input--invalid" : "")}
+          type={typeFromSeed(seed)}
+          placeholder={seed}
+          on:input={handleInput}
+          name={`${index}`}
+          value={formData[index]}
         />
       {:else if seed === "Bytes"}
         <input
@@ -236,6 +246,7 @@
           placeholder={seed}
           on:input={handleInput}
           name={`${index}`}
+          value={formData[index]}
         />
       {/if}
       <div
