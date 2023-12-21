@@ -235,6 +235,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@exodus/schemasafe@npm:^1.0.0-rc.9":
+  version: 1.3.0
+  resolution: "@exodus/schemasafe@npm:1.3.0"
+  checksum: 5fa00ce28d142dc39e07d8080e7967e77125bfdf59af31975b7e6395ca5265e2a8540ab7d8cc89abf8c0a483560f8dbb2994761115c995d2c473ab4b6ec74dba
+  languageName: node
+  linkType: hard
+
 "@fastify/busboy@npm:^2.0.0":
   version: 2.1.0
   resolution: "@fastify/busboy@npm:2.1.0"
@@ -407,6 +414,18 @@ __metadata:
   version: 1.0.0-next.23
   resolution: "@polka/url@npm:1.0.0-next.23"
   checksum: 4b0330de1ceecd1002c7e7449094d0c41f2ed0e21765f4835ccc7b003f2f024ac557d503b9ffdf0918cf50b80d5b8c99dfc5a91927e7b3c468b09c6bb42a3c41
+  languageName: node
+  linkType: hard
+
+"@restspace/svelte-schema-form@npm:^0.1.6":
+  version: 0.1.6
+  resolution: "@restspace/svelte-schema-form@npm:0.1.6"
+  dependencies:
+    "@exodus/schemasafe": ^1.0.0-rc.9
+    lodash-es: ^4.17.21
+  peerDependencies:
+    svelte: ^3.0.0
+  checksum: 1c3f882c0f3e61dc5f6f135ba3cb60cac38ae0158ed7b64a61ae40ca6dcb96cb86eb40a9351338d4c096136b5756cec1299bcc1ce8d2f26d7002ec8ea78c3265
   languageName: node
   linkType: hard
 
@@ -1823,6 +1842,7 @@ __metadata:
   dependencies:
     "@coral-xyz/anchor": ^0.29.0
     "@jridgewell/sourcemap-codec": ^1.4.15
+    "@restspace/svelte-schema-form": ^0.1.6
     "@solana/web3.js": ^1.87.6
     "@sveltejs/adapter-auto": ^2.1.1
     "@sveltejs/adapter-cloudflare": ^2.3.3
@@ -1845,6 +1865,13 @@ __metadata:
   version: 3.0.0
   resolution: "locate-character@npm:3.0.0"
   checksum: 2d9e9f45e2dce7464c016ed6d81ebc938bc9c656392f7d6858308ab6fdaa57bcd4b6b479291d49e7db4047e3f321ddadbe78355f349b7974b203f19674e277cc
+  languageName: node
+  linkType: hard
+
+"lodash-es@npm:^4.17.21":
+  version: 4.17.21
+  resolution: "lodash-es@npm:4.17.21"
+  checksum: 05cbffad6e2adbb331a4e16fbd826e7faee403a1a04873b82b42c0f22090f280839f85b95393f487c1303c8a3d2a010048bf06151a6cbe03eee4d388fb0a12d2
   languageName: node
   linkType: hard
 
