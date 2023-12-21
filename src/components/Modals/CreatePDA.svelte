@@ -231,6 +231,14 @@
           name={`${index}`}
           value={formData[index]}
         />
+      {:else if seed === "Bytes"}
+        <input
+          class={"input--primary" + (invalid_fields.includes(index) ? " input--invalid" : "")}
+          type={typeFromSeed(seed)}
+          placeholder={seed}
+          on:input={handleInput}
+          name={`${index}`}
+        />
       {:else}
         <input
           class="input--primary"
