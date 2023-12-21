@@ -11,6 +11,7 @@
 		"tauri": "tauri"
 	},
 	"dependencies": {
+		"@coral-xyz/anchor": "^0.29.0",
 		"@jridgewell/sourcemap-codec": "^1.4.15",
 		"@tauri-apps/cli": "^2.0.0-alpha.18",
 		"sass": "^1.69.5",

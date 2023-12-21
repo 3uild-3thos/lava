@@ -2,8 +2,13 @@
   import Select from "svelte-select/no-styles/Select.svelte";
   import Icon from "../avatars/index.svelte";
   import { workspaces, selectedWorkspace } from "../../stores/store";
+  import type { Idl } from "@coral-xyz/anchor"
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
+  
 
   export let selectedTest: number = -1;
+  export let selectedProgram: Idl|String = "";
 
   let testName: string = "";
 
@@ -24,12 +29,6 @@
 
   $: console.log($workspaces[$selectedWorkspace]?.programs);
 
-  let selectedProgram: [
-    {
-      name: string;
-      instructions: string[];
-    }
-  ];
 
   let selectedInstruction: string;
 
@@ -79,7 +78,7 @@
   <Select
     items={$workspaces[$selectedWorkspace]?.programs.map((name) => name) ?? []}
     placeholder="Select a Program"
-    on:change={(e) => (selectedProgram = e.detail)}
+    on:change={(e)=>{dispatch("updateSelectedProgram", e); selectedProgram = e.detail}}
   >
     <div slot="selection" class="select--option" let:selection>
       <Icon

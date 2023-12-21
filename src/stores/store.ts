@@ -1,5 +1,6 @@
 import { persisted } from "./persisted";
 import { writable, type Writable } from "svelte/store";
+import type { Idl } from "@coral-xyz/anchor"
 
 export interface Wallet {
   name: string;
@@ -14,7 +15,7 @@ export interface TokenBalance {
 }
 export interface Workspace {
   name: string;
-  programs: string[];
+  programs: Idl|String[];
   wallets: Wallet[];
   tokens: Token[];
   pdas: PDA[];
