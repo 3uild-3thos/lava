@@ -2,13 +2,12 @@
   import Select from "svelte-select/no-styles/Select.svelte";
   import Icon from "../avatars/index.svelte";
   import { workspaces, selectedWorkspace } from "../../stores/store";
-  import type { Idl } from "@coral-xyz/anchor"
+  import type { Idl } from "@coral-xyz/anchor";
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
-  
 
   export let selectedTest: number = -1;
-  export let selectedProgram: Idl|String = "";
+  export let selectedProgram: Idl;
 
   let testName: string = "";
 
@@ -29,7 +28,6 @@
 
   $: console.log($workspaces[$selectedWorkspace]?.programs);
 
-
   let selectedInstruction: string;
 
   const createTest = () => {
@@ -40,13 +38,14 @@
         ...$workspaces[$selectedWorkspace].tests,
         {
           name: testName,
-          programId: selectedProgram.name,
+          programId: selectedProgram?.metadata?.address ?? selectedProgram,
           instruction: selectedInstruction,
           accounts: [],
-          parameters: [],
+          args: [],
         },
       ];
     }
+    dispatch("closeModal");
   };
 </script>
 
@@ -76,9 +75,13 @@
 
   <div class="modal--form-title">Program</div>
   <Select
-    items={$workspaces[$selectedWorkspace]?.programs.map((name) => name) ?? []}
+    items={$workspaces[$selectedWorkspace]?.programs ?? []}
     placeholder="Select a Program"
-    on:change={(e)=>{dispatch("updateSelectedProgram", e); selectedProgram = e.detail}}
+    on:change={(e) => {
+      dispatch("updateSelectedProgram", e);
+      console.log(e.detail);
+      selectedProgram = e.detail;
+    }}
   >
     <div slot="selection" class="select--option" let:selection>
       <Icon
@@ -104,10 +107,9 @@
 
   <div class="modal--form-title">Instructions</div>
   <Select
-    items={selectedProgram?.instructions}
+    items={selectedProgram?.instructions ?? []}
     placeholder="Select an Instruction"
-    disabled={!selectedProgram}
-    class={`${!selectedProgram ? "input--disabled" : ""}`}
+
     on:change={(e) => (selectedInstruction = e.detail.value)}
     on:clear={() => (selectedInstruction = [])}
   >
@@ -135,8 +137,5 @@
 </div>
 
 <div class="btns--modal">
-  <button
-    class="btn btn--lava"
-    on:click={createTest}
-  >Create</button>
+  <button class="btn btn--lava" on:click={createTest}>Create</button>
 </div>

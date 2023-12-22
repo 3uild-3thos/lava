@@ -2,7 +2,11 @@
   import { onMount } from "svelte";
   import AccountListCard from "../../components/AccountListCard.svelte";
   import Modal from "../../components/Modal.svelte";
-  import { workspaces, selectedWorkspace, type Workspace } from "../../stores/store";
+  import {
+    workspaces,
+    selectedWorkspace,
+    type Workspace,
+  } from "../../stores/store";
   import CreateTest from "../../components/Modals/CreateTest.svelte";
   import Icon from "../../components/avatars/index.svelte";
   import TestItem from "../../components/TestItem.svelte";
@@ -11,28 +15,34 @@
   import DeleteTest from "../../components/Modals/DeleteTest.svelte";
   import Select from "svelte-select/no-styles/Select.svelte";
   import { writable } from "svelte/store";
-  import type { Idl } from "@coral-xyz/anchor"
-  import { SubmitForm } from '@restspace/svelte-schema-form';
+  import type { Idl } from "@coral-xyz/anchor";
+  import { SubmitForm } from "@restspace/svelte-schema-form";
 
-
-// a function that takes an Idl's instructions arguments and returns an schema for SubmitForm
-const getSchema = (args: any[]) => {
-  let schema = {
-    type: "object",
-    properties: {}
+  // a function that takes an Idl's instructions arguments and returns an schema for SubmitForm
+  const getSchema = (args: any[]) => {
+    let schema = {
+      type: "object",
+      properties: {},
+    };
+    args.forEach((arg) => {
+      if (arg.type.vec) {
+        schema.properties[arg.name] = {
+          type: "object",
+          properties: { [arg.type.vec]: { type: "string" } },
+        };
+      } else {
+        schema.properties[arg.name] = { type: arg.type };
+      }
+    });
+    return schema;
   };
-  args.forEach(arg => {
-    schema.properties[arg.name] = { type: arg.type };
-  });
-  return schema;
-}
 
   let programs = $workspaces[$selectedWorkspace]?.programs as any[];
   let color = ["#9945FF", "#19FB9B"];
   let isCreateTestModalOpen = false;
   let isDeleteTestModalOpen = false;
   let ready = false;
-  
+
   onMount(() => {
     if ($workspaces[$selectedWorkspace].tests === undefined) {
       $workspaces[$selectedWorkspace].tests = [];
@@ -66,7 +76,11 @@ const getSchema = (args: any[]) => {
       inputValues.update((values) => {
         if (!values[selectedTest]) {
           let program = $workspaces[$selectedWorkspace].programs.find(
-            (program) => program.name === $workspaces[$selectedWorkspace].tests[selectedTest].programId  || program.metadata?.address === $workspaces[$selectedWorkspace].tests[selectedTest].programId
+            (program) =>
+              program.name ===
+                $workspaces[$selectedWorkspace].tests[selectedTest].programId ||
+              program.metadata?.address ===
+                $workspaces[$selectedWorkspace].tests[selectedTest].programId
           );
           values[selectedTest] = program?.instructions[0].args.map((arg) => {
             return {
@@ -80,28 +94,49 @@ const getSchema = (args: any[]) => {
       });
     }
   }
-  
+
   $: {
     if (selectedTest !== -1) {
       inputAccounts.update((accounts) => {
         if (!accounts[selectedTest]) {
           let program = $workspaces[$selectedWorkspace].programs.find(
-            (program) => program.name === $workspaces[$selectedWorkspace].tests[selectedTest].programId  || program.metadata?.address === $workspaces[$selectedWorkspace].tests[selectedTest].programId
+            (program) =>
+              program.name ===
+                $workspaces[$selectedWorkspace].tests[selectedTest].programId ||
+              program.metadata?.address ===
+                $workspaces[$selectedWorkspace].tests[selectedTest].programId
           );
-          accounts[selectedTest] = program?.instructions[0].accounts.map((account) => {
-            return {
-              name: account.name,
-              isMut: account.isMut,
-              isSigner: account.isSigner,
-            };
-          });
+          accounts[selectedTest] = program?.instructions[0].accounts.map(
+            (account) => {
+              return {
+                name: account.name,
+                isMut: account.isMut,
+                isSigner: account.isSigner,
+              };
+            }
+          );
         }
         return accounts;
       });
     }
   }
 
-  $: console.log($inputValues, selectedTest, $inputValues[selectedTest], selectedProgram);
+  $: console.log(
+    (
+      $workspaces[$selectedWorkspace].programs.find((program) => {
+        if (typeof program === "string" || selectedTest === -1) {
+          return false;
+        } else {
+          return (
+            (program as Idl).name ===
+              $workspaces[$selectedWorkspace].tests[selectedTest]?.programId ||
+            (program as Idl).metadata?.address ===
+              $workspaces[$selectedWorkspace].tests[selectedTest]?.programId
+          );
+        }
+      }) as Idl
+    )?.instructions[0]
+  );
 
   function beforeUnload() {
     if (selectedTest !== -1) {
@@ -114,22 +149,24 @@ const getSchema = (args: any[]) => {
     }
   }
 
-  let selectedProgram: Idl|String = "";
+  let selectedProgram: Idl | String = "";
 
   const updateSelectedProgram = (event) => {
     selectedProgram = event.detail.value;
   };
-  
+
   const submit = (e) => {
-	  console.log(JSON.stringify(e.detail.value, undefined, 2));
-  }
-  let schema = {
-	  type: "object",
-	  properties: {
-		  "x": { "type": "string" }
-	  }
+    console.log(JSON.stringify(e.detail.value, undefined, 2));
   };
- 
+
+  const saveTest = () => {
+    if (selectedTest !== -1) {
+      $workspaces[$selectedWorkspace].tests[selectedTest].accounts =
+        inputAccounts[selectedTest];
+      $workspaces[$selectedWorkspace].tests[selectedTest].args =
+        inputValues[selectedTest];
+    }
+  };
 </script>
 
 <svelte:head>
@@ -147,7 +184,12 @@ const getSchema = (args: any[]) => {
     bind:isOpen={isCreateTestModalOpen}
     on:close={() => (isCreateTestModalOpen = false)}
   >
-    <CreateTest {selectedTest} {selectedProgram} on:updateSelectedProgram={updateSelectedProgram} />
+    <CreateTest
+      {selectedTest}
+      {selectedProgram}
+      on:closeModal={() => (isCreateTestModalOpen = false)}
+      on:updateSelectedProgram={updateSelectedProgram}
+    />
   </Modal>
 
   <!-- Delete Test Modal -->
@@ -229,7 +271,24 @@ const getSchema = (args: any[]) => {
                       <img src="./signer.svg" alt="Signer Icon" />
                     {/if}
                   </div>
-                  <Select />
+                  {#if account.name === "systemProgram"}
+                    <input
+                      class="input--primary"
+                      type="text"
+                      readonly
+                      name={`${index}`}
+                      value="systemProgram"
+                    />
+                  {:else}
+                    <Select
+                      items={$workspaces[$selectedWorkspace]?.wallets?.map(
+                        (w) => (w?.address.length > 0 ? w?.address : w.name)
+                      )}
+                      id={`${index}`}
+                      placeholder="Select wallet"
+                      bind:value={$inputAccounts[selectedTest][index].value}
+                    />
+                  {/if}
                 </div>
               {/each}
             </div>
@@ -246,26 +305,34 @@ const getSchema = (args: any[]) => {
                   {#each $inputValues[selectedTest] as args, index}
                     <div class="argument">
                       {args.name}
-                      <span class="arg--type">{typeof args.type === "string" ? args.type : JSON.stringify(args.type)}</span>
+                      <span class="arg--type"
+                        >{typeof args.type === "string"
+                          ? args.type
+                          : JSON.stringify(args.type)}</span
+                      >
                     </div>
                     <input
                       class="input--primary"
                       bind:value={$inputValues[selectedTest][index].value}
                       placeholder="Value"
+                      name=""
                     />
                   {/each}
-                  <!--SubmitForm schema={{
-                    type: "object",
-                    properties: {
-                      "x": { "type": "string" }
-                    }}} {value} on:submit={submit} /-->
+                  <!--SubmitForm schema={getSchema(($workspaces[$selectedWorkspace].programs.find(
+                    (program) => {
+                      if (typeof program === "string") {
+                        return false
+                      }else {
+                      return program.name === $workspaces[$selectedWorkspace].tests[selectedTest]?.programId  || program .metadata?.address === $workspaces[$selectedWorkspace].tests[selectedTest]?.programId}
+                    }
+                  ))?.instructions[0].args)} {value} on:submit={submit} /-->
                 </div>
               </div>
             </div>
           {/if}
         </div>
       {/if}
-
+      <button on:click={saveTest}>Save</button>
     </div>
   </div>
 {/if}
