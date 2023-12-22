@@ -362,7 +362,7 @@
             <img src="./create-wallet.svg" class="workspace--stat--icon" />
             <div class="workspace--stat--content">
               <div class="workspace--stat--value">
-                {stat.wallets.length}
+                {stat?.wallets?.length}
               </div>
               <div class="workspace--stat--title">Wallets</div>
             </div>
@@ -375,7 +375,7 @@
             <img src="./create-token.svg" class="workspace--stat--icon" />
             <div class="workspace--stat--content">
               <div class="workspace--stat--value">
-                {stat.tokens.length}
+                {stat?.tokens?.length}
               </div>
               <div class="workspace--stat--title">Mint Accounts</div>
             </div>
@@ -388,7 +388,7 @@
             <img src="./create-program.svg" class="workspace--stat--icon" />
             <div class="workspace--stat--content">
               <div class="workspace--stat--value">
-                {stat.programs.length}
+                {stat?.programs?.length}
               </div>
               <div class="workspace--stat--title">Programs</div>
             </div>
@@ -401,7 +401,7 @@
             <img src="./create-test.svg" class="workspace--stat--icon" />
             <div class="workspace--stat--content">
               <div class="workspace--stat--value">
-                {stat.tests?.length || 0}
+                {stat?.tests?.length || 0}
               </div>
               <div class="workspace--stat--title">Tests</div>
             </div>
