@@ -155,16 +155,12 @@
     selectedProgram = event.detail.value;
   };
 
-  const submit = (e) => {
-    console.log(JSON.stringify(e.detail.value, undefined, 2));
-  };
-
   const saveTest = () => {
     if (selectedTest !== -1) {
       $workspaces[$selectedWorkspace].tests[selectedTest].accounts =
-        inputAccounts[selectedTest];
+        $inputAccounts[selectedTest];
       $workspaces[$selectedWorkspace].tests[selectedTest].args =
-        inputValues[selectedTest];
+        $inputValues[selectedTest];
     }
   };
 </script>
@@ -244,6 +240,10 @@
     </div>
 
     <div class="test--builder">
+      <form
+      on:submit|preventDefault={saveTest}
+      class="modal--form"
+    >
       {#if selectedTest === -1}
         <div class="test--builder--empty-state">
           <img src="./select-test.svg" alt="Select a Test" />
@@ -251,9 +251,10 @@
             Select a test to get started
           </div>
         </div>
-
+   
         <!-- Accounts -->
       {:else if $inputAccounts[selectedTest]?.length > 0}
+
         <div class="test--content">
           <div class="test--form">
             <div class="content--header">
@@ -330,9 +331,12 @@
               </div>
             </div>
           {/if}
+          <button type="submit">Save</button>
+        
         </div>
+
       {/if}
-      <button on:click={saveTest}>Save</button>
+    </form>  
     </div>
   </div>
 {/if}
