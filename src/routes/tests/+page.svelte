@@ -148,6 +148,7 @@
         $inputAccounts[selectedTest];
       $workspaces[$selectedWorkspace].tests[selectedTest].args =
         $inputValues[selectedTest];
+      alert("Test saved");
     }
   };
 </script>
@@ -336,7 +337,9 @@
                 </div>
               </div>
             {/if}
-            <button type="submit">Save</button>
+            {#if selectedTest !== -1}
+              <button type="submit">Save</button>
+            {/if}
           </div>
         {/if}
       </form>
