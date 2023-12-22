@@ -71,8 +71,12 @@
 
   let inputAccounts = writable<[]>([]);
 
+  let instruction;
+
   $: {
     if (selectedTest !== -1) {
+      instruction = $workspaces[$selectedWorkspace].tests[selectedTest]
+        ?.instruction;
       inputValues.update((values) => {
         if (!values[selectedTest]) {
           let program = $workspaces[$selectedWorkspace].programs.find(
@@ -82,10 +86,7 @@
               program.metadata?.address ===
                 $workspaces[$selectedWorkspace].tests[selectedTest].programId
           );
-          values[selectedTest] = (
-            program ??
-            $workspaces[$selectedWorkspace].tests[selectedTest].programId
-          )?.instructions[0].args.map((arg) => {
+          values[selectedTest] = instruction.args.map((arg) => {
             return {
               value: "",
               type: arg.type,
@@ -109,10 +110,7 @@
               program.metadata?.address ===
                 $workspaces[$selectedWorkspace].tests[selectedTest].programId
           );
-          accounts[selectedTest] = (
-            program ??
-            $workspaces[$selectedWorkspace].tests[selectedTest].programId
-          )?.instructions[0].accounts.map((account) => {
+          accounts[selectedTest] = instruction?.accounts.map((account) => {
             return {
               name: account.name,
               isMut: account.isMut,
