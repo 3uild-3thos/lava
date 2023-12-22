@@ -82,7 +82,10 @@
               program.metadata?.address ===
                 $workspaces[$selectedWorkspace].tests[selectedTest].programId
           );
-          values[selectedTest] = program?.instructions[0].args.map((arg) => {
+          values[selectedTest] = (
+            program ??
+            $workspaces[$selectedWorkspace].tests[selectedTest].programId
+          )?.instructions[0].args.map((arg) => {
             return {
               value: "",
               type: arg.type,
@@ -106,37 +109,23 @@
               program.metadata?.address ===
                 $workspaces[$selectedWorkspace].tests[selectedTest].programId
           );
-          accounts[selectedTest] = program?.instructions[0].accounts.map(
-            (account) => {
-              return {
-                name: account.name,
-                isMut: account.isMut,
-                isSigner: account.isSigner,
-              };
-            }
-          );
+          accounts[selectedTest] = (
+            program ??
+            $workspaces[$selectedWorkspace].tests[selectedTest].programId
+          )?.instructions[0].accounts.map((account) => {
+            return {
+              name: account.name,
+              isMut: account.isMut,
+              isSigner: account.isSigner,
+            };
+          });
         }
         return accounts;
       });
     }
   }
 
-  $: console.log(
-    (
-      $workspaces[$selectedWorkspace].programs.find((program) => {
-        if (typeof program === "string" || selectedTest === -1) {
-          return false;
-        } else {
-          return (
-            (program as Idl).name ===
-              $workspaces[$selectedWorkspace].tests[selectedTest]?.programId ||
-            (program as Idl).metadata?.address ===
-              $workspaces[$selectedWorkspace].tests[selectedTest]?.programId
-          );
-        }
-      }) as Idl
-    )?.instructions[0]
-  );
+  $: console.log($inputAccounts, $inputValues);
 
   function beforeUnload() {
     if (selectedTest !== -1) {
@@ -209,11 +198,27 @@
               title={test.name}
               isSelected={selectedTest === index}
               {index}
-              on:updateSelectedTest={(event) =>{
-                (selectedTest = event.detail.index)
-                $inputAccounts[selectedTest] = $workspaces[$selectedWorkspace].tests[selectedTest]?.accounts ?? []
-                $inputValues[selectedTest] = $workspaces[$selectedWorkspace].tests[selectedTest]?.args ?? []}
+              on:updateSelectedTest={(event) => {
+                selectedTest = event.detail.index;
+                if (
+                  $workspaces[$selectedWorkspace].tests[
+                    selectedTest
+                  ]?.accounts.some((account) => !!account.value)
+                ) {
+                  $inputAccounts[selectedTest] =
+                    $workspaces[$selectedWorkspace].tests[selectedTest]
+                      ?.accounts ?? [];
                 }
+                if (
+                  $workspaces[$selectedWorkspace].tests[
+                    selectedTest
+                  ]?.args.some((arg) => !!arg.value)
+                ) {
+                  $inputValues[selectedTest] =
+                    $workspaces[$selectedWorkspace].tests[selectedTest]?.args ??
+                    [];
+                }
+              }}
               type={"test"}
             >
               <div slot="content" class="test--slot">
@@ -243,86 +248,85 @@
     </div>
 
     <div class="test--builder">
-      <form
-      on:submit|preventDefault={saveTest}
-      class="modal--form"
-    >
-      {#if selectedTest === -1}
-        <div class="test--builder--empty-state">
-          <img src="./select-test.svg" alt="Select a Test" />
-          <div class="test--builder--empty-state--title">
-            Select a test to get started
-          </div>
-        </div>
-   
-        <!-- Accounts -->
-      {:else if $inputAccounts[selectedTest]?.length > 0}
-
-        <div class="test--content">
-          <div class="test--form">
-            <div class="content--header">
-              <div class="test--content--title">Accounts</div>
-            </div>
-            <div class="instruction--list" in:fade|global={{ duration: 100 }}>
-              {#each $inputAccounts[selectedTest] as account, index}
-                <div class="test--form--item">
-                  <div class="instruction--list--value">
-                    {account.name}
-                    {#if account.isMut}
-                      <img src="./modify.svg" alt="Mut Icon" />
-                    {/if}
-                    {#if account.isSigner}
-                      <img src="./signer.svg" alt="Signer Icon" />
-                    {/if}
-                  </div>
-                  {#if account.name === "systemProgram"}
-                    <input
-                      class="input--primary"
-                      type="text"
-                      readonly
-                      name={`${index}`}
-                      value="systemProgram"
-                    />
-                  {:else}
-                    <Select
-                      items={$workspaces[$selectedWorkspace]?.wallets?.map(
-                        (w) => (w?.address.length > 0 ? w?.address : w.name)
-                      )}
-                      id={`${index}`}
-                      placeholder="Select wallet"
-                      bind:value={$inputAccounts[selectedTest][index].value}
-                    />
-                  {/if}
-                </div>
-              {/each}
+      <form on:submit|preventDefault={saveTest} class="modal--form">
+        {#if selectedTest === -1}
+          <div class="test--builder--empty-state">
+            <img src="./select-test.svg" alt="Select a Test" />
+            <div class="test--builder--empty-state--title">
+              Select a test to get started
             </div>
           </div>
 
-          <!-- Args -->
-          {#if $inputValues[selectedTest].length > 0}
+          <!-- Accounts -->
+        {:else if $inputAccounts[selectedTest]?.length > 0}
+          <div class="test--content">
             <div class="test--form">
               <div class="content--header">
-                <div class="test--content--title">Arguments</div>
+                <div class="test--content--title">Accounts</div>
               </div>
               <div class="instruction--list" in:fade|global={{ duration: 100 }}>
-                <div class="test--content--list">
-                  {#each $inputValues[selectedTest] as args, index}
-                    <div class="argument">
-                      {args.name}
-                      <span class="arg--type"
-                        >{typeof args.type === "string"
-                          ? args.type
-                          : JSON.stringify(args.type)}</span
-                      >
+                {#each $inputAccounts[selectedTest] as account, index}
+                  <div class="test--form--item">
+                    <div class="instruction--list--value">
+                      {account.name}
+                      {#if account.isMut}
+                        <img src="./modify.svg" alt="Mut Icon" />
+                      {/if}
+                      {#if account.isSigner}
+                        <img src="./signer.svg" alt="Signer Icon" />
+                      {/if}
                     </div>
-                    <input
-                      class="input--primary"
-                      bind:value={$inputValues[selectedTest][index].value}
-                      placeholder="Value"
-                      name=""
-                    />
-                  {/each}
-                  <!--SubmitForm schema={getSchema(($workspaces[$selectedWorkspace].programs.find(
+                    {#if account.name === "systemProgram"}
+                      <input
+                        class="input--primary"
+                        type="text"
+                        readonly
+                        name={`${index}`}
+                        value="systemProgram"
+                      />
+                    {:else}
+                      <Select
+                        items={$workspaces[$selectedWorkspace]?.wallets?.map(
+                          (w) => (w?.address.length > 0 ? w?.address : w.name)
+                        )}
+                        id={`${index}`}
+                        placeholder="Select wallet"
+                        bind:value={$inputAccounts[selectedTest][index].value}
+                      />
+                    {/if}
+                  </div>
+                {/each}
+              </div>
+            </div>
+
+            <!-- Args -->
+            {#if $inputValues[selectedTest]?.length > 0}
+              <div class="test--form">
+                <div class="content--header">
+                  <div class="test--content--title">Arguments</div>
+                </div>
+                <div
+                  class="instruction--list"
+                  in:fade|global={{ duration: 100 }}
+                >
+                  <div class="test--content--list">
+                    {#each $inputValues[selectedTest] as args, index}
+                      <div class="argument">
+                        {args.name}
+                        <span class="arg--type"
+                          >{typeof args.type === "string"
+                            ? args.type
+                            : JSON.stringify(args.type)}</span
+                        >
+                      </div>
+                      <input
+                        class="input--primary"
+                        bind:value={$inputValues[selectedTest][index].value}
+                        placeholder="Value"
+                        name=""
+                      />
+                    {/each}
+                    <!--SubmitForm schema={getSchema(($workspaces[$selectedWorkspace].programs.find(
                     (program) => {
                       if (typeof program === "string") {
                         return false
@@ -330,16 +334,14 @@
                       return program.name === $workspaces[$selectedWorkspace].tests[selectedTest]?.programId  || program .metadata?.address === $workspaces[$selectedWorkspace].tests[selectedTest]?.programId}
                     }
                   ))?.instructions[0].args)} {value} on:submit={submit} /-->
+                  </div>
                 </div>
               </div>
-            </div>
-          {/if}
-          <button type="submit">Save</button>
-        
-        </div>
-
-      {/if}
-    </form>  
+            {/if}
+            <button type="submit">Save</button>
+          </div>
+        {/if}
+      </form>
     </div>
   </div>
 {/if}

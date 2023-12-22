@@ -26,7 +26,7 @@
     formTouched[field] = true;
   }
 
-  $: console.log($workspaces[$selectedWorkspace]?.programs);
+  $: console.log(selectedProgram?.instructions);
 
   let selectedInstruction: string;
 
@@ -109,8 +109,7 @@
   <Select
     items={selectedProgram?.instructions ?? []}
     placeholder="Select an Instruction"
-
-    on:change={(e) => (selectedInstruction = e.detail.value)}
+    bind:value={selectedInstruction}
     on:clear={() => (selectedInstruction = [])}
   >
     <div slot="selection" class="select--option" let:selection>
