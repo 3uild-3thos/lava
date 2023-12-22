@@ -159,7 +159,7 @@
   let customProgramName = "";
 
   const isValidAddress = (address) => {
-    if (address.trim() === "") {
+    if (address?.trim() === "") {
       return true;
     } else {
       try {
@@ -173,8 +173,8 @@
 
   function finishIDL() {
     if (
-      (customProgramId.length === 0 || isValidAddress(customProgramId)) &&
-      customProgramName.length > 0
+      (customProgramId?.length === 0 || isValidAddress(customProgramId)) &&
+      customProgramName?.length > 0
     ) {
       const programAlreadyExists = $workspaces[
         $selectedWorkspace
@@ -306,14 +306,14 @@
       <div class="btns--modal">
         <button
           class={`btn btn--lava ${
-            (customProgramId.length > 0 && !isValidAddress(customProgramId)) ||
-            customProgramName.length === 0
+            (customProgramId?.length > 0 && !isValidAddress(customProgramId)) ||
+            customProgramName?.length === 0
               ? " btn--disabled"
               : ""
           }`}
-          disabled={(customProgramId.length > 0 &&
+          disabled={(customProgramId?.length > 0 &&
             !isValidAddress(customProgramId)) ||
-            customProgramName.length === 0}
+            customProgramName?.length === 0}
           on:click={() => finishIDL()}>Finish</button
         >
       </div>
