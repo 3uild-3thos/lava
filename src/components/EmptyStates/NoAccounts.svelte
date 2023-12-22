@@ -16,7 +16,7 @@
     class="btn btn--primary btn--fit"
     on:click={() => dispatch("openModal")}
     ><img
-      src="./add.svg"
+      src="/add.svg"
       alt="Add Icon"
       style="margin-right:5px;width:16px;height:16px;"
     />Add an Account</button

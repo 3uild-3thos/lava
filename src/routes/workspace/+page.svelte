@@ -68,7 +68,7 @@
       completed: $workspaces[$selectedWorkspace]?.wallets?.length > 0,
       buttonText: "Create",
       buttonIcon: "/add.svg",
-      graphic: "get-started-wallet.svg",
+      graphic: "/get-started-wallet.svg",
       color: "#8A54FE",
     },
     {
@@ -77,7 +77,7 @@
       completed: $workspaces[$selectedWorkspace]?.tokens?.length > 0,
       buttonText: "Create",
       buttonIcon: "/add.svg",
-      graphic: "get-started-token.svg",
+      graphic: "/get-started-token.svg",
       color: "#FE9154",
     },
     {
@@ -85,7 +85,7 @@
       subtitle: "An IDL is a JSON file that describes a program's interface.",
       completed: $workspaces[$selectedWorkspace]?.programs?.length > 0,
       buttonText: "Import",
-      graphic: "import-idl.svg",
+      graphic: "/import-idl.svg",
       buttonIcon: "/import.svg",
       color: "#FE6054",
     },
@@ -95,7 +95,7 @@
       completed: $workspaces[$selectedWorkspace]?.tests?.length > 0,
       buttonText: "Create",
       buttonIcon: "/add.svg",
-      graphic: "get-started-test.svg",
+      graphic: "/get-started-test.svg",
       color: "#54FE98",
     },
   ].map((step, index, array) => {
@@ -359,7 +359,7 @@
             style={`--color: #8A54FE`}
             in:fade={{ duration: 200 }}
           >
-            <img src="./create-wallet.svg" class="workspace--stat--icon" />
+            <img src="/create-wallet.svg" class="workspace--stat--icon" />
             <div class="workspace--stat--content">
               <div class="workspace--stat--value">
                 {stat?.wallets?.length}
@@ -372,7 +372,7 @@
             style={`--color: #FFBE41`}
             in:fade={{ delay: 100, duration: 200 }}
           >
-            <img src="./create-token.svg" class="workspace--stat--icon" />
+            <img src="/create-token.svg" class="workspace--stat--icon" />
             <div class="workspace--stat--content">
               <div class="workspace--stat--value">
                 {stat?.tokens?.length}
@@ -385,7 +385,7 @@
             style={`--color: #FE6054`}
             in:fade={{ delay: 100, duration: 200 }}
           >
-            <img src="./create-program.svg" class="workspace--stat--icon" />
+            <img src="/create-program.svg" class="workspace--stat--icon" />
             <div class="workspace--stat--content">
               <div class="workspace--stat--value">
                 {stat?.programs?.length}
@@ -398,7 +398,7 @@
             style={`--color: #54FE98`}
             in:fade={{ delay: 100, duration: 200 }}
           >
-            <img src="./create-test.svg" class="workspace--stat--icon" />
+            <img src="/create-test.svg" class="workspace--stat--icon" />
             <div class="workspace--stat--content">
               <div class="workspace--stat--value">
                 {stat?.tests?.length || 0}

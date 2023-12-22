@@ -12,7 +12,7 @@
         class="create--account--card"
         on:click={() => dispatch("createWallet")}
       >
-        <img src="./create-wallet.svg" />
+        <img src="/create-wallet.svg" />
       </div>
       Wallet
     </div>
@@ -21,7 +21,7 @@
         class="create--account--card"
         on:click={() => dispatch("createToken")}
       >
-        <img src="./create-token.svg" />
+        <img src="/create-token.svg" />
       </div>
       Mint
     </div>
@@ -30,13 +30,13 @@
         class="create--account--card"
         on:click={() => dispatch("createProgram")}
       >
-        <img src="./create-program.svg" />
+        <img src="/create-program.svg" />
       </div>
       Program
     </div>
     <div class="create--account">
       <div class="create--account--card" on:click={() => dispatch("createPDA")}>
-        <img src="./create-pda.svg" />
+        <img src="/create-pda.svg" />
       </div>
       PDA
     </div>
