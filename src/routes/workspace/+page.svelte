@@ -59,11 +59,13 @@
     goto("/");
   }
 
-  let gettingStarted = [
+  $: stat = $workspaces[$selectedWorkspace];
+
+  $: gettingStarted = [
     {
       title: "Create a Wallet Account",
       subtitle: "A wallet account is used to sign transactions.",
-      completed: workspace.wallets?.length > 0,
+      completed: $workspaces[$selectedWorkspace]?.wallets?.length > 0,
       buttonText: "Create",
       buttonIcon: "/add.svg",
       graphic: "get-started-wallet.svg",
@@ -72,7 +74,7 @@
     {
       title: "Create a Mint Account",
       subtitle: "A mint account is used to create tokens.",
-      completed: workspace.tokens?.length > 0,
+      completed: $workspaces[$selectedWorkspace]?.tokens?.length > 0,
       buttonText: "Create",
       buttonIcon: "/add.svg",
       graphic: "get-started-token.svg",
@@ -81,7 +83,7 @@
     {
       title: "Import IDL",
       subtitle: "An IDL is a JSON file that describes a program's interface.",
-      completed: workspace.programs?.length > 0,
+      completed: $workspaces[$selectedWorkspace]?.programs?.length > 0,
       buttonText: "Import",
       graphic: "import-idl.svg",
       buttonIcon: "/import.svg",
@@ -90,7 +92,7 @@
     {
       title: "Create a Program Test",
       subtitle: "Testing your program is the best way to ensure it works.",
-      completed: false,
+      completed: $workspaces[$selectedWorkspace]?.tests?.length > 0,
       buttonText: "Create",
       buttonIcon: "/add.svg",
       graphic: "get-started-test.svg",
@@ -200,8 +202,6 @@
       idlToAdd = null;
     }
   }
-
-  $: stat = $workspaces[$selectedWorkspace];
 </script>
 
 <svelte:head>
