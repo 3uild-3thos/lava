@@ -24,7 +24,7 @@
       }
       $workspaces = [
         ...$workspaces,
-        { name, programs: [], wallets: [], tokens: [], pdas: [] },
+        { name, programs: [], wallets: [], tokens: [], pdas: [],     version: "0.0.0-pre-alpha" },
       ];
       $selectedWorkspace = $workspaces.length - 1;
       createModal = false;

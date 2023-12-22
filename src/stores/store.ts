@@ -20,6 +20,7 @@ export interface Workspace {
   tokens: Token[];
   pdas: PDA[];
   tests: Test[];
+  version: string;
 }
 
 export interface Token {
@@ -55,6 +56,7 @@ export const workspaces = persisted("workspaces", [
     tokens: [],
     pdas: [],
     tests: [],
+    version: "0.0.0-pre-alpha"
   },
 ] as Workspace[]);
 
