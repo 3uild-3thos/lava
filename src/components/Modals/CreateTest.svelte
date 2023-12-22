@@ -26,9 +26,9 @@
     formTouched[field] = true;
   }
 
-  $: console.log(selectedProgram?.instructions);
+  $: console.log(selectedProgram);
 
-  let selectedInstruction: string;
+  let selectedInstruction;
 
   const createTest = () => {
     console.log(testName, selectedProgram, selectedInstruction);
@@ -79,9 +79,8 @@
     placeholder="Select a Program"
     on:change={(e) => {
       dispatch("updateSelectedProgram", e);
-      console.log(e.detail);
-      selectedProgram = e.detail;
-    }}
+      console.log(e);
+      selectedProgram = e.detail;    }}
   >
     <div slot="selection" class="select--option" let:selection>
       <Icon
