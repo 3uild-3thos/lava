@@ -56,7 +56,7 @@ export const workspaces = persisted("workspaces", [
     tokens: [],
     pdas: [],
     tests: [],
-    version: "0.0.0-pre-alpha"
+    version: "0.0.0"
   },
 ] as Workspace[]);
 
