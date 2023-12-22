@@ -209,8 +209,11 @@
               title={test.name}
               isSelected={selectedTest === index}
               {index}
-              on:updateSelectedTest={(event) =>
-                (selectedTest = event.detail.index)}
+              on:updateSelectedTest={(event) =>{
+                (selectedTest = event.detail.index)
+                $inputAccounts[selectedTest] = $workspaces[$selectedWorkspace].tests[selectedTest]?.accounts ?? []
+                $inputValues[selectedTest] = $workspaces[$selectedWorkspace].tests[selectedTest]?.args ?? []}
+                }
               type={"test"}
             >
               <div slot="content" class="test--slot">
