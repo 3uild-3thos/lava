@@ -66,7 +66,7 @@
       {#if decimalHover === index}
         <Popover xOffset={50} yOffset={-50} title={"Number of Decimals"} />
       {/if}
-      {account.decimal}
+      {account.decimals}
     </div>
   </div>
 </div>

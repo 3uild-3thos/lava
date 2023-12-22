@@ -8,7 +8,7 @@
   export let token;
   let name = token ? token.name : "";
   let symbol = token ? token.symbol : "";
-  let decimal = token ? token.decimal : null;
+  let decimals = token ? token.decimals : null;
   let tokenAlreadyExists = false;
   export let wallets = [];
   $: console.log(wallets);
@@ -24,13 +24,13 @@
   let valid = {
     name: false,
     symbol: false,
-    decimal: false,
+    decimals: false,
   };
 
   let formTouched = {
     name: false,
     symbol: false,
-    decimal: false,
+    decimals: false,
   };
 
   let formSubmitted = false;
@@ -38,13 +38,13 @@
   $: formTouched = {
     name: name.length > 0 || formSubmitted,
     symbol: symbol.length > 0 || formSubmitted,
-    decimal: decimal > 0 || formSubmitted,
+    decimals: decimals > 0 || formSubmitted,
   };
 
   $: valid = {
     name: name.length > 0 && name.length <= 32,
     symbol: symbol.length > 0 && symbol.length <= 5,
-    decimal: decimal >= 0 && decimal <= 18,
+    decimals: decimals >= 0 && decimals <= 18,
   };
 
   function handleInputTouch(field) {
@@ -52,7 +52,7 @@
   }
 
   const addToken = () => {
-    if (valid.name && valid.symbol && valid.decimal) {
+    if (valid.name && valid.symbol && valid.decimals) {
       if (token) {
         // Edit mode
         const index = $workspaces[$selectedWorkspace].tokens.findIndex(
@@ -62,7 +62,7 @@
           $workspaces[$selectedWorkspace].tokens[index] = {
             name,
             symbol: symbol.toUpperCase(),
-            decimal: decimal,
+            decimals,
             freezeAuthority: freezeAuthority?.name,
             mintAuthority: mintAuthority?.name,
           };
@@ -84,7 +84,7 @@
           {
             name,
             symbol: symbol.toUpperCase(),
-            decimal: decimal,
+            decimals,
             freezeAuthority: freezeAuthority?.name,
             mintAuthority: mintAuthority?.name,
           },
@@ -140,7 +140,7 @@
           : ''}"
         type="number"
         placeholder="Number between 0-18"
-        bind:value={decimal}
+        bind:value={decimals}
       />
     </div>
   </div>
@@ -224,10 +224,10 @@
   <div class="btns--modal">
     <button
       class={`btn btn--lava${
-        !valid.name || !valid.symbol || !valid.decimal ? " btn--disabled" : ""
+        !valid.name || !valid.symbol || !valid.decimals ? " btn--disabled" : ""
       }`}
       on:click={() => addToken()}
-      disabled={!valid.name || !valid.symbol || !valid.decimal}
+      disabled={!valid.name || !valid.symbol || !valid.decimals}
       >{token ? "Update Mint" : "Create Mint"}</button
     >
   </div>

@@ -15,17 +15,18 @@ export interface TokenBalance {
 }
 export interface Workspace {
   name: string;
-  programs: Idl|String[];
+  programs: Array<Idl|String>;
   wallets: Wallet[];
   tokens: Token[];
   pdas: PDA[];
   tests: Test[];
+  version: string;
 }
 
 export interface Token {
   name: string;
   symbol: string;
-  decimal: number;
+  decimals: number;
   mintAuthority: string;
   freezeAuthority: string;
 }
@@ -44,7 +45,7 @@ export interface Test {
   programId: string;
   instruction: string;
   accounts: any[];
-  parameters: any[];
+  args: any[];
 }
 
 export const workspaces = persisted("workspaces", [
@@ -55,6 +56,7 @@ export const workspaces = persisted("workspaces", [
     tokens: [],
     pdas: [],
     tests: [],
+    version: "0.0.0"
   },
 ] as Workspace[]);
 

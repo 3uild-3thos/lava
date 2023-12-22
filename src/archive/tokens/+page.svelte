@@ -133,7 +133,7 @@
   }
 
   let supply: string;
-  let decimal: any;
+  let decimals: any;
   let symbol = "";
   let name = "";
   let creator = "";
@@ -142,13 +142,13 @@
   let valid = {
     name: false,
     symbol: false,
-    decimal: false,
+    decimals: false,
   };
 
   let formTouched = {
     name: false,
     symbol: false,
-    decimal: false,
+    decimals: false,
   };
 
   let formSubmitted = false;
@@ -156,13 +156,13 @@
   $: formTouched = {
     name: name.length > 0 || formSubmitted,
     symbol: symbol.length > 0 || formSubmitted,
-    decimal: decimal > 0 || formSubmitted,
+    decimals: decimals > 0 || formSubmitted,
   };
 
   $: valid = {
     name: name.length > 0 && name.length <= 32,
     symbol: symbol.length > 0 && symbol.length <= 5,
-    decimal: decimal >= 0 && decimal <= 18,
+    decimals: decimals >= 0 && decimals <= 18,
   };
 
   const deleteToken = (index) => {
