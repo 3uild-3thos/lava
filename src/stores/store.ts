@@ -25,7 +25,7 @@ export interface Workspace {
 export interface Token {
   name: string;
   symbol: string;
-  decimal: number;
+  decimals: number;
   mintAuthority: string;
   freezeAuthority: string;
 }
