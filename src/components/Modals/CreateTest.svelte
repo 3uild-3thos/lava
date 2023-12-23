@@ -4,6 +4,7 @@
   import { workspaces, selectedWorkspace } from "../../stores/store";
   import type { Idl } from "@coral-xyz/anchor";
   import { createEventDispatcher } from "svelte";
+  import filter from "svelte-select/filter";
   const dispatch = createEventDispatcher();
 
   export let selectedTest: number = -1;
@@ -46,7 +47,8 @@
       ];
     }
     dispatch("closeModal");
-  };
+    dispatch("updateSelectedTest");
+};
 </script>
 
 <h1 class="modal--title">
@@ -75,7 +77,7 @@
 
   <div class="modal--form-title">Program</div>
   <Select
-    items={$workspaces[$selectedWorkspace]?.programs ?? []}
+    items={$workspaces[$selectedWorkspace]?.accounts.filter(account=>account.kind ==="program") ?? []}
     placeholder="Select a Program"
     on:change={(e) => {
       dispatch("updateSelectedProgram", e);
