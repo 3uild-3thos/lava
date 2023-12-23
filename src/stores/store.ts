@@ -4,9 +4,9 @@ import type { Idl } from "@coral-xyz/anchor"
 
 export interface Workspace {
   name: string;
-  idls?: Idl[];
+  idls: Idl[];
   accounts: Account[];
-  // tests?: Test[];
+  tests: Test[];
   version: string;
 }
 
@@ -53,11 +53,20 @@ export interface AssociatedTokenAccount extends Account {
   amount: number;
 }
 
+export interface Test {
+  name: string;
+  programId: string;
+  instruction: string;
+  accounts: any[];
+  args: any[];
+}
+
 export const workspaces = persisted("workspaces", [
   {
     name: "Empty Workspace",
     accounts: [],
     tests: [],
+    idls: [],
     version: "0.0.0",
   },
 ] as Workspace[]);

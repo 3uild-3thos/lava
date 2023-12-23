@@ -39,16 +39,19 @@
         return;
       }
 
-      $workspaces[$selectedWorkspace].accounts = {
+      $workspaces[$selectedWorkspace].accounts = [
         ...$workspaces[$selectedWorkspace].accounts,
-          ...idlToAdd,
-          name: programName,
-          metadata: {
-            ...idlToAdd.metadata,
-            address: programId,
-          },
+          {
           kind: "program",
-      };
+          name: programName,
+          }
+      ];
+
+      $workspaces[$selectedWorkspace].idls = [
+        ...$workspaces[$selectedWorkspace].idls,
+        {...idlToAdd, name: programName, metadata: {address: programId}},
+      ];
+
       dispatch("closeProgramModal");
     } else {
       const existingProgram = Object.values($workspaces[$selectedWorkspace].accounts).find(
