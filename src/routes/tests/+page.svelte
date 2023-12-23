@@ -65,13 +65,6 @@
         ?.instruction;
       inputValues.update((values) => {
         if (!values[selectedTest]) {
-          let program = $workspaces[$selectedWorkspace].programs.find(
-            (program) =>
-              program.name ===
-                $workspaces[$selectedWorkspace].tests[selectedTest].programId ||
-              program.metadata?.address ===
-                $workspaces[$selectedWorkspace].tests[selectedTest].programId
-          );
           values[selectedTest] = instruction.args.map((arg) => {
             return {
               value: "",
@@ -89,13 +82,6 @@
     if (selectedTest !== -1) {
       inputAccounts.update((accounts) => {
         if (!accounts[selectedTest]) {
-          let program = $workspaces[$selectedWorkspace].programs.find(
-            (program) =>
-              program.name ===
-                $workspaces[$selectedWorkspace].tests[selectedTest].programId ||
-              program.metadata?.address ===
-                $workspaces[$selectedWorkspace].tests[selectedTest].programId
-          );
           accounts[selectedTest] = instruction?.accounts.map((account) => {
             return {
               name: account.name,
