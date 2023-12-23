@@ -61,6 +61,7 @@
 
   $: {
     if (selectedTest !== -1) {
+      console.log(selectedTest)
       instruction = $workspaces[$selectedWorkspace].tests[selectedTest]
         ?.instruction;
       inputValues.update((values) => {
@@ -75,11 +76,6 @@
         }
         return values;
       });
-    }
-  }
-
-  $: {
-    if (selectedTest !== -1) {
       inputAccounts.update((accounts) => {
         if (!accounts[selectedTest]) {
           accounts[selectedTest] = instruction?.accounts.map((account) => {
@@ -171,15 +167,7 @@
               {index}
               on:updateSelectedTest={(event) => {
                 selectedTest = event.detail.index;
-                if (
-                  $workspaces[$selectedWorkspace].tests[
-                    selectedTest
-                  ]?.accounts.some((account) => !!account.value)
-                ) {
-                  $inputAccounts[selectedTest] =
-                    $workspaces[$selectedWorkspace].tests[selectedTest]
-                      ?.accounts ?? [];
-                }
+                
                 if (
                   $workspaces[$selectedWorkspace].tests[
                     selectedTest
@@ -260,6 +248,7 @@
                         items={$workspaces[$selectedWorkspace]?.accounts.map(({name})=>name)}
                         id={`${index}`}
                         placeholder="Select wallet"
+                        value={$workspaces[$selectedWorkspace]?.tests[selectedTest]?.accounts[index]?.name ?? "" }
                         on:change={(event) => {
                          $inputAccounts[index] = $workspaces[$selectedWorkspace]?.accounts.find(({name})=>name === event.detail.value);
                         }}
