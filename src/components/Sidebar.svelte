@@ -5,7 +5,6 @@
   let path: string;
 
   $: path = $page.url.pathname;
-  $: console.log(path);
   import NodeConnection from "./NodeConnection.svelte";
   import Popover from "./Popover.svelte";
   let routes = [

@@ -24,7 +24,7 @@
       }
       $workspaces = [
         ...$workspaces,
-        { name, programs: [], wallets: [], tokens: [], pdas: [],     version: "0.0.0" },
+        { name, accounts: [], tests: [], version: "0.0.0" },
       ];
       $selectedWorkspace = $workspaces.length - 1;
       createModal = false;
@@ -56,7 +56,6 @@
     input.click();
   };
 
-  $: console.log($workspaces);
 </script>
 
 <svelte:head>

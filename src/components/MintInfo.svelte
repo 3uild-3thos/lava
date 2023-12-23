@@ -1,4 +1,6 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
+  const dispatch = createEventDispatcher();
   import Popover from "./Popover.svelte";
   export let color: string = "";
   export let account: any = {};
@@ -6,6 +8,13 @@
   let freezeAuthorityHover: number = -1;
   export let hovered: number = -1;
   let decimalHover: number = -1;
+
+  function openAssignToken(index) {
+    dispatch("openAssign", {
+      index: index,
+    });
+  }
+
   function mintAuthorityHovered(index: number) {
     mintAuthorityHover = index;
   }
@@ -38,7 +47,7 @@
             : "No Mint Authority"}
         />
       {/if}
-      <img src="./owner.svg" class="token--owner-icon" alt="Fingerprint Icon" />
+      <img src="/owner.svg" class="token--owner-icon" alt="Fingerprint Icon" />
     </div>
 
     <div
@@ -55,7 +64,7 @@
             : "No Freeze Authority"}
         />
       {/if}
-      <img src="./freeze.svg" class="token--owner-icon" alt="Freeze Icon" />
+      <img src="/freeze.svg" class="token--owner-icon" alt="Freeze Icon" />
     </div>
 
     <div
@@ -67,6 +76,18 @@
         <Popover xOffset={50} yOffset={-50} title={"Number of Decimals"} />
       {/if}
       {account.decimals}
+    </div>
+    <div
+      style="margin-left:auto;">
+    Create ATA 
+    <button
+      class="tokens-button"
+      type="button"
+      on:click={(event) => {
+        openAssignToken({index: account.originalIndex});
+        event.stopPropagation();
+      }}
+      >+ </button>
     </div>
   </div>
 </div>

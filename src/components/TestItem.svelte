@@ -8,7 +8,6 @@
   export let type: string = "test";
   export let version: string = "0.0.0";
   export let isSelected = false;
-  $: console.log(index);
 </script>
 
 <div class="tests--list--item">

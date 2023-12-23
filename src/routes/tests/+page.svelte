@@ -51,20 +51,6 @@
   });
 
   let selectedTest: number = -1;
-  let fakeTests = [
-    {
-      name: "Test 1",
-      program: programs[0],
-    },
-    {
-      name: "Test 2",
-      program: programs[0],
-    },
-    {
-      name: "Test 3",
-      program: programs[0],
-    },
-  ];
   let value = {};
 
   let inputValues = writable<[]>([]);
@@ -123,7 +109,6 @@
     }
   }
 
-  $: console.log($inputAccounts, $inputValues);
 
   function beforeUnload() {
     if (selectedTest !== -1) {
@@ -185,7 +170,7 @@
     <DeleteTest on:cancelDelete={() => (isDeleteTestModalOpen = false)} />
   </Modal>
 
-  <div class="tests">
+  <div class="tests" in:fade|global>
     <div class="tests--sidebar">
       <div class="tests--sidebar-header">
         <div class="tests--sidebar-title">Tests</div>

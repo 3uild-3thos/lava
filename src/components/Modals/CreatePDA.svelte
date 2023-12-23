@@ -4,12 +4,19 @@
   export let editingPda = -1;
   export let pdaName = "";
   export let pdaAddress = "";
+  export let selectedProgram = "";
+  export let seeds = [];
+
+  
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
 
+  // $: if(editingPda !== -1) {
+  //   selectedProgram = $workspaces[$selectedWorkspace]?.accounts[editingPda].name
+  // } else {
+  //   selectedProgram = "";
+  // };
   let selectedSeed = null;
-  export let selectedProgram = "";
-  export let seeds = [];
   const addSeed = (e) => {
     seeds = [...seeds, e.detail.value];
     selectedSeed = null;
@@ -32,9 +39,6 @@
     "u128",
   ];
 
-  $: if (selectedProgram === "") {
-    pdaAddress = "";
-  }
   let invalid_fields = [];
 
   function isStringArrayInRange(str) {
@@ -94,8 +98,8 @@
   }
 
   function handleSubmit() {
-    const pdaExists = $workspaces[$selectedWorkspace].pdas?.some(
-      (pda) => pda.name === pdaName
+    const pdaExists = $workspaces[$selectedWorkspace].accounts?.some(
+      (account) => account.name === pdaName
     );
     if (pdaExists) {
       pdaAlreadyExists = true;
@@ -108,38 +112,48 @@
         type: seed,
       };
     });
-    pdaSeeds = [...pdaSeeds, { value: selectedProgram, type: "Program" }];
-    if ($workspaces[$selectedWorkspace].pdas === undefined) {
-      $workspaces[$selectedWorkspace].pdas = [];
+    pdaSeeds = [...pdaSeeds, { value: selectedProgram.value, type: "Program" }];
+    if ($workspaces[$selectedWorkspace].accounts === undefined) {
+      $workspaces[$selectedWorkspace].accounts = [];
     }
-    $workspaces[$selectedWorkspace].pdas = [
-      ...$workspaces[$selectedWorkspace].pdas,
+    $workspaces[$selectedWorkspace].accounts = [
+      ...$workspaces[$selectedWorkspace].accounts,
       {
         name: pdaName,
         seeds: pdaSeeds,
+        kind: "pda",
       },
     ];
     dispatch("closePDAModal");
   }
 
   function editPda() {
-    if (editingPda) {
-      const pdaExists = $workspaces[$selectedWorkspace].pdas?.some(
-        (pda, index) => index !== editingPda && pda.name === pdaName
-      );
-      if (pdaExists) {
-        pdaAlreadyExists = true;
-
-        return;
-      }
-
-      $workspaces[$selectedWorkspace].pdas[editingPda] = {
-        name: pdaName,
-        seeds: pdaSeeds,
-      };
-      dispatch("closePDAModal");
+  if (editingPda !== -1) {
+    const pdaExists = $workspaces[$selectedWorkspace].accounts?.some(
+      (account, index) => index !== editingPda && account.name === pdaName
+    );
+    if (pdaExists) {
+      pdaAlreadyExists = true;
+      return;
     }
+
+    const ataAccounts = $workspaces[$selectedWorkspace].accounts.filter(
+        (account) => account.kind === "ata" && account.authority === $workspaces[$selectedWorkspace].accounts[editingPda].name
+      );
+      ataAccounts.forEach((account) => {
+        account.authority = pdaName;
+        account.name = account.authority + account.mint
+    });
+
+    $workspaces[$selectedWorkspace].accounts[editingPda] = {
+      name: pdaName,
+      seeds: pdaSeeds,
+      kind: "pda",
+    };
+    dispatch("closePDAModal");
   }
+}
+
 
   function typeFromSeed(seed) {
     switch (seed) {
@@ -177,7 +191,8 @@
     seeds = [];
   }
 
-  $: validSeeds = seeds.every((seed, index) => formData[index]?.length > 1) && invalid_fields.length == 0;
+  $: validSeeds = editingPda === -1 ? seeds.every((seed, index) => formData[index]?.length > 1) && invalid_fields.length == 0 : true;
+
 </script>
 
 <h1 class="modal--title">{editingPda === -1 ? "Create PDA" : "Edit PDA"}</h1>
@@ -214,7 +229,7 @@
       {#if seed === "Pubkey"}
         <Select
           class="modal--form-select block"
-          items={$workspaces[$selectedWorkspace]?.wallets?.map((w) =>
+          items={$workspaces[$selectedWorkspace]?.accounts?.filter((a) => a.kind === "wallet").map((w) =>
             w?.address.length > 0 ? w?.address : w.name
           )}
           id={`${index}`}
@@ -231,7 +246,7 @@
           name={`${index}`}
           value={formData[index]}
         />
-      {:else if seed === "Bytes"}
+      {:else if seed === "u8"}
         <input
           class={"input--primary" + (invalid_fields.includes(index) ? " input--invalid" : "")}
           type={typeFromSeed(seed)}
@@ -274,14 +289,14 @@
   <Select
     class="modal--form-select"
     bind:value={selectedProgram}
-    items={$workspaces[$selectedWorkspace]?.programs?.map(
-      (p) => p?.metadata?.address ?? p.name
+    items={$workspaces[$selectedWorkspace]?.accounts?.filter((a) => a.kind === 'program').map(
+      (p) => p.name
     )}
     placeholder="Select program"
   />
 
   {#if pdaAlreadyExists}
-    <div class="already--exists">A PDA with this name already exists</div>
+    <div class="already--exists">An account with this name already exists</div>
   {/if}
 
   <div class="btns--modal">

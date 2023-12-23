@@ -4,13 +4,16 @@
   import Card from "./Card/index.svelte";
   import AtaList from "./ATAList.svelte";
   import MintInfo from "./MintInfo.svelte";
-  import AssignToken from "./Modals/AssignToken.svelte";
+  // import AssignToken from "./Modals/archive/AssignToken.svelte";
   import PdaList from "./PDAList.svelte";
+  import CreateAta from "./Modals/CreateATA.svelte";
+  import AtaRelationship from "./ATARelationship.svelte";
 
   export let walletsLength: number;
   export let accounts: any = [];
-  export let walletColors: any = [];
-  export let tokenColors: any = [];
+  // export let walletColors: any = [];
+  // export let tokenColors: any = [];
+  export let colors: any = [];
   export let searchTerm = "";
   export let sortType = "name";
   let isAssignTokenModalOpen: boolean = false;
@@ -23,7 +26,12 @@
   let deleteModal = false;
   let deletePdaModal = false;
   let deletingToken = -1;
+  let deletingATA = -1;
   let deleteTokenModal = false;
+  let ataMint = -1;
+  let isCreateATAModalOpen = false;
+  let deleteATAModal = false;
+
 
   function deleteWallet(index: number) {
     dispatch("deleteWallet", { index });
@@ -56,6 +64,16 @@
     deleteTokenModal = false;
   }
 
+  function onDeleteATA(index: number) {
+    deletingATA = index;
+    deleteATAModal = true;
+  }
+
+  function deleteATA(index: number) {
+    dispatch("deleteATA", { index });
+    deleteATAModal = false;
+  }
+
   function deleteProgram(index: number) {
     dispatch("deleteProgram", { index });
     deleteProgramModal = false;
@@ -85,63 +103,22 @@
     deleteProgramModal = true;
   }
 
-  function openAssignTokenModal(index: any) {
-    editingWallet = index;
-    isAssignTokenModalOpen = true;
+  function openCreateATAModal(index: any) {
+    ataMint = index;
+    isCreateATAModalOpen = true;
   }
 
-  function getColorByAccountType(accountType: string, originalIndex: number) {
-    switch (accountType) {
-      case "token":
-        return tokenColors[originalIndex];
-      case "wallet":
-        return "#8A54FE";
-      case "program":
-        return "#FE6054";
-      default:
-        return "#5498FE";
-    }
-  }
-
-  $: filteredWallets = accounts.wallets
-    .map((wallet, index: number) => ({ ...wallet, originalIndex: index }))
-    .filter((wallet) =>
-      wallet.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .map((wallet, index: number) => ({ ...wallet, itemType: "wallet", index }));
-
-  $: filteredPrograms = accounts.programs
-    .map((program, index: number) => ({ ...program, originalIndex: index }))
-    .filter((program) =>
-      program.name?.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .map((program, index: number) => ({
-      ...program,
-      itemType: "program",
-      index,
-    }));
-
-  $: filteredPDAs = accounts.pdas
-    .map((pda, index: number) => ({ ...pda, originalIndex: index }))
-    .filter((pda) => pda.name?.toLowerCase().includes(searchTerm.toLowerCase()))
-    .map((pda, index: number) => ({
-      ...pda,
-      itemType: "pda",
-      index,
-    }));
-
-  $: filteredTokens = accounts.tokens
-    .map((token, index: number) => ({ ...token, originalIndex: index }))
-    .filter((token) =>
-      token.name.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .map((token, index: number) => ({ ...token, itemType: "token", index }));
+  $:filteredAccounts = accounts.map((account, index) => {
+    return {
+      ...account,
+      originalIndex: index,
+    };
+  }).filter(account => {
+    return searchTerm ? account.name.includes(searchTerm) : true;
+  });
 
   $: sortedAccounts = [
-    ...filteredWallets,
-    ...filteredPrograms,
-    ...filteredPDAs,
-    ...filteredTokens,
+    ...filteredAccounts
   ];
 
   $: if (sortType === "name") {
@@ -153,17 +130,26 @@
     });
   } else if (sortType === "type") {
     sortedAccounts = [...sortedAccounts].sort((a, b) => {
-      const typeOrder = {
-        wallet: 1,
-        program: 2,
-        pda: 3,
-        token: 4,
-      };
-      return typeOrder[a.itemType] - typeOrder[b.itemType];
+      if (a.kind && b.kind) {
+        const order = {
+          wallet: 1,
+          program: 2,
+          pda: 3,
+          mint: 4,
+          ata: 5,
+        };
+        return order[a.kind] - order[b.kind];
+      }
+      return 0;
+    });
+  } else if (sortType === "created") {
+    sortedAccounts = [...sortedAccounts].sort((a, b) => {
+      return a.originalIndex - b.originalIndex;
     });
   }
 
   $: hoveredCard = -1;
+  $:console.log(accounts)
 </script>
 
 <!-- Confirm Delete Wallet Modal -->
@@ -193,15 +179,44 @@
 
 <!-- Assign ATAs -->
 <Modal
-  bind:isOpen={isAssignTokenModalOpen}
-  on:close={() => (isAssignTokenModalOpen = false)}
+  bind:isOpen={isCreateATAModalOpen}
+  on:close={() => (isCreateATAModalOpen = false)}
 >
-  <AssignToken
-    {tokenColors}
-    {editingWallet}
-    on:closeModal={() => (isAssignTokenModalOpen = false)}
+  <CreateAta
+  on:closeAtaModal={() => (isCreateATAModalOpen = false)}
+  assigningMint={ataMint}
+  tokenColors={colors}
   />
 </Modal>
+
+<!-- Delete ATA -->
+
+<Modal
+  bind:isOpen={deleteATAModal}
+  on:close={() => (deleteATAModal = false)}
+>
+  <h1 class="modal--title">Confirm Delete</h1>
+  <div class="modal--form">
+    <div class="modal--form--warning">
+      <img src="/alert.svg" alt="Alert Icon" />
+      Please confirm you want to delete the selected ATA.
+    </div>
+    <div class="btns--modal" style="margin-top:20px">
+      <button
+        class="btn btn--primary"
+        on:click={() => {
+          deleteATAModal = false;
+        }}>Cancel</button
+      >
+      <button
+        class="btn btn--lava"
+        on:click={() => {
+          deleteATA(deletingATA);
+        }}>Confirm</button
+      >
+    </div>
+  </div></Modal
+>
 
 <!-- Delete Token Modal -->
 <Modal
@@ -291,76 +306,83 @@
       on:mouseleave={() => (hoveredCard = -1)}
       on:showTokens={() =>
         dispatch("openWalletModal", { index: account.originalIndex })}
-      color={getColorByAccountType(account.itemType, account.originalIndex)}
+      color={colors[account.originalIndex]}
       title={account.name}
       {hoveredCard}
-      type={account.itemType}
+      kind={account.kind}
       ticker={account.symbol ? account.symbol : ""}
       cardPosition={index}
       balance={account.sol_balance}
     >
       <div slot="options">
+        {#if account.kind !== "ata"}
         <div
           class="edit-icon"
           on:click={(event) => {
-            if (account.type === "wallet") {
+            if (account.kind === "wallet") {
               editWallet(account.originalIndex);
               event.stopPropagation();
-            } else if (account.type === "token") {
+            } else if (account.kind === "mint") {
               onEditToken(account.originalIndex);
             } else if (
-              account.type === "pda" &&
-              account.itemType !== "program"
+              account.kind === "pda"
             ) {
               editPda(account.originalIndex);
-            } else if (account.itemType === "program") {
+            } else if (account.kind === "program") {
               onEditProgram(account.originalIndex);
             }
           }}
         />
+        {/if}
         <div
           class="trash-icon"
           on:click={(event) => {
-            if (account.type === "wallet") {
+            if (account.kind === "wallet") {
               onDeleteWallet(account.originalIndex);
               event.stopPropagation();
-            } else if (account.type === "token") {
+            } else if (account.kind === "mint") {
               onDeleteToken(account.originalIndex);
             } else if (
-              account.type === "pda" &&
-              account.itemType !== "program"
+              account.kind === "pda"
             ) {
               onDeletePda(account.originalIndex);
-            } else if (account.itemType === "program") {
+            } else if (account.kind === "program") {
               onDeleteProgram(account.originalIndex);
+            } else if (account.kind === "ata") {
+              onDeleteATA(account.originalIndex);
             }
           }}
         />
       </div>
       <div slot="footer">
-        {#if account.type === "wallet"}
+        {#if account.kind === "wallet" || account.kind === "program" || account.kind === "pda"}
           <AtaList
-            {account}
-            walletTokenColors={walletColors}
+            accounts={accounts}
+            accountIndex={account.originalIndex}
+            walletTokenColors={colors}
             {hoveredCard}
-            on:openAssign={(event) => {
-              openAssignTokenModal(event.detail.index);
-            }}
           />
-        {:else if account.itemType === "program"}
+        {:else if account.kind === "program"}
           <PdaList
             {hoveredCard}
             {account}
-            on:openCreatePda={(event) => onCreatePda(event.detail.data)}
+            on:openCreatePda={(event) => onCreatePda(event.detail.index)}
           />
-        {:else if account.type === "token"}
+        {:else if account.kind === "mint"}
           <MintInfo
+            on:openAssign={(event) => {
+              openCreateATAModal(event.detail.index);
+            }}
             hovered={hoveredCard}
             {index}
             {account}
-            color={tokenColors[account.originalIndex]}
+            color={colors[account.originalIndex]}
           />
+        {:else if account.kind === "ata"}
+            <AtaRelationship {colors} {accounts}
+            ata={account}/>
         {/if}
+
       </div>
     </Card>
   {/key}

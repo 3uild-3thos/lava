@@ -6,8 +6,10 @@
   let searchTerm = "";
   let sortType = "type";
   let sortTypes = [
+    { value: "created", label: "Created"},
     { value: "name", label: "Name" },
     { value: "type", label: "Type" },
+
   ];
 
   $: sortType =

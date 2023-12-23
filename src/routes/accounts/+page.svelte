@@ -5,390 +5,387 @@
   import Modal from "../../components/Modal.svelte";
   import CreateWallet from "../../components/Modals/CreateWallet.svelte";
   import OpenWallet from "../../components/Modals/OpenWallet.svelte";
-  import AssignToken from "../../components/Modals/AssignToken.svelte";
+  // import AssignToken from "../../components/Modals/archive/AssignToken.svelte";
   import NoAccounts from "../../components/EmptyStates/NoAccounts.svelte";
   import AccountListCard from "../../components/AccountListCard.svelte";
-  import CreateAccount from "../../components/Modals/CreateAccount.svelte";
-  import CreateToken from "../../components/Modals/CreateToken.svelte";
-  import AccountFilter from "../../components/AccountFilter.svelte";
-  import CreatePDA from "../../components/Modals/CreatePDA.svelte";
-  import CreateProgram from "../../components/Modals/CreateProgram.svelte";
-  import EditProgram from "../../components/Modals/EditProgram.svelte";
-  import AtaList from "../../components/ATAList.svelte";
+    import CreateAccount from "../../components/Modals/CreateAccount.svelte";
+    import CreateToken from "../../components/Modals/CreateToken.svelte";
+    import AccountFilter from "../../components/AccountFilter.svelte";
+    import CreatePDA from "../../components/Modals/CreatePDA.svelte";
+    import CreateProgram from "../../components/Modals/CreateProgram.svelte";
+    import EditProgram from "../../components/Modals/EditProgram.svelte";
+    import AtaList from "../../components/ATAList.svelte";
 
-  let tokenColors = [
-    "#FEBC2E",
-    "#19FB9B",
-    "#DC30C0",
-    "#F0FE54",
-    "#FEBC2E",
-    "#19FB9B",
-    "#DC30C0",
-    "#F0FE54",
-  ];
-  let isCreatePDAModalOpen = false;
-  let editingProgram = -1;
-  let programAddress = "";
-  let programName = "";
-  let walletName = "";
-  let walletAddress = "";
-  let pdaAddress = "";
-  let sol_balance = 10;
-  let selectedPda = -1;
-  let selectedPdaName = "";
-  let selectedPdaSeeds = [];
-  let editingWallet = -1;
-  let ready = false;
-  let isCreateAccountModalOpen = false;
-  let isCreateWalletModalOpen = false;
-  let isCreateTokenModalOpen = false;
-  let isCreateProgramModalOpen = false;
-  let isViewModalOpen = false;
-  let isEditProgramModalOpen = false;
-  let hideWallets = false;
-  let openedWallet = $workspaces[$selectedWorkspace]?.wallets[0];
-  let openedWalletIndex = 0;
-  let showTokens;
-  let token;
-  let programAlreadyExists = false;
+    let tokenColors = [
+      "#FEBC2E",
+      "#54FE98",
+      "#DC30C0",
+      "#F0FE54",
+      "#FEBC2E",
+      "#54FE98",
+      "#DC30C0",
+      "#F0FE54",
+    ];
+    let isCreatePDAModalOpen = false;
+    let editingProgram = -1;
+    let programAddress = "";
+    let programName = "";
+    let walletName = "";
+    let walletAddress = "";
+    let pdaAddress = "";
+    let sol_balance = 10;
+    let selectedPda = -1;
+    let selectedPdaName = "";
+    let selectedPdaSeeds = [];
+    let editingWallet = -1;
+    let ready = false;
+    let isCreateAccountModalOpen = false;
+    let isCreateWalletModalOpen = false;
+    let isCreateTokenModalOpen = false;
+    let isCreateProgramModalOpen = false;
+    let isViewModalOpen = false;
+    let isEditProgramModalOpen = false;
+    let hideWallets = false;
+    let openedWallet = "";
+    let openedWalletIndex = 0;
+    let showTokens;
+    let token;
+    let programAlreadyExists = false;
+    let programCreate = -1;
 
-  function openWalletModal(index) {
-    isViewModalOpen = true;
-    openedWallet = $workspaces[$selectedWorkspace].wallets[index];
-    openedWalletIndex = index;
-  }
-
-  onMount(() => {
-    ready = true;
-  });
-
-  const deleteToken = (index) => {
-    const tokenToDelete = $workspaces[$selectedWorkspace].tokens[index];
-    $workspaces[$selectedWorkspace].tokens = $workspaces[
-      $selectedWorkspace
-    ].tokens.filter((token, i) => i !== index);
-
-    $workspaces[$selectedWorkspace].wallets = $workspaces[
-      $selectedWorkspace
-    ].wallets.map((wallet) => {
-      wallet.tokens = wallet.tokens.filter(
-        (token) => token.symbol !== tokenToDelete.symbol
-      );
-      return wallet;
-    });
-  };
-
-  const deleteProgram = (index) => {
-    $workspaces[$selectedWorkspace].programs = $workspaces[
-      $selectedWorkspace
-    ].programs.filter((program, i) => i !== index);
-  };
-
-  const deletePda = (index) => {
-    $workspaces[$selectedWorkspace].pdas = $workspaces[
-      $selectedWorkspace
-    ].pdas.filter((pda, i) => i !== index);
-  };
-
-  const deleteWallet = (index) => {
-    $workspaces[$selectedWorkspace].wallets = $workspaces[
-      $selectedWorkspace
-    ].wallets.filter((wallet, i) => i !== index);
-  };
-
-  const editWallet = (index) => {
-    editingWallet = index;
-    walletName = $workspaces[$selectedWorkspace].wallets[index].name;
-    walletAddress = $workspaces[$selectedWorkspace].wallets[index].address;
-    sol_balance = $workspaces[$selectedWorkspace].wallets[index].sol_balance;
-    isCreateWalletModalOpen = true;
-  };
-
-  function updateProgram(event) {
-    const programNameExists = $workspaces[$selectedWorkspace].programs.some(
-      (program) => program.name === event.name
-    );
-    if (programNameExists) {
-      programAlreadyExists = true;
-      return;
+    function openWalletModal(index) {
+      isViewModalOpen = true;
+      openedWallet = $workspaces[$selectedWorkspace].accounts[index];
+      openedWalletIndex = index;
     }
 
-    $workspaces[$selectedWorkspace].programs[event.index] = {
-      ...$workspaces[$selectedWorkspace].programs[event.index],
-      name: event.name,
-      metadata: {
-        ...$workspaces[$selectedWorkspace].programs[event.index].metadata,
-        address: event.address,
-      },
+    onMount(() => {
+      ready = true;
+    });
+
+    const deleteToken = (index) => {
+    $workspaces[$selectedWorkspace].accounts = $workspaces[
+      $selectedWorkspace
+    ].accounts.filter((token, i) => i !== index);
     };
-    isEditProgramModalOpen = false;
-  }
+    
+    const editWallet = (index) => {
+    editingWallet = index;
+    walletName = $workspaces[$selectedWorkspace].accounts[index].name;
+    walletAddress = $workspaces[$selectedWorkspace].accounts[index].address;
+    sol_balance = $workspaces[$selectedWorkspace].accounts[index].sol_balance;
+    isCreateWalletModalOpen = true;
+    };
 
-  function getTokenColor(stringParam) {
-    let sum = 0;
-    for (let i = 0; i < stringParam.length; i++) {
-      sum += stringParam.charCodeAt(i);
+    const deleteProgram = (index) => {
+      $workspaces[$selectedWorkspace].accounts = $workspaces[
+      $selectedWorkspace
+    ].accounts.filter((token, i) => i !== index);
+    };
+
+    const deletePda = (index) => {
+      $workspaces[$selectedWorkspace].accounts = $workspaces[
+      $selectedWorkspace
+    ].accounts.filter((token, i) => i !== index);
+    };
+
+    const deleteWallet = (index) => {
+      $workspaces[$selectedWorkspace].accounts = $workspaces[
+      $selectedWorkspace
+    ].accounts.filter((token, i) => i !== index);
+    };
+
+    function deleteATA(index) {
+      $workspaces[$selectedWorkspace].accounts = $workspaces[
+      $selectedWorkspace
+    ].accounts.filter((token, i) => i !== index);
     }
-    let result = sum % 7;
-    let finalColor = tokenColors[result];
-    return finalColor;
-  }
 
-  function handleSortTypeChange(event) {
-    sortType = event.detail;
-    if (typeof localStorage !== "undefined") {
-      localStorage.setItem("sortType", sortType);
+    const updateProgram = (event) => {
+      
+      const programNameExists = $workspaces[$selectedWorkspace].accounts.some(
+        (account) => account.name === event.name
+      );
+      if (programNameExists) {
+        programAlreadyExists = true;
+        return;
+      }
+
+      const ataAccounts = $workspaces[$selectedWorkspace].accounts.filter(
+        (account) => account.kind === "ata" && account.authority === $workspaces[$selectedWorkspace].accounts[event.index].name
+      );
+      ataAccounts.forEach((account) => {
+        account.authority = event.name;
+        account.name = account.authority + account.mint
+      });
+
+
+      $workspaces[$selectedWorkspace].accounts = $workspaces[$selectedWorkspace].accounts.map((account, index) => {
+        if (index === event.index) {
+          account.name = event.name;
+          account.metadata.address = event.address;
+        }
+        return account;
+      });
+      isEditProgramModalOpen = false;
+    };
+
+    function handleSortTypeChange(event) {
+      sortType = event.detail;
+      if (typeof localStorage !== "undefined") {
+        localStorage.setItem("sortType", sortType);
+      }
     }
-  }
 
-  function editToken(index) {
-    token = $workspaces[$selectedWorkspace].tokens[index];
-    isCreateTokenModalOpen = true;
-  }
+    function editToken(index) {
+      token = $workspaces[$selectedWorkspace].accounts[index];
+      isCreateTokenModalOpen = true;
+    }
 
-  function editPdaModal(index) {
-    selectedPda = index;
-    selectedPdaName = $workspaces[$selectedWorkspace].pdas[index].name;
-    isCreatePDAModalOpen = true;
-    selectedPdaSeeds = $workspaces[$selectedWorkspace].pdas[index].seeds;
-  }
-  function editProgram(index) {
-    editingProgram = index;
-    isEditProgramModalOpen = true;
-    programAddress =
-      $workspaces[$selectedWorkspace].programs[index].metadata.address;
-    programName = $workspaces[$selectedWorkspace].programs[index].name;
-  }
+    function editPdaModal(index) {
+      selectedPda = index;
+      selectedPdaName = $workspaces[$selectedWorkspace].accounts[index].name;
+      isCreatePDAModalOpen = true;
+      selectedPdaSeeds = $workspaces[$selectedWorkspace].accounts[index].seeds;
+    }
+    
+    function editProgram(index) {
+      editingProgram = index;
+      isEditProgramModalOpen = true;
+      programAddress =
+        $workspaces[$selectedWorkspace].accounts[index].metadata.address;
+      programName = $workspaces[$selectedWorkspace].accounts[index].name;
+    }
 
-  $: searchTerm = "";
-  $: sortType =
-    typeof localStorage !== "undefined"
-      ? localStorage.getItem("sortType") || "name"
-      : "name";
+    $: searchTerm = "";
+    $: sortType =
+      typeof localStorage !== "undefined"
+        ? localStorage.getItem("sortType") || "name"
+        : "name";
 
-  $: showTokens =
-    typeof localStorage !== "undefined"
-      ? localStorage.getItem("showTokens") === "true"
-      : false;
+    $: showTokens =
+      typeof localStorage !== "undefined"
+        ? localStorage.getItem("showTokens") === "true"
+        : false;
 
-  $: colorsTokens = $workspaces[$selectedWorkspace]?.tokens.map((token) => {
-    return getTokenColor(token.symbol);
-  });
+    function getTokenColor(stringParam) {
+      let sum = 0;
+      for (let i = 0; i < stringParam.length; i++) {
+        sum += stringParam.charCodeAt(i);
+      }
+      let result = sum % 7;
+      let finalColor = tokenColors[result];
+      return finalColor;
+    }
 
-  $: colorsWallets = $workspaces[$selectedWorkspace]?.wallets.map((wallet) => {
-    return wallet.tokens.map((token) => {
-      return getTokenColor(token.symbol);
-    });
-  });
-</script>
+    function getColorByAccountType(accountType, originalIndex) {
+    switch (accountType) {
+      case "mint":
+        return getTokenColor($workspaces[$selectedWorkspace]?.accounts[originalIndex]?.symbol);
+      case "wallet":
+        return "#8A54FE";
+      case "program":
+        return "#FE6054";
+      case "ata":
+        return "#A0A0AB";
+      default:
+        return "#5498FE";
+    }
+    }
 
-<svelte:head>
-  <title>
-    {`⬡ Lava - Accounts`}
-  </title>
-</svelte:head>
+    $: colors = $workspaces[$selectedWorkspace]?.accounts
+      ?.map((account, index) => {
+        return getColorByAccountType(account.kind, index);
+      });
+  </script>
 
-{#if ready}
-  <!-- Create Account Modal -->
-  <Modal
-    width={300}
-    bind:isOpen={isCreateAccountModalOpen}
-    on:close={() => (isCreateAccountModalOpen = false)}
-  >
-    <CreateAccount
-      on:createWallet={() => (
-        (isCreateAccountModalOpen = false),
-        (isCreateWalletModalOpen = true),
-        (isCreatePDAModalOpen = false),
-        (isCreateProgramModalOpen = false)
-      )}
-      on:createToken={() => (
-        (isCreateAccountModalOpen = false),
-        (isCreateTokenModalOpen = true),
-        (isCreatePDAModalOpen = false),
-        (isCreateProgramModalOpen = false)
-      )}
-      on:createPDA={() => (
-        (isCreateAccountModalOpen = false),
-        (isCreateTokenModalOpen = false),
-        (isCreatePDAModalOpen = true),
-        (isCreateProgramModalOpen = false)
-      )}
-      on:createProgram={() => (
-        (isCreateAccountModalOpen = false),
-        (isCreateTokenModalOpen = false),
-        (isCreatePDAModalOpen = false),
-        (isCreateProgramModalOpen = true)
-      )}
-    />
-  </Modal>
+  <svelte:head>
+    <title>
+      {`⬡ Lava - Accounts`}
+    </title>
+  </svelte:head>
 
-  <!-- Create Program Modal -->
-  <Modal
-    width={350}
-    bind:isOpen={isCreateProgramModalOpen}
-    on:close={() => (isCreateProgramModalOpen = false)}
-  >
-    <CreateProgram
-      on:closeProgramModal={() => (isCreateProgramModalOpen = false)}
-    />
-  </Modal>
+  {#if ready}
+    <!-- Create Account Modal -->
+    <Modal
+      width={300}
+      bind:isOpen={isCreateAccountModalOpen}
+      on:close={() => (isCreateAccountModalOpen = false)}
+    >
+      <CreateAccount
+        on:createWallet={() => (
+          (isCreateAccountModalOpen = false),
+          (isCreateWalletModalOpen = true),
+          (isCreatePDAModalOpen = false),
+          (isCreateProgramModalOpen = false)
+        )}
+        on:createToken={() => (
+          (isCreateAccountModalOpen = false),
+          (isCreateTokenModalOpen = true),
+          (isCreatePDAModalOpen = false),
+          (isCreateProgramModalOpen = false)
+        )}
+        on:createPDA={() => (
+          (isCreateAccountModalOpen = false),
+          (isCreateTokenModalOpen = false),
+          (isCreatePDAModalOpen = true),
+          (isCreateProgramModalOpen = false)
+        )}
+        on:createProgram={() => (
+          (isCreateAccountModalOpen = false),
+          (isCreateTokenModalOpen = false),
+          (isCreatePDAModalOpen = false),
+          (isCreateProgramModalOpen = true)
+        )}
+      />
+    </Modal>
 
-  <!-- Create Token Modal -->
-  <Modal
-    width={400}
-    bind:isOpen={isCreateTokenModalOpen}
-    on:close={() => (isCreateTokenModalOpen = false)}
-  >
-    <CreateToken
-      {token}
-      wallets={$workspaces[$selectedWorkspace]?.wallets ?? []}
-      on:closeTokenModal={() => (isCreateTokenModalOpen = false)}
-    />
-  </Modal>
+    <!-- Create Program Modal -->
+    <Modal
+      width={350}
+      bind:isOpen={isCreateProgramModalOpen}
+      on:close={() => (isCreateProgramModalOpen = false)}
+    >
+      <CreateProgram
+        on:closeProgramModal={() => (isCreateProgramModalOpen = false)}
+      />
+    </Modal>
 
-  <!-- Create Wallet Modal -->
-  <Modal
-    bind:isOpen={isCreateWalletModalOpen}
-    on:close={() => (isCreateWalletModalOpen = false)}
-  >
-    <CreateWallet
-      {editingWallet}
-      {walletName}
-      {sol_balance}
-      {walletAddress}
-      on:closeModal={() => (isCreateWalletModalOpen = false)}
-    />
-  </Modal>
+    <!-- Create Token Modal -->
+    <Modal
+      width={400}
+      bind:isOpen={isCreateTokenModalOpen}
+      on:close={() => (isCreateTokenModalOpen = false)}
+    >
+      <CreateToken
+        {token}
+        wallets={$workspaces[$selectedWorkspace]?.accounts.filter(account => account.kind === "wallet")}
+        on:closeTokenModal={() => (isCreateTokenModalOpen = false)}
+      />
+    </Modal>
 
-  <!-- Open Wallet Modal  -->
-  <Modal
-    bind:isOpen={isViewModalOpen}
-    on:close={() => (isViewModalOpen = false)}
-    width={450}
-    modalVariant={true}
-    color={"#A0A0AB"}
-  >
-    <OpenWallet
+    <!-- Create Wallet Modal -->
+    <Modal
+      bind:isOpen={isCreateWalletModalOpen}
+      on:close={() => (isCreateWalletModalOpen = false)}
+    >
+      <CreateWallet
+        {editingWallet}
+        {walletName}
+        {sol_balance}
+        {walletAddress}
+        on:closeModal={() => (isCreateWalletModalOpen = false)}
+      />
+    </Modal>
+
+    <!-- Open Wallet Modal  -->
+    <Modal
       bind:isOpen={isViewModalOpen}
-      {openedWallet}
-      colors={colorsWallets}
-      {openedWalletIndex}
-    />
-  </Modal>
+      on:close={() => (isViewModalOpen = false)}
+      width={450}
+      modalVariant={true}
+      color={"#A0A0AB"}
+    >
+      <OpenWallet
+        bind:isOpen={isViewModalOpen}
+        {openedWallet}
+        colors={colors}
+        {openedWalletIndex}
+      />
+    </Modal>
 
-  <!-- Edit Program Modal -->
-  <Modal
-    bind:isOpen={isEditProgramModalOpen}
-    on:close={() => (isEditProgramModalOpen = false)}
-    width={300}
-    modalVariant={true}
-    color={"#A0A0AB"}
-  >
-    <EditProgram
-      on:updateProgram={(event) => updateProgram(event.detail)}
-      programExists={programAlreadyExists}
-      {editingProgram}
-      {programName}
-      {programAddress}
-    />
-  </Modal>
+    <!-- Edit Program Modal -->
+    <Modal
+      bind:isOpen={isEditProgramModalOpen}
+      on:close={() => (isEditProgramModalOpen = false)}
+      width={300}
+      modalVariant={true}
+      color={"#A0A0AB"}
+    >
+      <EditProgram
+        on:updateProgram={(event) => updateProgram(event.detail)}
+        programExists={programAlreadyExists}
+        {editingProgram}
+        {programName}
+        {programAddress}
+      />
+    </Modal>
 
-  <!-- Create PDA Modal -->
-  <Modal
-    bind:isOpen={isCreatePDAModalOpen}
-    on:close={() => (isCreatePDAModalOpen = false)}
-  >
-    <CreatePDA
-      on:closePDAModal={() => (
-        (isCreatePDAModalOpen = false), (pdaAddress = "")
-      )}
-      editingPda={selectedPda}
-      pdaName={selectedPdaName}
-      selectedProgram={$workspaces[$selectedWorkspace]?.pdas[selectedPda]?.seeds.find(
-        (seed) => {
-          return seed.type === "Program"}
-      )?.value.value}
-      seeds={selectedPdaSeeds}
-    />
-  </Modal>
+    <!-- Create PDA Modal -->
+    <Modal
+      bind:isOpen={isCreatePDAModalOpen}
+      on:close={() => (isCreatePDAModalOpen = false)}
+    >
+      <CreatePDA
+        on:closePDAModal={() => (
+          (isCreatePDAModalOpen = false), (pdaAddress = "")
+        )}
+        editingPda={selectedPda}
+        pdaName={selectedPdaName}
+        selectedProgram={programCreate === -1 ? $workspaces[$selectedWorkspace].accounts[selectedPda]?.seeds?.find(
+          (seed) => {
+            return seed.type === "Program"}
+        )?.value.value : $workspaces[$selectedWorkspace].accounts[programCreate]?.name}
+        seeds={selectedPdaSeeds}
+      />
+    </Modal>
 
-  <div class="common--wrapper">
-    <div class="tokens">
-      <div class="common--header">
-        <h1
-          class="common--title"
-          style="margin-bottom:0"
-          in:fly={{ delay: 100, duration: 100, y: -10 }}
-        >
-          Accounts
-        </h1>
-        <AccountFilter
-          on:searchTermChange={(event) => (searchTerm = event.detail)}
-          on:sortTypeChange={handleSortTypeChange}
-        />
-        {#if !hideWallets}
-          <button
-            class="btn btn--primary btn--fit btn--end"
-            on:click={() => (
-              ((editingWallet = -1), (selectedPda = -1), (token = undefined)),
-              (isCreateAccountModalOpen = true)
-            )}
-            ><img
-              src="/add.svg"
-              alt="Add Icon"
-              style="margin-right:5px;width:16px;height:16px;"
-            /> Create an Account</button
+    <div class="common--wrapper">
+      <div class="tokens">
+        <div class="common--header">
+          <h1
+            class="common--title"
+            style="margin-bottom:0"
+            in:fly={{ delay: 100, duration: 100, y: -10 }}
           >
+            Accounts
+          </h1>
+          <AccountFilter
+            on:searchTermChange={(event) => (searchTerm = event.detail)}
+            on:sortTypeChange={handleSortTypeChange}
+          />
+          {#if !hideWallets}
+            <button
+              class="btn btn--primary btn--fit btn--end"
+              on:click={() => (
+                ((editingWallet = -1), (selectedPda = -1), programCreate = -1, (token = undefined)),
+                (isCreateAccountModalOpen = true)
+              )}
+              ><img
+                src="/add.svg"
+                alt="Add Icon"
+                style="margin-right:5px;width:16px;height:16px;"
+              /> Create an Account</button
+            >
+          {/if}
+        </div>
+        {#if ($workspaces[$selectedWorkspace].accounts.length > 0)}
+          <div class="wallet--list">
+            <AccountListCard
+              accounts={
+                  $workspaces[$selectedWorkspace]?.accounts}
+              walletsLength={$workspaces[$selectedWorkspace]?.accounts?.filter(account => account.kind === "wallet").length}
+              colors={colors}
+              on:openWalletModal={(event) => openWalletModal(event.detail.index)}
+              on:deleteWallet={(event) => deleteWallet(event.detail.index)}
+              on:editWallet={(event) => editWallet(event.detail.index)}
+              on:deleteToken={(event) => deleteToken(event.detail.index)}
+              on:deletePda={(event) => deletePda(event.detail.index)}
+              on:deleteProgram={(event) => deleteProgram(event.detail.index)}
+              on:editToken={(event) => editToken(event.detail.index)}
+              on:editPdaModal={(event) => editPdaModal(event.detail.index)}
+              on:editProgram={(event) => editProgram(event.detail.index)}
+              on:deleteATA={(event) => deleteATA(event.detail.index)}
+              on:openCreatePda={(event) => (
+                (programCreate = event.detail.data), (isCreatePDAModalOpen = true)
+              )}
+              {searchTerm}
+              {sortType}
+            />
+          </div>
+        {:else}
+          <NoAccounts on:openModal={() => (isCreateAccountModalOpen = true)} />
         {/if}
       </div>
-      {#if ($workspaces[$selectedWorkspace]?.wallets.length > 0 || $workspaces[$selectedWorkspace]?.tokens.length > 0) && !hideWallets}
-        <div class="wallet--list">
-          <AccountListCard
-            accounts={{
-              wallets:
-                $workspaces[$selectedWorkspace]?.wallets.map((wallet) => ({
-                  ...wallet,
-                  type: "wallet",
-                })) ?? [],
-              pdas:
-                $workspaces[$selectedWorkspace]?.pdas.map((pda) => ({
-                  ...pda,
-                  type: "pda",
-                })) ?? [],
-              programs:
-                $workspaces[$selectedWorkspace]?.programs.map((program) => ({
-                  ...program,
-                  type: "pda",
-                })) ?? [],
-              tokens:
-                $workspaces[$selectedWorkspace]?.tokens.map((token) => ({
-                  ...token,
-                  type: "token",
-                })) ?? [],
-            }}
-            walletsLength={$workspaces[$selectedWorkspace]?.wallets.length}
-            tokenColors={colorsTokens}
-            walletColors={colorsWallets}
-            on:openWalletModal={(event) => openWalletModal(event.detail.index)}
-            on:deleteWallet={(event) => deleteWallet(event.detail.index)}
-            on:editWallet={(event) => editWallet(event.detail.index)}
-            on:deleteToken={(event) => deleteToken(event.detail.index)}
-            on:deletePda={(event) => deletePda(event.detail.index)}
-            on:deleteProgram={(event) => deleteProgram(event.detail.index)}
-            on:editToken={(event) => editToken(event.detail.index)}
-            on:editPdaModal={(event) => editPdaModal(event.detail.index)}
-            on:editProgram={(event) => editProgram(event.detail.index)}
-            on:openCreatePda={(event) => (
-              (pdaAddress = event.detail.data), (isCreatePDAModalOpen = true)
-            )}
-            {searchTerm}
-            {sortType}
-          />
-        </div>
-      {:else}
-        <NoAccounts on:openModal={() => (isCreateAccountModalOpen = true)} />
-      {/if}
     </div>
-  </div>
-{/if}
+  {/if}

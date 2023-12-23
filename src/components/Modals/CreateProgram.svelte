@@ -31,43 +31,43 @@
 
   function createProgram() {
     if (idlToAdd) {
-      const existingProgram = $workspaces[$selectedWorkspace].programs.find(
-        (program) => program.name === programName
+      const existingProgram = Object.values($workspaces[$selectedWorkspace].accounts).find(
+        (account) => account.name === programName
       );
       if (existingProgram) {
         programAlreadyExists = true;
         return;
       }
 
-      $workspaces[$selectedWorkspace].programs = [
-        ...$workspaces[$selectedWorkspace].programs,
-        {
+      $workspaces[$selectedWorkspace].accounts = {
+        ...$workspaces[$selectedWorkspace].accounts,
           ...idlToAdd,
           name: programName,
           metadata: {
             ...idlToAdd.metadata,
             address: programId,
           },
-        },
-      ];
+          kind: "program",
+      };
       dispatch("closeProgramModal");
     } else {
-      const existingProgram = $workspaces[$selectedWorkspace].programs.find(
-        (program) => program.name === programName
+      const existingProgram = Object.values($workspaces[$selectedWorkspace].accounts).find(
+        (account) => account.name === programName
       );
       if (existingProgram) {
         programAlreadyExists = true;
         return;
       }
 
-      $workspaces[$selectedWorkspace].programs = [
-        ...$workspaces[$selectedWorkspace].programs,
+      $workspaces[$selectedWorkspace].accounts = [
+        ...$workspaces[$selectedWorkspace].accounts,
         {
           name: programName,
           metadata: {
             address: programId ? programId : undefined,
           },
-        },
+          kind: "program",
+        }
       ];
       dispatch("closeProgramModal");
     }
@@ -155,7 +155,7 @@
 
 {#if programAlreadyExists}
   <div class="already--exists">
-    A program with this name already exists in this workspace.
+    An account with this name already exists.
   </div>
 {/if}
 

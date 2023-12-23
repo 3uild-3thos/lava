@@ -88,7 +88,7 @@
   }
 
   .card--footer {
-    @apply text-base text-lava-secondary font-medium flex-col items-center gap-y-2;
+    @apply text-base text-lava-secondary font-medium flex-col items-center gap-y-2 w-full;
     margin-top:auto !important;
   }
 
