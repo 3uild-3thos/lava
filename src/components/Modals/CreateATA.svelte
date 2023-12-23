@@ -73,6 +73,7 @@
       <Icon
         size={24}
         value={selection.label}
+        style={"character"}
         color={tokenColors[selection.originalIndex]}
         border={true}
         radius={7}

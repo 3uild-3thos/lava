@@ -24,7 +24,7 @@
     {#if authorityPopOverOpened}
         <Popover xOffset={-75} yOffset={-45} title={ata.authority} on:mouseleave={() => popOverOpened = false}/>
     {/if}
-    <Avatar size={32} color={colors[authorityIndex]} value={ata.authority} />
+    <Avatar size={32} color={colors[authorityIndex]} value={ata.authority} style="character"/>
     </div>
     
 </div>

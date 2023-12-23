@@ -30,7 +30,6 @@
   on:mouseleave
   on:mouseover
   on:mousemove={handleMousemove}
-  on:click={() => showTokens()}
   in:fade|global={{ delay: cardPosition * 50, duration: 100 }}
   style={`--hoveredColor: ${color}; --bgColor: ${color}10; --left:${
     m.x
@@ -44,7 +43,7 @@
         <img src={`/SOL.svg`} alt={`Sol Icon`} style="width:32px;height:32px" />
       {:else}
         <TokenIcon
-          style={kind === "mint" ? "character" : "symbol"}
+          style={"character"}
           value={ticker ? ticker : title}
           size={32}
           border={true}
