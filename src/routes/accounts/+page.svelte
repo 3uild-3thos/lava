@@ -64,6 +64,15 @@
     });
 
     const deleteToken = (index) => {
+      const tokenName = $workspaces[$selectedWorkspace].accounts[index].symbol;
+      const ataAccounts = $workspaces[$selectedWorkspace].accounts.filter(
+        (account) => account.kind === "ata" && account.mint === tokenName
+      );
+      ataAccounts.forEach((account) => {
+        $workspaces[$selectedWorkspace].accounts = $workspaces[
+          $selectedWorkspace
+        ].accounts.filter((token) => token !== account);
+      });
     $workspaces[$selectedWorkspace].accounts = $workspaces[
       $selectedWorkspace
     ].accounts.filter((token, i) => i !== index);
@@ -78,21 +87,57 @@
     };
 
     const deleteProgram = (index) => {
+    const programName = $workspaces[$selectedWorkspace].accounts[index].name;
+    const ataAccounts = $workspaces[$selectedWorkspace].accounts.filter(
+      (account) => account.kind === "ata" && account.authority === programName
+    );
+    ataAccounts.forEach((account) => {
+      $workspaces[$selectedWorkspace].accounts = $workspaces[
+        $selectedWorkspace
+      ].accounts.filter((token) => token !== account);
+    });
       $workspaces[$selectedWorkspace].accounts = $workspaces[
       $selectedWorkspace
     ].accounts.filter((token, i) => i !== index);
     };
 
     const deletePda = (index) => {
+      const pdaName = $workspaces[$selectedWorkspace].accounts[index].name;
+      const ataAccounts = $workspaces[$selectedWorkspace].accounts.filter(
+        (account) => account.kind === "ata" && account.authority === pdaName
+      );
+      ataAccounts.forEach((account) => {
+        $workspaces[$selectedWorkspace].accounts = $workspaces[
+          $selectedWorkspace
+        ].accounts.filter((token) => token !== account);
+      });
       $workspaces[$selectedWorkspace].accounts = $workspaces[
       $selectedWorkspace
     ].accounts.filter((token, i) => i !== index);
     };
 
     const deleteWallet = (index) => {
+      const walletName = $workspaces[$selectedWorkspace].accounts[index].name;
+      const mintAccounts = $workspaces[$selectedWorkspace].accounts.filter(
+        (account) => account.kind === "mint"
+      );
+      mintAccounts.forEach((account) => {
+        if (account.freezeAuthority === walletName || account.mintAuthority === walletName) {
+          account.freezeAuthority = "";
+          account.mintAuthority = "";
+        }
+      });
+      const ataAccounts = $workspaces[$selectedWorkspace].accounts.filter(
+        (account) => account.kind === "ata" && account.authority === walletName
+      );
+      ataAccounts.forEach((account) => {
+        $workspaces[$selectedWorkspace].accounts = $workspaces[
+          $selectedWorkspace
+        ].accounts.filter((token) => token !== account);
+      });
       $workspaces[$selectedWorkspace].accounts = $workspaces[
-      $selectedWorkspace
-    ].accounts.filter((token, i) => i !== index);
+        $selectedWorkspace
+      ].accounts.filter((token, i) => i !== index);
     };
 
     function deleteATA(index) {

@@ -28,10 +28,13 @@
     const accountIndex = accounts.findIndex(
       (account) => account.name === accountAssigned
     );
-    if (accountIndex !== -1) {
+    const ataExists = $workspaces[$selectedWorkspace].accounts?.some(
+      (account, index) => index !== accountIndex && account.name === accountAssigned.value + $workspaces[$selectedWorkspace].accounts[assigningMint.index].symbol
+    );
+    if (ataExists) {
         ataAlreadyExists = true;
         return;
-      }
+    }
     $workspaces[$selectedWorkspace].accounts = [
         ...$workspaces[$selectedWorkspace].accounts,
         {
@@ -97,6 +100,12 @@
     bind:value={amount}
   />
 </div>
+
+    {#if ataAlreadyExists}
+    <div class="already--exists">
+        ATA already exists, delete the existing ATA to create a new one.
+    </div>
+    {/if}
 <!-- Form Submit -->
 <div class="btns--modal">
   <button

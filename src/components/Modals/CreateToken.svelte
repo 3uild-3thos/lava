@@ -51,7 +51,7 @@
   }
 
   const addToken = () => {
-    if (valid.name && valid.symbol && valid.decimals) {
+    if (valid.name && valid.symbol) {
       if (token) {
         // Edit mode
         const index = $workspaces[$selectedWorkspace].accounts.findIndex(
@@ -70,7 +70,7 @@
           $workspaces[$selectedWorkspace].accounts[index] = {
             name,
             symbol: symbol.toUpperCase(),
-            decimals,
+            decimals: decimals ? decimals : 0,
             freezeAuthority: freezeAuthority?.name,
             mintAuthority: mintAuthority?.name,
             kind: "mint",
@@ -82,7 +82,7 @@
           (account) => account.name === name
         );
         const tokenSymbolExists = $workspaces[$selectedWorkspace].accounts.some(
-          (account) => account.symbol === symbol.toUpperCase() && account.kind === "mint"
+          (account) => account.symbol === symbol.toUpperCase() && account.kind === "mint" || account.name === symbol.toUpperCase() 
         );
         if (tokenNameExists || tokenSymbolExists) {
           tokenAlreadyExists = true;
@@ -93,7 +93,7 @@
           {
             name,
             symbol: symbol.toUpperCase(),
-            decimals,
+            decimals: decimals ? decimals : 0,
             freezeAuthority: freezeAuthority?.name,
             mintAuthority: mintAuthority?.name,
             kind: "mint",
@@ -145,7 +145,7 @@
     <div class="modal--form-item">
       <div class="modal--form-title">Decimals</div>
       <input
-        class="input--primary {!valid.decimal && formTouched.decimal
+        class="input--primary {!valid.decimals && formTouched.decimals
           ? 'input--invalid'
           : ''}"
         type="number"
@@ -237,7 +237,7 @@
         !valid.name || !valid.symbol || !valid.decimals ? " btn--disabled" : ""
       }`}
       on:click={() => addToken()}
-      disabled={!valid.name || !valid.symbol || !valid.decimals}
+      disabled={!valid.name || !valid.symbol || !valid.decimals || !decimals}
       >{token ? "Update Mint" : "Create Mint"}</button
     >
   </div>
