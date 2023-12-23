@@ -173,6 +173,7 @@
       {selectedProgram}
       on:closeModal={() => (isCreateTestModalOpen = false)}
       on:updateSelectedProgram={updateSelectedProgram}
+      on:updateSelectedTest={()=>(selectedTest = $workspaces[$selectedWorkspace].tests.length - 1)}
     />
   </Modal>
 

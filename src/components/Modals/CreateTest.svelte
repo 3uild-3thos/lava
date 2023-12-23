@@ -46,7 +46,8 @@
       ];
     }
     dispatch("closeModal");
-  };
+    dispatch("updateSelectedTest");
+};
 </script>
 
 <h1 class="modal--title">
