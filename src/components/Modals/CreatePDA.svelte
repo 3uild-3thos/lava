@@ -7,8 +7,9 @@
   export let selectedProgram = "";
   export let seeds = [];
 
-  
   import { createEventDispatcher } from "svelte";
+  import getInputTypes from "../../helpers/getInputTypes";
+  import isStringArrayInRange from "../../helpers/isArrayInRange";
   const dispatch = createEventDispatcher();
 
   // $: if(editingPda !== -1) {
@@ -22,8 +23,14 @@
     selectedSeed = null;
   };
 
-  let formData = editingPda!==-1 ? seeds.filter((s)=>s.type!="Program").map(({value})=>value) : [];
-  let pdaSeeds = editingPda!==-1 ? seeds.filter((s)=>s.type!="Program").map(({type})=>type) : [];
+  let formData =
+    editingPda !== -1
+      ? seeds.filter((s) => s.type != "Program").map(({ value }) => value)
+      : [];
+  let pdaSeeds =
+    editingPda !== -1
+      ? seeds.filter((s) => s.type != "Program").map(({ type }) => type)
+      : [];
   let formTouched = { pdaName: false };
   let valid = { pdaName: false };
   let pdaAlreadyExists = false;
@@ -41,53 +48,35 @@
 
   let invalid_fields = [];
 
-  function isStringArrayInRange(str) {
-    const trimmedStr = str.replace(/[\[\]]/g, '');
-    const numbersArray = trimmedStr.split(',');
-    const numericArray = numbersArray.map(Number);
-    console.log(numericArray)
-    const isInRange = numericArray.every(num => typeof num === 'number' && num >= 0 && num <= 255);
-    console.log(isInRange)
-    if (isInRange) {
-      return numericArray;
-    } else {
-      return false;
-    }
-}
+  
 
   function handleInput(event) {
     const { name, value } = event.target;
-    if (seeds[name]=== "String"){
-    formData[name] = value as string;
-    } else if (seeds[name]=== "Pubkey"){
+    if (seeds[name] === "String") {
       formData[name] = value as string;
-    } else if (seeds[name]=== "Bytes"){
+    } else if (seeds[name] === "Pubkey") {
+      formData[name] = value as string;
+    } else if (seeds[name] === "Bytes") {
       // Check if it's a valid hexadecimal string with "0x" appended
-    const hexRegex = /^0x([0-9A-Fa-f]+)$/;
-
-      // Check if it's a valid array of numbers
-
+      const hexRegex = /^0x([0-9A-Fa-f]+)$/;
       if (hexRegex.test(value)) {
-        console.log('hex')
         formData[name] = value;
         invalid_fields = invalid_fields.filter((field) => field !== name);
-    } else if (isStringArrayInRange(value)) {
+      } else if (isStringArrayInRange(value)) {
         formData[name] = value;
         invalid_fields = invalid_fields.filter((field) => field !== name);
-    } else {
-      invalid_fields = [...invalid_fields, name];
-    }
-
-
-    } else if (seeds[name]=== "u8"){
+      } else {
+        invalid_fields = [...invalid_fields, name];
+      }
+    } else if (seeds[name] === "u8") {
       formData[name] = value as number;
-    } else if (seeds[name]=== "u16"){
+    } else if (seeds[name] === "u16") {
       formData[name] = value as number;
-    } else if (seeds[name]=== "u32"){
+    } else if (seeds[name] === "u32") {
       formData[name] = value as number;
-    } else if (seeds[name]=== "u64"){
+    } else if (seeds[name] === "u64") {
       formData[name] = value as number;
-    } else if (seeds[name]=== "u128"){
+    } else if (seeds[name] === "u128") {
       formData[name] = value as number;
     }
   }
@@ -128,53 +117,32 @@
   }
 
   function editPda() {
-  if (editingPda !== -1) {
-    const pdaExists = $workspaces[$selectedWorkspace].accounts?.some(
-      (account, index) => index !== editingPda && account.name === pdaName
-    );
-    if (pdaExists) {
-      pdaAlreadyExists = true;
-      return;
-    }
+    if (editingPda !== -1) {
+      const pdaExists = $workspaces[$selectedWorkspace].accounts?.some(
+        (account, index) => index !== editingPda && account.name === pdaName
+      );
+      if (pdaExists) {
+        pdaAlreadyExists = true;
+        return;
+      }
 
-    const ataAccounts = $workspaces[$selectedWorkspace].accounts.filter(
-        (account) => account.kind === "ata" && account.authority === $workspaces[$selectedWorkspace].accounts[editingPda].name
+      const ataAccounts = $workspaces[$selectedWorkspace].accounts.filter(
+        (account) =>
+          account.kind === "ata" &&
+          account.authority ===
+            $workspaces[$selectedWorkspace].accounts[editingPda].name
       );
       ataAccounts.forEach((account) => {
         account.authority = pdaName;
-        account.name = account.authority + account.mint
-    });
+        account.name = account.authority + account.mint;
+      });
 
-    $workspaces[$selectedWorkspace].accounts[editingPda] = {
-      name: pdaName,
-      seeds: pdaSeeds,
-      kind: "pda",
-    };
-    dispatch("closePDAModal");
-  }
-}
-
-
-  function typeFromSeed(seed) {
-    switch (seed) {
-      case "String":
-        return "text";
-      case "Pubkey":
-        return "text";
-      case "Bytes":
-        return "text";
-      case "u8":
-        return "number";
-      case "u16":
-        return "number";
-      case "u32":
-        return "number";
-      case "u64":
-        return "number";
-      case "u128":
-        return "number";
-      default:
-        return "text";
+      $workspaces[$selectedWorkspace].accounts[editingPda] = {
+        name: pdaName,
+        seeds: pdaSeeds,
+        kind: "pda",
+      };
+      dispatch("closePDAModal");
     }
   }
 
@@ -191,8 +159,11 @@
     seeds = [];
   }
 
-  $: validSeeds = editingPda === -1 ? seeds.every((seed, index) => formData[index]?.length > 1) && invalid_fields.length == 0 : true;
-
+  $: validSeeds =
+    editingPda === -1
+      ? seeds.every((seed, index) => formData[index]?.length > 1) &&
+        invalid_fields.length == 0
+      : true;
 </script>
 
 <h1 class="modal--title">{editingPda === -1 ? "Create PDA" : "Edit PDA"}</h1>
@@ -221,7 +192,7 @@
 
   <div class="modal--form-title">Seeds</div>
 
-  {#each seeds.filter((s)=>s.type!="Program") as seed, index}
+  {#each seeds.filter((s) => s.type != "Program") as seed, index}
     <div
       class="modal--form-seed"
       style="display: flex; position:relative; justify-content: space-between; align-items: center; margin-bottom:0.5rem;"
@@ -229,9 +200,9 @@
       {#if seed === "Pubkey"}
         <Select
           class="modal--form-select block"
-          items={$workspaces[$selectedWorkspace]?.accounts?.filter((a) => a.kind === "wallet").map((w) =>
-            w?.address.length > 0 ? w?.address : w.name
-          )}
+          items={$workspaces[$selectedWorkspace]?.accounts
+            ?.filter((a) => a.kind === "wallet")
+            .map((w) => (w?.address.length > 0 ? w?.address : w.name))}
           id={`${index}`}
           on:change={(e) => handleSelect(e, index)}
           placeholder="Select wallet"
@@ -239,8 +210,9 @@
         />
       {:else if seed === "Bytes"}
         <input
-          class={"input--primary" + (invalid_fields.includes(index) ? " input--invalid" : "")}
-          type={typeFromSeed(seed)}
+          class={"input--primary" +
+            (invalid_fields.includes(index) ? " input--invalid" : "")}
+          type={getInputTypes(seed)}
           placeholder={seed}
           on:input={handleInput}
           name={`${index}`}
@@ -248,8 +220,9 @@
         />
       {:else if seed === "u8"}
         <input
-          class={"input--primary" + (invalid_fields.includes(index) ? " input--invalid" : "")}
-          type={typeFromSeed(seed)}
+          class={"input--primary" +
+            (invalid_fields.includes(index) ? " input--invalid" : "")}
+          type={getInputTypes(seed)}
           placeholder={seed}
           on:input={handleInput}
           name={`${index}`}
@@ -257,7 +230,7 @@
       {:else}
         <input
           class="input--primary"
-          type={typeFromSeed(seed)}
+          type={getInputTypes(seed)}
           placeholder={seed}
           on:input={handleInput}
           name={`${index}`}
@@ -289,9 +262,9 @@
   <Select
     class="modal--form-select"
     bind:value={selectedProgram}
-    items={$workspaces[$selectedWorkspace]?.accounts?.filter((a) => a.kind === 'program').map(
-      (p) => p.name
-    )}
+    items={$workspaces[$selectedWorkspace]?.accounts
+      ?.filter((a) => a.kind === "program")
+      .map((p) => p.name)}
     placeholder="Select program"
   />
 

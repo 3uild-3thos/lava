@@ -17,6 +17,8 @@
   import { writable } from "svelte/store";
   import type { Idl } from "@coral-xyz/anchor";
   import { SubmitForm } from "@restspace/svelte-schema-form";
+  import getInputTypes from "../../helpers/getInputTypes";
+  import isStringArrayInRange from "../../helpers/isArrayInRange";
 
   // a function that takes an Idl's instructions arguments and returns an schema for SubmitForm
   const getSchema = (args: any[]) => {
@@ -61,9 +63,8 @@
 
   $: {
     if (selectedTest !== -1) {
-      console.log(selectedTest)
-      instruction = $workspaces[$selectedWorkspace].tests[selectedTest]
-        ?.instruction;
+      instruction =
+        $workspaces[$selectedWorkspace].tests[selectedTest]?.instruction;
       inputValues.update((values) => {
         if (!values[selectedTest]) {
           values[selectedTest] = instruction.args.map((arg) => {
@@ -91,7 +92,6 @@
     }
   }
 
-
   function beforeUnload() {
     if (selectedTest !== -1) {
       // Cancel the event as stated by the standard.
@@ -111,7 +111,7 @@
 
   const saveTest = () => {
     if (selectedTest !== -1) {
-      console.log($inputAccounts[selectedTest])
+      console.log($inputAccounts[selectedTest]);
       $workspaces[$selectedWorkspace].tests[selectedTest].accounts =
         $inputAccounts[selectedTest];
       $workspaces[$selectedWorkspace].tests[selectedTest].args =
@@ -141,7 +141,8 @@
       {selectedProgram}
       on:closeModal={() => (isCreateTestModalOpen = false)}
       on:updateSelectedProgram={updateSelectedProgram}
-      on:updateSelectedTest={()=>(selectedTest = $workspaces[$selectedWorkspace].tests.length - 1)}
+      on:updateSelectedTest={() =>
+        (selectedTest = $workspaces[$selectedWorkspace].tests.length - 1)}
     />
   </Modal>
 
@@ -168,7 +169,7 @@
               {index}
               on:updateSelectedTest={(event) => {
                 selectedTest = event.detail.index;
-                
+
                 if (
                   $workspaces[$selectedWorkspace].tests[
                     selectedTest
@@ -246,14 +247,22 @@
                       />
                     {:else}
                       <Select
-                        items={$workspaces[$selectedWorkspace]?.accounts.map(({name})=>name)}
+                        items={$workspaces[$selectedWorkspace]?.accounts.map(
+                          ({ name }) => name
+                        )}
                         id={`${index}`}
                         placeholder="Select wallet"
-                        value={$workspaces[$selectedWorkspace]?.tests[selectedTest]?.accounts[index]?.name ?? "" }
+                        value={$workspaces[$selectedWorkspace]?.tests[
+                          selectedTest
+                        ]?.accounts[index]?.name ?? ""}
                         on:change={(event) => {
-                          if ($inputAccounts[index]){
-                            $inputAccounts[index].value = $workspaces[$selectedWorkspace]?.accounts.find(({name})=>name === event.detail.value);
-                          }else{
+                          if ($inputAccounts[index]) {
+                            $inputAccounts[index].value = $workspaces[
+                              $selectedWorkspace
+                            ]?.accounts.find(
+                              ({ name }) => name === event.detail.value
+                            );
+                          } else {
                             $inputAccounts[index] = {
                               name: event.detail.value,
                               isMut: false,
@@ -290,9 +299,27 @@
                       </div>
                       <input
                         class="input--primary"
-                        bind:value={$inputValues[selectedTest][index].value}
+                        value={$inputValues[selectedTest][index].value}
                         placeholder="Value"
-                        name=""
+                        name={`${index}`}
+                        on:input={(event) => {
+                          if (args.type === "Bytes") {
+                            const hexRegex = /^0x([0-9A-Fa-f]+)$/;
+                            if (hexRegex.test(event.target.value)) {
+                              $inputValues[selectedTest][index].value =
+                                event.target.value;
+                            } else if (
+                              isStringArrayInRange(event.target.value)
+                            ) {
+                              $inputValues[selectedTest][index].value =
+                                event.target.value;
+                            }
+                          } else {
+                          
+                          $inputValues[selectedTest][index].value =
+                            event.target.value;
+                        }}}
+                        type={getInputTypes(args.type)}
                       />
                     {/each}
                     <!--SubmitForm schema={getSchema(($workspaces[$selectedWorkspace].programs.find(
