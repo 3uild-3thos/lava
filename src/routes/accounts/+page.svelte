@@ -370,7 +370,7 @@
         selectedProgram={programCreate === -1 ? $workspaces[$selectedWorkspace].accounts[selectedPda]?.seeds?.find(
           (seed) => {
             return seed.type === "Program"}
-        )?.value.value : $workspaces[$selectedWorkspace].accounts[programCreate]?.name}
+        )?.value: $workspaces[$selectedWorkspace].accounts[programCreate]?.name}
         seeds={selectedPdaSeeds}
       />
     </Modal>

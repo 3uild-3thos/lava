@@ -12,11 +12,10 @@
   import isStringArrayInRange from "../../helpers/isArrayInRange";
   const dispatch = createEventDispatcher();
 
-  // $: if(editingPda !== -1) {
-  //   selectedProgram = $workspaces[$selectedWorkspace]?.accounts[editingPda].name
-  // } else {
-  //   selectedProgram = "";
-  // };
+   $: if(editingPda !== -1) {
+     selectedProgram = $workspaces[$selectedWorkspace]?.accounts[editingPda].seeds.find((seed) => seed.type === "Program")?.name;
+  }
+
   let selectedSeed = null;
   const addSeed = (e) => {
     seeds = [...seeds, e.detail.value];
@@ -47,8 +46,6 @@
   ];
 
   let invalid_fields = [];
-
-  
 
   function handleInput(event) {
     const { name, value } = event.target;
@@ -101,7 +98,7 @@
         type: seed,
       };
     });
-    pdaSeeds = [...pdaSeeds, { value: selectedProgram.value, type: "Program" }];
+    pdaSeeds = [...pdaSeeds, { value: selectedProgram, type: "Program" }];
     if ($workspaces[$selectedWorkspace].accounts === undefined) {
       $workspaces[$selectedWorkspace].accounts = [];
     }
@@ -216,7 +213,7 @@
           placeholder={seed}
           on:input={handleInput}
           name={`${index}`}
-          value={formData[index]}
+          value={formData[index]??""}
         />
       {:else if seed === "u8"}
         <input
@@ -226,6 +223,15 @@
           placeholder={seed}
           on:input={handleInput}
           name={`${index}`}
+        />
+        {:else if seed == "String"}
+        <input
+          class="input--primary"
+          type={getInputTypes(seed)}
+          placeholder={seed}
+          on:input={handleInput}
+          name={`${index}`}
+          value={formData[index]??""}
         />
       {:else}
         <input
@@ -261,11 +267,12 @@
   <div class="modal--form-title">Program</div>
   <Select
     class="modal--form-select"
-    bind:value={selectedProgram}
+    value={selectedProgram}
     items={$workspaces[$selectedWorkspace]?.accounts
       ?.filter((a) => a.kind === "program")
       .map((p) => p.name)}
     placeholder="Select program"
+    on:change={(e) => (selectedProgram = e.detail.value)}
   />
 
   {#if pdaAlreadyExists}

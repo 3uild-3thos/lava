@@ -149,7 +149,6 @@
   }
 
   $: hoveredCard = -1;
-  $:console.log(accounts)
 </script>
 
 <!-- Confirm Delete Wallet Modal -->
