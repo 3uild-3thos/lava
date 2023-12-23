@@ -251,7 +251,15 @@
                         placeholder="Select wallet"
                         value={$workspaces[$selectedWorkspace]?.tests[selectedTest]?.accounts[index]?.name ?? "" }
                         on:change={(event) => {
-                         $inputAccounts[index].value = $workspaces[$selectedWorkspace]?.accounts.find(({name})=>name === event.detail.value);
+                          if ($inputAccounts[index]){
+                            $inputAccounts[index].value = $workspaces[$selectedWorkspace]?.accounts.find(({name})=>name === event.detail.value);
+                          }else{
+                            $inputAccounts[index] = {
+                              name: event.detail.value,
+                              isMut: false,
+                              isSigner: false,
+                            };
+                          }
                         }}
                       />
                     {/if}
