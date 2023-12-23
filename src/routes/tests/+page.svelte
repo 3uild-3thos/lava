@@ -229,14 +229,14 @@
           </div>
 
           <!-- Accounts -->
-        {:else if $inputAccounts[selectedTest]?.length > 0}
+        {:else if $workspaces[$selectedWorkspace].tests?.length > 0}
           <div class="test--content">
             <div class="test--form">
               <div class="content--header">
                 <div class="test--content--title">Accounts</div>
               </div>
               <div class="instruction--list" in:fade|global={{ duration: 100 }}>
-                {#each $inputAccounts[selectedTest] as account, index}
+                {#each $workspaces[$selectedWorkspace].tests[selectedTest].instruction.accounts as account, index}
                   <div class="test--form--item">
                     <div class="instruction--list--value">
                       {account.name}
@@ -257,12 +257,12 @@
                       />
                     {:else}
                       <Select
-                        items={$workspaces[$selectedWorkspace]?.wallets?.map(
-                          (w) => (w?.address.length > 0 ? w?.address : w.name)
-                        )}
+                        items={$workspaces[$selectedWorkspace]?.accounts.map(({name})=>name)}
                         id={`${index}`}
                         placeholder="Select wallet"
-                        bind:value={$inputAccounts[selectedTest][index].value}
+                        on:change={(event) => {
+                         $inputAccounts[index] = $workspaces[$selectedWorkspace]?.accounts.find(({name})=>name === event.detail.value);
+                        }}
                       />
                     {/if}
                   </div>
