@@ -2,12 +2,12 @@
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
   export let ticker: string = "";
-  export let type: string = "";
+  export let kind: string = "";
   export let footer: any = null;
   export let balance: string = "";
   export let color: string = "";
   export let cardPosition: number;
-  export let title: string = `${type}`;
+  export let title: string = `${kind}`;
   export let hoveredCard: number = -1;
   import TokenIcon from "../avatars/index.svelte";
   let m = { x: 0, y: 0 };
@@ -19,12 +19,10 @@
   import { fade } from "svelte/transition";
 
   function showTokens() {
-    if (type === "wallet") {
+    if (kind === "wallet") {
       dispatch("showTokens");
     }
   }
-
-  $: console.log(hoveredCard);
 </script>
 
 <div
@@ -42,11 +40,11 @@
   <div class="card--shimmer" />
   <div class="card--content">
     <div class="card--header">
-      {#if type === "wallet"}
+      {#if kind === "wallet"}
         <img src={`/SOL.svg`} alt={`Sol Icon`} style="width:32px;height:32px" />
       {:else}
         <TokenIcon
-          style={type === "token" ? "character" : "symbol"}
+          style={kind === "mint" ? "character" : "symbol"}
           value={ticker ? ticker : title}
           size={32}
           border={true}
@@ -57,17 +55,17 @@
       <div class="card--title">{title}</div>
       <div class="card--type">
         <img
-          src={`/${type}.svg`}
-          alt={`${type} Icon`}
+          src={`/${kind}.svg`}
+          alt={`${kind} Icon`}
           style="width:16px;height:16px"
         />
-        {type === "token" ? "Mint" : type}
+        {kind === "mint" ? "Mint" : kind}
       </div>
       <div class="card--options">
         <slot name="options" />
       </div>
     </div>
-    {#if type === "wallet"}
+    {#if kind === "wallet"}
       <div class="card--balance">
         {balance} SOL
       </div>

@@ -44,21 +44,43 @@
   function onEditWallet() {
     if (walletName) {
       // Check if wallet name already exists
-      const wallets = $workspaces[$selectedWorkspace].wallets;
-      const walletIndex = wallets.findIndex(
-        (wallet) => wallet.name === walletName
+      const accounts = $workspaces[$selectedWorkspace].accounts;
+      const accountIndex = accounts.findIndex(
+        (account) => account.name === walletName
       );
-      if (walletIndex !== -1) {
+      if (accountIndex !== -1) {
         walletAlreadyExists = true;
         return;
       }
+      const ataAccounts = $workspaces[$selectedWorkspace].accounts.filter(
+        (account) => account.kind === "ata" && account.authority === $workspaces[$selectedWorkspace].accounts[editingWallet].name
+      );
+      ataAccounts.forEach((account) => {
+        account.authority = walletName;
+        account.name = account.authority + account.mint
+      });
 
-      $workspaces[$selectedWorkspace].wallets[editingWallet] = {
+      const mintAccounts = $workspaces[$selectedWorkspace].accounts.filter(
+        (account) =>
+          account.kind === "mint" &&
+          (account.freezeAuthority === $workspaces[$selectedWorkspace].accounts[editingWallet].name ||
+            account.mintAuthority === $workspaces[$selectedWorkspace].accounts[editingWallet].name)
+      );
+      mintAccounts.forEach((account) => {
+        if (account.freezeAuthority === $workspaces[$selectedWorkspace].accounts[editingWallet].name) {
+          account.freezeAuthority = walletName;
+        }
+        if (account.mintAuthority === $workspaces[$selectedWorkspace].accounts[editingWallet].name) {
+          account.mintAuthority = walletName;
+        }
+      });
+      $workspaces[$selectedWorkspace].accounts[editingWallet] = {
         name: walletName,
         address: walletAddress,
-        tokens: $workspaces[$selectedWorkspace].wallets[editingWallet].tokens,
         sol_balance,
+        kind: "wallet",
       };
+
       walletName = "";
       walletAddress = "";
       sol_balance = 0;
@@ -70,22 +92,22 @@
   function addWallet() {
     if (valid.name && valid.sol_balance) {
       // Check if wallet name already exists
-      const wallets = $workspaces[$selectedWorkspace].wallets;
-      const walletIndex = wallets.findIndex(
-        (wallet) => wallet.name === walletName
+      const accounts = $workspaces[$selectedWorkspace].accounts;
+      const accountIndex = accounts.findIndex(
+        (account) => account.name === walletName
       );
-      if (walletIndex !== -1) {
+      if (accountIndex !== -1) {
         walletAlreadyExists = true;
         return;
       }
 
-      $workspaces[$selectedWorkspace].wallets = [
-        ...$workspaces[$selectedWorkspace].wallets,
+      $workspaces[$selectedWorkspace].accounts = [
+        ...$workspaces[$selectedWorkspace].accounts,
         {
           name: walletName,
           address: walletAddress,
-          tokens: [],
           sol_balance,
+          kind: "wallet",
         },
       ];
       dispatch("closeModal");
@@ -126,7 +148,7 @@
 />
 
 {#if walletAlreadyExists}
-  <div class="already--exists">A wallet with this name already exists</div>
+  <div class="already--exists">An account with this name already exists</div>
 {/if}
 
 <div class="btns--modal">

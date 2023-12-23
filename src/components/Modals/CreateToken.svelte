@@ -11,7 +11,6 @@
   let decimals = token ? token.decimals : null;
   let tokenAlreadyExists = false;
   export let wallets = [];
-  $: console.log(wallets);
   let creator = "";
 
   let freezeAuthority = token
@@ -55,38 +54,49 @@
     if (valid.name && valid.symbol && valid.decimals) {
       if (token) {
         // Edit mode
-        const index = $workspaces[$selectedWorkspace].tokens.findIndex(
-          (t) => t.name === token.name
+        const index = $workspaces[$selectedWorkspace].accounts.findIndex(
+          (account) => account.name === token.name && account.kind === "mint"
         );
+
+        const ataAccounts = $workspaces[$selectedWorkspace].accounts.filter(
+        (account) => account.kind === "ata" && account.mint === $workspaces[$selectedWorkspace].accounts[index].symbol
+          );
+          ataAccounts.forEach((account) => {;
+            account.name = account.authority + symbol
+            account.mint = symbol.toUpperCase()
+        });
+
         if (index !== -1) {
-          $workspaces[$selectedWorkspace].tokens[index] = {
+          $workspaces[$selectedWorkspace].accounts[index] = {
             name,
             symbol: symbol.toUpperCase(),
             decimals,
             freezeAuthority: freezeAuthority?.name,
             mintAuthority: mintAuthority?.name,
+            kind: "mint",
           };
         }
       } else {
         // Create mode
-        const tokenNameExists = $workspaces[$selectedWorkspace].tokens.some(
-          (t) => t.name === name
+        const tokenNameExists = $workspaces[$selectedWorkspace].accounts.some(
+          (account) => account.name === name
         );
-        const tokenSymbolExists = $workspaces[$selectedWorkspace].tokens.some(
-          (t) => t.symbol === symbol.toUpperCase()
+        const tokenSymbolExists = $workspaces[$selectedWorkspace].accounts.some(
+          (account) => account.symbol === symbol.toUpperCase() && account.kind === "mint"
         );
         if (tokenNameExists || tokenSymbolExists) {
           tokenAlreadyExists = true;
           return;
         }
-        $workspaces[$selectedWorkspace].tokens = [
-          ...$workspaces[$selectedWorkspace].tokens,
+        $workspaces[$selectedWorkspace].accounts = [
+          ...$workspaces[$selectedWorkspace].accounts,
           {
             name,
             symbol: symbol.toUpperCase(),
             decimals,
             freezeAuthority: freezeAuthority?.name,
             mintAuthority: mintAuthority?.name,
+            kind: "mint",
           },
         ];
       }
@@ -217,7 +227,7 @@
 
   {#if tokenAlreadyExists}
     <div class="already--exists">
-      A token with this name or ticker already exists.
+      An account with this name or ticker already exists.
     </div>
   {/if}
 

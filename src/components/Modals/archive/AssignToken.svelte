@@ -3,8 +3,8 @@
   export let editingWallet = -1;
   import { createEventDispatcher } from "svelte";
   import Select from "svelte-select/no-styles/Select.svelte";
-  import { workspaces, selectedWorkspace } from "../../stores/store";
-  import Icon from "../avatars/index.svelte";
+  import { workspaces, selectedWorkspace } from "../../../stores/store";
+  import Icon from "../../avatars/index.svelte";
   let amount = 1000000000;
   let symbol = "";
   let formSubmitted = false;
@@ -31,7 +31,6 @@
   }
 
   function assignToken() {
-    console.log(symbol, amount);
     if (symbol && editingWallet !== -1) {
       const index = $workspaces[$selectedWorkspace].wallets[
         editingWallet
@@ -65,9 +64,9 @@
   };
 </script>
 
-<h1 class="modal--title">Assign a Token</h1>
+<h1 class="modal--title">Create ATA</h1>
 <div class="modal--form">
-  <div class="modal--form-title">Token</div>
+  <div class="modal--form-title">Account</div>
   <Select
     items={$workspaces[$selectedWorkspace]?.tokens.map(
       ({ symbol }) => symbol

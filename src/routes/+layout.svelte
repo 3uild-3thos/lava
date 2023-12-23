@@ -46,14 +46,6 @@
     if ($selectedWorkspace === undefined) {
       $selectedWorkspace = 0;
     }
-    for (let i = 0; i < $workspaces.length; i++) {
-      for (let j = 0; j < $workspaces[i].tokens.length; j++) {
-          if ($workspaces[i].tokens[j].decimal){
-            $workspaces[i].tokens[j].decimals = $workspaces[i].tokens[j].decimal;
-            $workspaces[i].tokens[j].decimal = undefined
-        }
-      }
-    }
   });
 </script>
 
