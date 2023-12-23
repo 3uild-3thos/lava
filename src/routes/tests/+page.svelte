@@ -111,6 +111,7 @@
 
   const saveTest = () => {
     if (selectedTest !== -1) {
+      console.log($inputAccounts[selectedTest])
       $workspaces[$selectedWorkspace].tests[selectedTest].accounts =
         $inputAccounts[selectedTest];
       $workspaces[$selectedWorkspace].tests[selectedTest].args =
@@ -250,7 +251,7 @@
                         placeholder="Select wallet"
                         value={$workspaces[$selectedWorkspace]?.tests[selectedTest]?.accounts[index]?.name ?? "" }
                         on:change={(event) => {
-                         $inputAccounts[index] = $workspaces[$selectedWorkspace]?.accounts.find(({name})=>name === event.detail.value);
+                         $inputAccounts[index].value = $workspaces[$selectedWorkspace]?.accounts.find(({name})=>name === event.detail.value);
                         }}
                       />
                     {/if}
