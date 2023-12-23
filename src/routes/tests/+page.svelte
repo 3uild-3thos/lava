@@ -264,7 +264,7 @@
                             );
                           } else {
                             $inputAccounts[index] = {
-                              name: event.detail.value,
+                              name: event.detail.name,
                               isMut: false,
                               isSigner: false,
                             };
@@ -299,9 +299,8 @@
                       </div>
                       <input
                         class="input--primary"
-                        value={$inputValues[selectedTest][index].value}
+                        value={`${$inputValues[selectedTest][index].value}`}
                         placeholder="Value"
-                        name={`${index}`}
                         on:input={(event) => {
                           if (args.type === "Bytes") {
                             const hexRegex = /^0x([0-9A-Fa-f]+)$/;
@@ -315,10 +314,10 @@
                                 event.target.value;
                             }
                           } else {
-                          
-                          $inputValues[selectedTest][index].value =
-                            event.target.value;
-                        }}}
+                            $inputValues[selectedTest][index].value =
+                              event.target.value;
+                          }
+                        }}
                         type={getInputTypes(args.type)}
                       />
                     {/each}
