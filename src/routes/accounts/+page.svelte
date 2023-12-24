@@ -99,6 +99,15 @@
       $workspaces[$selectedWorkspace].accounts = $workspaces[
       $selectedWorkspace
     ].accounts.filter((token, i) => i !== index);
+    
+    $workspaces[$selectedWorkspace].idls = $workspaces[
+      $selectedWorkspace
+    ].idls.filter((idl) => idl.name !== programName);
+
+    $workspaces[$selectedWorkspace].tests = $workspaces[
+      $selectedWorkspace
+    ].tests.filter((test) => test.programId.name !== programName);
+
     };
 
     const deletePda = (index) => {

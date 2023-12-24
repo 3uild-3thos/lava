@@ -345,7 +345,7 @@
               account.kind === "pda"
             ) {
               onDeletePda(account.originalIndex);
-            } else if (account.kind === "program") {
+            } else if (account.kind === "Program") {
               onDeleteProgram(account.originalIndex);
             } else if (account.kind === "ata") {
               onDeleteATA(account.originalIndex);
