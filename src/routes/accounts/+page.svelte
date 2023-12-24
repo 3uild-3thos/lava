@@ -206,8 +206,9 @@
     function editProgram(index) {
       editingProgram = index;
       isEditProgramModalOpen = true;
+      programName = $workspaces[$selectedWorkspace].accounts[index].name;
       programAddress =
-        $workspaces[$selectedWorkspace].accounts[index].metadata?.address;
+      $workspaces[$selectedWorkspace].idls.find((idl)=>programName == idl.name)?.metadata?.address;
       programName = $workspaces[$selectedWorkspace].accounts[index].name;
     }
 
