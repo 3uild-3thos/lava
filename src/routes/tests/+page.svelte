@@ -67,7 +67,7 @@
         $workspaces[$selectedWorkspace].tests[selectedTest]?.instruction;
       inputValues.update((values) => {
         if (!values[selectedTest]) {
-          values[selectedTest] = instruction.args.map((arg) => {
+          values[selectedTest] = instruction?.args?.map((arg) => {
             return {
               value: "",
               type: arg.type,
@@ -79,7 +79,7 @@
       });
       inputAccounts.update((accounts) => {
         if (!accounts[selectedTest]) {
-          accounts[selectedTest] = instruction?.accounts.map((account) => {
+          accounts[selectedTest] = instruction?.accounts?.map((account) => {
             return {
               name: account.name,
               isMut: account.isMut,
@@ -211,7 +211,7 @@
     <div class="test--builder">
       {#if selectedTest === -1}
       <div class="test--builder--empty-state">
-        <img src="./select-test.svg" alt="Select a Test" />
+        <img src="/select-test.svg" alt="Select a Test" />
         <div class="test--builder--empty-state--title">
           Select a test to get started
         </div>
@@ -231,10 +231,10 @@
                     <div class="instruction--list--value">
                       {account.name}
                       {#if account.isMut}
-                        <img src="./modify.svg" alt="Mut Icon" />
+                        <img src="/modify.svg" alt="Mut Icon" />
                       {/if}
                       {#if account.isSigner}
-                        <img src="./signer.svg" alt="Signer Icon" />
+                        <img src="/signer.svg" alt="Signer Icon" />
                       {/if}
                     </div>
                     {#if account.name === "systemProgram"}
