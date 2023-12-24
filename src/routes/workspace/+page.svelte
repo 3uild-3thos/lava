@@ -181,20 +181,20 @@
 
         function finishIDL() {
           if (
-            (customProgramId?.length === 0 || isValidAddress(customProgramId)) &&
+            (!customProgramId || customProgramId?.length === 0 || isValidAddress(customProgramId)) &&
             customProgramName?.length > 0
           ) {
             const programAlreadyExists = $workspaces[
               $selectedWorkspace
             ].accounts.some(
-              (account) =>
-                account.name === customProgramName
-            );
+              (account) =>{
+                console.log(account.name, customProgramName)
+                return account.name === customProgramName
+            });
             if (programAlreadyExists) {
               programExists = true; // Set programExists to true
               return;
             }
-
             $workspaces[$selectedWorkspace].accounts = [
               ...$workspaces[$selectedWorkspace].accounts,
               {
@@ -210,7 +210,7 @@
                 name: customProgramName,
                 metadata: {
                   ...idlToAdd.metadata,
-                  address: customProgramId.length === 0 ? undefined : customProgramId,
+                  address: customProgramId?.length === 0 ? undefined : customProgramId,
                 },
               },
             ];
@@ -308,7 +308,7 @@
                         <input
                           class="input--primary"
                           placeholder="Optional"
-                          value={customProgramId}
+                          value={customProgramId??" "}
                           on:input={(e) => (customProgramId = e.currentTarget.value)}
                         />
                         {#if !customProgramId}
