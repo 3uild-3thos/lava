@@ -13,8 +13,13 @@
   const dispatch = createEventDispatcher();
 
    $: if(editingPda !== -1) {
-     selectedProgram = $workspaces[$selectedWorkspace]?.accounts[editingPda].seeds.find((seed) => seed.type === "Program")?.name;
-  }
+     selectedProgram = $workspaces[$selectedWorkspace]?.accounts[editingPda].seeds.find((seed) => seed?.kind === "Program")?.value;
+     formData =
+    editingPda !== -1
+      ? seeds.filter((s) =>{console.log(s); s?.kind != "Program"})?.map((s) => s?.value)
+      : [];  }
+
+  
 
   let selectedSeed = null;
   const addSeed = (e) => {
@@ -24,11 +29,11 @@
 
   let formData =
     editingPda !== -1
-      ? seeds.filter((s) => s.type != "Program").map(({ value }) => value)
+      ? seeds.filter((s) => s?.kind != "Program")?.map((s) => s?.value)
       : [];
   let pdaSeeds =
     editingPda !== -1
-      ? seeds.filter((s) => s.type != "Program").map(({ type }) => type)
+      ? seeds.filter((s) => s?.kind != "Program").map((s) => s?.kind)
       : [];
   let formTouched = { pdaName: false };
   let valid = { pdaName: false };
@@ -95,10 +100,10 @@
     pdaSeeds = seeds?.map((seed, index) => {
       return {
         value: formData[index],
-        type: seed,
+        kind: seed,
       };
     });
-    pdaSeeds = [...pdaSeeds, { value: selectedProgram, type: "Program" }];
+    pdaSeeds = [...pdaSeeds, { value: selectedProgram, kind: "Program" }];
     if ($workspaces[$selectedWorkspace].accounts === undefined) {
       $workspaces[$selectedWorkspace].accounts = [];
     }
@@ -133,7 +138,18 @@
         account.authority = pdaName;
         account.name = account.authority + account.mint;
       });
-
+      console.log(formData)
+      pdaSeeds = seeds?.map((seed, index) => {
+      return {
+        value: formData[index],
+        kind: seed,
+      };
+    });
+    pdaSeeds = [...pdaSeeds, { value: selectedProgram, kind: "Program" }];
+    if ($workspaces[$selectedWorkspace].accounts === undefined) {
+      $workspaces[$selectedWorkspace].accounts = [];
+    }
+      console.log($workspaces[$selectedWorkspace].accounts[editingPda])
       $workspaces[$selectedWorkspace].accounts[editingPda] = {
         name: pdaName,
         seeds: pdaSeeds,
@@ -189,7 +205,7 @@
 
   <div class="modal--form-title">Seeds</div>
 
-  {#each seeds.filter((s) => s.type != "Program") as seed, index}
+  {#each seeds.filter((s) => s?.kind != "Program") as seed, index}
     <div
       class="modal--form-seed"
       style="display: flex; position:relative; justify-content: space-between; align-items: center; margin-bottom:0.5rem;"
@@ -293,7 +309,7 @@
         ? 'btn--disabled'
         : ''}"
     >
-      Create
+      Save
     </button>
   </div>
 </form>

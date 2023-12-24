@@ -369,7 +369,7 @@
         pdaName={selectedPdaName}
         selectedProgram={programCreate === -1 ? $workspaces[$selectedWorkspace].accounts[selectedPda]?.seeds?.find(
           (seed) => {
-            return seed.type === "Program"}
+            return seed?.kind === "Program"}
         )?.value: $workspaces[$selectedWorkspace].accounts[programCreate]?.name}
         seeds={selectedPdaSeeds}
       />
@@ -404,7 +404,7 @@
             >
           {/if}
         </div>
-        {#if ($workspaces[$selectedWorkspace].accounts.length > 0)}
+        {#if ($workspaces[$selectedWorkspace]?.accounts?.length > 0)}
           <div class="wallet--list">
             <AccountListCard
               accounts={
