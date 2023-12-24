@@ -209,17 +209,17 @@
     </div>
 
     <div class="test--builder">
+      {#if selectedTest === -1}
+      <div class="test--builder--empty-state">
+        <img src="./select-test.svg" alt="Select a Test" />
+        <div class="test--builder--empty-state--title">
+          Select a test to get started
+        </div>
+      </div>
+      {:else if $workspaces[$selectedWorkspace].tests?.length > 0}
       <form on:submit|preventDefault={saveTest} class="modal--form">
-        {#if selectedTest === -1}
-          <div class="test--builder--empty-state">
-            <img src="./select-test.svg" alt="Select a Test" />
-            <div class="test--builder--empty-state--title">
-              Select a test to get started
-            </div>
-          </div>
 
           <!-- Accounts -->
-        {:else if $workspaces[$selectedWorkspace].tests?.length > 0}
           <div class="test--content">
             <div class="test--form">
               <div class="content--header">
@@ -337,8 +337,8 @@
               <button type="submit">Save</button>
             {/if}
           </div>
-        {/if}
       </form>
+      {/if}
     </div>
   </div>
 {/if}
