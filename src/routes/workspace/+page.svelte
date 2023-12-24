@@ -198,13 +198,20 @@
             $workspaces[$selectedWorkspace].accounts = [
               ...$workspaces[$selectedWorkspace].accounts,
               {
+                name: customProgramName,
+                kind: "Program"
+              },
+            ];
+
+            $workspaces[$selectedWorkspace].idls = [
+              ...($workspaces[$selectedWorkspace].idls ?? []),
+              {
                 ...idlToAdd,
                 name: customProgramName,
                 metadata: {
                   ...idlToAdd.metadata,
                   address: customProgramId.length === 0 ? undefined : customProgramId,
                 },
-                kind: "program"
               },
             ];
 

@@ -27,13 +27,9 @@
     formTouched[field] = true;
   }
 
-  $: console.log(selectedProgram);
-
   let selectedInstruction;
 
   const createTest = () => {
-    console.log(testName, selectedProgram, selectedInstruction);
-
     if (valid.name) {
       $workspaces[$selectedWorkspace].tests = [
         ...$workspaces[$selectedWorkspace].tests,
@@ -78,7 +74,7 @@
   <div class="modal--form-title">Program</div>
   <Select
     items={$workspaces[$selectedWorkspace]?.accounts.filter(
-      (account) => account.kind === "program"
+      (account) => account.kind === "Program"
     ) ?? []}
     placeholder="Select a Program"
     on:change={(e) => {
@@ -110,7 +106,7 @@
 
   <div class="modal--form-title">Instructions</div>
   <Select
-    items={selectedProgram?.instructions ?? []}
+    items={($workspaces[$selectedWorkspace]?.idls?.find((idl)=>idl.name == selectedProgram.name)?.instructions ?? [])}
     placeholder="Select an Instruction"
     bind:value={selectedInstruction}
     on:clear={() => (selectedInstruction = [])}
