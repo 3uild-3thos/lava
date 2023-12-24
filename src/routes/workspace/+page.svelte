@@ -187,10 +187,7 @@
             const programAlreadyExists = $workspaces[
               $selectedWorkspace
             ].accounts.some(
-              (account) =>{
-                console.log(account.name, customProgramName)
-                return account.name === customProgramName
-            });
+              (account) => account.name === customProgramName);
             if (programAlreadyExists) {
               programExists = true; // Set programExists to true
               return;

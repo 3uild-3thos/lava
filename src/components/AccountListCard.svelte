@@ -333,7 +333,7 @@
               account.kind === "pda"
             ) {
               editPda(account.originalIndex);
-            } else if (account.kind === "program") {
+            } else if (account.kind === "Program") {
               onEditProgram(account.originalIndex);
             }
           }}

@@ -177,7 +177,7 @@
       $workspaces[$selectedWorkspace].accounts = $workspaces[$selectedWorkspace].accounts.map((account, index) => {
         if (index === event.index) {
           account.name = event.name;
-          account.metadata.address = event.address;
+          account.metadata = {address: event?.address};
         }
         return account;
       });
@@ -207,7 +207,7 @@
       editingProgram = index;
       isEditProgramModalOpen = true;
       programAddress =
-        $workspaces[$selectedWorkspace].accounts[index].metadata.address;
+        $workspaces[$selectedWorkspace].accounts[index].metadata?.address;
       programName = $workspaces[$selectedWorkspace].accounts[index].name;
     }
 
