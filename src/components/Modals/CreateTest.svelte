@@ -48,7 +48,7 @@
     }
     dispatch("closeModal");
     dispatch("updateSelectedTest");
-};
+  };
 </script>
 
 <h1 class="modal--title">
@@ -77,12 +77,14 @@
 
   <div class="modal--form-title">Program</div>
   <Select
-    items={$workspaces[$selectedWorkspace]?.accounts.filter(account=>account.kind ==="program") ?? []}
+    items={$workspaces[$selectedWorkspace]?.accounts.filter(
+      (account) => account.kind === "program"
+    ) ?? []}
     placeholder="Select a Program"
     on:change={(e) => {
-      dispatch("updateSelectedProgram", e);
-      console.log(e);
-      selectedProgram = e.detail;    }}
+      dispatch("updateSelectedProgram", e.detail);
+      selectedProgram = e.detail;
+    }}
   >
     <div slot="selection" class="select--option" let:selection>
       <Icon

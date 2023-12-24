@@ -105,8 +105,8 @@
 
   let selectedProgram: Idl | String = "";
 
-  const updateSelectedProgram = (event) => {
-    selectedProgram = event.detail.value;
+  const updateSelectedProgram = (e) => {
+    selectedProgram = e.detail;
   };
 
   const saveTest = () => {
