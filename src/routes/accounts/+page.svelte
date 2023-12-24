@@ -106,7 +106,7 @@
 
     $workspaces[$selectedWorkspace].tests = $workspaces[
       $selectedWorkspace
-    ].tests.filter((test) => test.programId.name !== programName);
+    ].tests.filter((test) => test.programId !== programName);
 
     };
 
@@ -238,7 +238,7 @@
         return getTokenColor($workspaces[$selectedWorkspace]?.accounts[originalIndex]?.symbol);
       case "wallet":
         return "#8A54FE";
-      case "program":
+      case "Program":
         return "#FE6054";
       case "ata":
         return "#A0A0AB";

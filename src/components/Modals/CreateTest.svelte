@@ -35,7 +35,7 @@
         ...$workspaces[$selectedWorkspace].tests,
         {
           name: testName,
-          programId: selectedProgram?.metadata?.address ?? selectedProgram,
+          programId: selectedProgram?.metadata?.address ?? selectedProgram.name,
           instruction: selectedInstruction,
           accounts: [],
           args: [],

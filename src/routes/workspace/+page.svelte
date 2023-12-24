@@ -415,7 +415,7 @@
                                 <div class="workspace--stat--value">
                                   {
                                     $workspaces[$selectedWorkspace]?.accounts.filter(
-                                      (account) => account.kind === "program"
+                                      (account) => account.kind === "Program"
                                     )?.length
                                   }
                                 </div>

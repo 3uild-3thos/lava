@@ -111,7 +111,6 @@
 
   const saveTest = () => {
     if (selectedTest !== -1) {
-      console.log($inputAccounts[selectedTest]);
       $workspaces[$selectedWorkspace].tests[selectedTest].accounts =
         $inputAccounts[selectedTest];
       $workspaces[$selectedWorkspace].tests[selectedTest].args =

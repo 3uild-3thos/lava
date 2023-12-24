@@ -69,7 +69,7 @@
           metadata: {
             address: programId ? programId : undefined,
           },
-          kind: "program",
+          kind: "Program",
         }
       ];
       dispatch("closeProgramModal");
