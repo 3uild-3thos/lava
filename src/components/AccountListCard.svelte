@@ -360,7 +360,7 @@
         />
       </div>
       <div slot="footer">
-        {#if account.kind === "wallet" || account.kind === "Program" || account.kind === "pda"}
+        {#if account.kind === "wallet" || account.kind === "pda"}
           <AtaList
             accounts={accounts}
             accountIndex={account.originalIndex}
