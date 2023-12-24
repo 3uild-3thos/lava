@@ -31,11 +31,7 @@ interface Seed {
 }
 
 export interface Program extends Account {
-  kind: "program"
-}
-
-export interface Program extends Account {
-  kind: "program"
+  kind: "Program"
 }
 
 export interface Mint extends Account {

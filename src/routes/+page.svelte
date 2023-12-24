@@ -24,7 +24,7 @@
       }
       $workspaces = [
         ...$workspaces,
-        { name, accounts: [], tests: [], version: "0.0.0" },
+        { name, accounts: [], tests: [], idls:[], version: "0.0.0" },
       ];
       $selectedWorkspace = $workspaces.length - 1;
       createModal = false;

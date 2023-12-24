@@ -54,7 +54,7 @@
       <div class="card--title">{title}</div>
       <div class="card--type">
         <img
-          src={`/${kind}.svg`}
+          src={`/${kind.toLowerCase()}.svg`}
           alt={`${kind} Icon`}
           style="width:16px;height:16px"
         />

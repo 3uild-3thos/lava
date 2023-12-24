@@ -286,7 +286,7 @@
     class="modal--form-select"
     value={selectedProgram}
     items={$workspaces[$selectedWorkspace]?.accounts
-      ?.filter((a) => a.kind === "program")
+      ?.filter((a) => a.kind === "Program")
       .map((p) => p.name)}
     placeholder="Select program"
     on:change={(e) => (selectedProgram = e.detail.value)}
