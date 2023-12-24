@@ -360,14 +360,14 @@
         />
       </div>
       <div slot="footer">
-        {#if account.kind === "wallet" || account.kind === "program" || account.kind === "pda"}
+        {#if account.kind === "wallet" || account.kind === "Program" || account.kind === "pda"}
           <AtaList
             accounts={accounts}
             accountIndex={account.originalIndex}
             walletTokenColors={colors}
             {hoveredCard}
           />
-        {:else if account.kind === "program"}
+        {:else if account.kind === "Program"}
           <PdaList
             {hoveredCard}
             {account}

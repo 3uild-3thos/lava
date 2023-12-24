@@ -23,7 +23,7 @@
         const content = readerEvent.target.result;
         idlToAdd = JSON.parse(content);
         programName = idlToAdd.name;
-        programId = idlToAdd.metadata.address;
+        programId = idlToAdd.metadata?.address ?? "";
       };
     };
     input.click();
@@ -42,7 +42,7 @@
       $workspaces[$selectedWorkspace].accounts = [
         ...$workspaces[$selectedWorkspace].accounts,
           {
-          kind: "program",
+          kind: "Program",
           name: programName,
           }
       ];
@@ -97,13 +97,12 @@
   let valid = { name: false, id: false };
 
   $: valid = {
-    id: programId.length > 0,
+    id: programId?.length > 0,
     name: programName.length > 0 && programName.length <= 32,
   };
 
   function handleInputTouch(field: string) {
     formTouched[field] = true;
-    console.log(formTouched);
   }
 </script>
 
