@@ -15,11 +15,10 @@
    $: if(editingPda !== -1) {
      selectedProgram = $workspaces[$selectedWorkspace]?.accounts[editingPda].seeds.find((seed) => seed?.kind === "Program")?.value;
      formData =
-    editingPda !== -1
-      ? seeds.filter((s) =>{console.log(s); s?.kind != "Program"})?.map((s) => s?.value)
-      : [];  }
-
-  
+      editingPda !== -1
+        ? seeds.filter((s) =>s?.kind != "Program")?.map((s) => s?.value)
+        : [];
+    }
 
   let selectedSeed = null;
   const addSeed = (e) => {
@@ -54,12 +53,11 @@
 
   function handleInput(event) {
     const { name, value } = event.target;
-    if (seeds[name] === "String") {
+    if (seeds[name] == "String") {
       formData[name] = value as string;
-    } else if (seeds[name] === "Pubkey") {
+    } else if (seeds[name] == "Pubkey") {
       formData[name] = value as string;
-    } else if (seeds[name] === "Bytes") {
-      // Check if it's a valid hexadecimal string with "0x" appended
+    } else if (seeds[name] == "Bytes") {
       const hexRegex = /^0x([0-9A-Fa-f]+)$/;
       if (hexRegex.test(value)) {
         formData[name] = value;
@@ -70,16 +68,18 @@
       } else {
         invalid_fields = [...invalid_fields, name];
       }
-    } else if (seeds[name] === "u8") {
+    } else if (seeds[name] == "u8") {
       formData[name] = value as number;
-    } else if (seeds[name] === "u16") {
+    } else if (seeds[name] == "u16") {
       formData[name] = value as number;
-    } else if (seeds[name] === "u32") {
+    } else if (seeds[name] == "u32") {
       formData[name] = value as number;
-    } else if (seeds[name] === "u64") {
+    } else if (seeds[name] == "u64") {
       formData[name] = value as number;
-    } else if (seeds[name] === "u128") {
+    } else if (seeds[name] == "u128") {
       formData[name] = value as number;
+    } else{
+      formData[name] = value as string;
     }
   }
 
@@ -138,18 +138,18 @@
         account.authority = pdaName;
         account.name = account.authority + account.mint;
       });
-      console.log(formData)
-      pdaSeeds = seeds?.map((seed, index) => {
+      pdaSeeds = seeds?.filter((s)=>s.kind != "Program").map((seed, index) => {
       return {
         value: formData[index],
-        kind: seed,
+        kind: seed.kind,
       };
     });
+
     pdaSeeds = [...pdaSeeds, { value: selectedProgram, kind: "Program" }];
     if ($workspaces[$selectedWorkspace].accounts === undefined) {
       $workspaces[$selectedWorkspace].accounts = [];
     }
-      console.log($workspaces[$selectedWorkspace].accounts[editingPda])
+
       $workspaces[$selectedWorkspace].accounts[editingPda] = {
         name: pdaName,
         seeds: pdaSeeds,
@@ -239,6 +239,7 @@
           placeholder={seed}
           on:input={handleInput}
           name={`${index}`}
+          value={formData[index]}
         />
         {:else if seed == "String"}
         <input
