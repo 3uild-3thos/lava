@@ -8,6 +8,7 @@
   import PdaList from "./PDAList.svelte";
   import CreateAta from "./Modals/CreateATA.svelte";
   import AtaRelationship from "./ATARelationship.svelte";
+  import { fade } from "svelte/transition";
 
   export let walletsLength: number;
   export let accounts: any = [];
@@ -297,6 +298,11 @@
     </div>
   </div></Modal
 >
+
+{#if sortedAccounts.length === 0}
+  <div class="empty--state--search" in:fade>Oops, theres nothing here...</div>
+{/if}
+
 
 {#each sortedAccounts as account, index}
   {#key sortType}
