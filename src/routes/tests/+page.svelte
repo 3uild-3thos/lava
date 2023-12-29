@@ -20,7 +20,6 @@
   import getInputTypes from "../../helpers/getInputTypes";
   import isStringArrayInRange from "../../helpers/isArrayInRange";
 
-  // a function that takes an Idl's instructions arguments and returns an schema for SubmitForm
   const getSchema = (args: any[]) => {
     let schema = {
       type: "object",
@@ -50,7 +49,6 @@
       $workspaces[$selectedWorkspace].tests = [];
     }
     ready = true;
-    console.log($workspaces[$selectedWorkspace].tests)
   });
 
   let selectedTest: number = -1;
@@ -65,28 +63,56 @@
   $: {
     if (selectedTest !== -1) {
       instruction =
-        $workspaces[$selectedWorkspace].tests[selectedTest]?.instruction;
+        $workspaces[$selectedWorkspace].idls?.find(program => {
+          if (typeof program === "string") {
+            return false;
+          } else {
+            return (
+              program.name ===
+                $workspaces[$selectedWorkspace].tests[selectedTest]?.programId ||
+              program.metadata?.address ===
+                $workspaces[$selectedWorkspace].tests[selectedTest]?.programId
+            );
+          }
+        })?.instructions?.find(
+          (instruction) => instruction.name ==
+            $workspaces[$selectedWorkspace].tests[selectedTest]?.instruction
+        );
+
       inputValues.update((values) => {
-        if (!values[selectedTest]) {
-          values[selectedTest] = instruction?.args?.map((arg) => {
-            return {
-              value: "",
-              type: arg.type,
-              name: arg.name,
-            };
+        if (values?.length == 0) {
+          values = instruction?.args?.map((arg) => {
+            switch (arg.type) {
+              case "u8":
+                return 0;
+              case "u16":
+                return 0;
+              case "u32":
+                return 0;
+              case "u64":
+                return 0;
+              case "u128":
+                return 0;
+              default:
+                return "";
+            }
           });
         }
         return values;
       });
       inputAccounts.update((accounts) => {
-        if (!accounts[selectedTest]) {
-          accounts[selectedTest] = instruction?.accounts?.map((account) => {
-            return {
-              name: account.name,
-              isMut: account.isMut,
-              isSigner: account.isSigner,
-            };
-          });
+        if (!accounts?.length > 0) {
+          accounts = instruction?.accounts?.map((account) =>
+            [
+              "systemProgram",
+              "associatedTokenProgram",
+              "tokenProgram",
+              "tokenProgram",
+              "tokenProgram2022",
+            ].includes(account.name)
+              ? account.name
+              : "",
+          );
         }
         return accounts;
       });
@@ -111,13 +137,11 @@
   };
 
   const saveTest = () => {
-    if (selectedTest !== -1) {
-      $workspaces[$selectedWorkspace].tests[selectedTest].accounts =
-        $inputAccounts[selectedTest];
-      $workspaces[$selectedWorkspace].tests[selectedTest].args =
-        $inputValues[selectedTest];
-    }
+    $workspaces[$selectedWorkspace].tests[selectedTest].accounts =
+      $inputAccounts;
+    $workspaces[$selectedWorkspace].tests[selectedTest].args = $inputValues;
   };
+  
 </script>
 
 <svelte:head>
@@ -168,16 +192,12 @@
               {index}
               on:updateSelectedTest={(event) => {
                 selectedTest = event.detail.index;
-
-                if (
-                  $workspaces[$selectedWorkspace].tests[
-                    selectedTest
-                  ]?.args.some((arg) => !!arg.value)
-                ) {
-                  $inputValues[selectedTest] =
-                    $workspaces[$selectedWorkspace].tests[selectedTest]?.args ??
-                    [];
-                }
+                $inputAccounts =
+                  $workspaces[$selectedWorkspace].tests[selectedTest]
+                    ?.accounts ?? [];
+                $inputValues =
+                  $workspaces[$selectedWorkspace].tests[selectedTest]?.args ??
+                  [];
               }}
               type={"test"}
             >
@@ -209,15 +229,14 @@
 
     <div class="test--builder">
       {#if selectedTest === -1}
-      <div class="test--builder--empty-state">
-        <img src="/select-test.svg" alt="Select a Test" />
-        <div class="test--builder--empty-state--title">
-          Select a test to get started
+        <div class="test--builder--empty-state">
+          <img src="/select-test.svg" alt="Select a Test" />
+          <div class="test--builder--empty-state--title">
+            Select a test to get started
+          </div>
         </div>
-      </div>
       {:else if $workspaces[$selectedWorkspace].tests?.length > 0}
-      <form on:submit|preventDefault={saveTest} class="modal--form">
-
+        <form on:submit|preventDefault={saveTest} class="modal--form">
           <!-- Accounts -->
           <div class="test--content">
             <div class="test--form">
@@ -225,7 +244,7 @@
                 <div class="test--content--title">Accounts</div>
               </div>
               <div class="instruction--list" in:fade|global={{ duration: 100 }}>
-                {#each $workspaces[$selectedWorkspace].tests[selectedTest].instruction.accounts as account, index}
+                {#each instruction.accounts as account, index}
                   <div class="test--form--item">
                     <div class="instruction--list--value">
                       {account.name}
@@ -237,45 +256,31 @@
                       {/if}
                     </div>
                     {#if account.name === "systemProgram"}
-                    <Select
-                    disabled
-                    value={`systemProgram`}>
-                    </Select>
-
+                      <Select disabled value={`systemProgram`}></Select>
                     {:else if account.name === "associatedTokenProgram"}
-                    <Select
-                    disabled
-                    value={`associatedTokenProgram`}/>
+                      <Select disabled value={`associatedTokenProgram`} />
                     {:else if account.name === "tokenProgram"}
-                    <Select
-                    items={["tokenProgram", "tokenProgram2022"]}
-                    value={$inputAccounts[index]?.name ?? "tokenProgram"}
-                    on:change={(e) => {$inputAccounts[index] = {name: e.detail.value}, console.log($inputAccounts[index])}}
-                    />
+                      <Select
+                        items={["tokenProgram", "tokenProgram2022"]}
+                        value={$inputAccounts[index] ?? "tokenProgram"}
+                        on:change={(e) => {
+                          ($inputAccounts[index] = e.detail.value),
+                          saveTest();
+                        }}
+                      />
                     {:else}
                       <Select
                         items={$workspaces[$selectedWorkspace]?.accounts.map(
-                          ({ name }) => name
+                          ({ name }) => name,
                         )}
                         id={`${index}`}
                         placeholder="Select wallet"
                         value={$workspaces[$selectedWorkspace]?.tests[
                           selectedTest
-                        ]?.accounts[index]?.name ?? ""}
+                        ]?.accounts[index] ?? ""}
                         on:change={(event) => {
-                          if ($inputAccounts[index]) {
-                            $inputAccounts[index].value = $workspaces[
-                              $selectedWorkspace
-                            ]?.accounts.find(
-                              ({ name }) => name === event.detail.value
-                            );
-                          } else {
-                            $inputAccounts[index] = {
-                              name: event.detail.name,
-                              isMut: false,
-                              isSigner: false,
-                            };
-                          }
+                          $inputAccounts[index] = event.detail.value;
+                          saveTest();
                         }}
                       />
                     {/if}
@@ -285,7 +290,7 @@
             </div>
 
             <!-- Args -->
-            {#if $inputValues[selectedTest]?.length > 0}
+            {#if instruction.args?.length > 0}
               <div class="test--form">
                 <div class="content--header">
                   <div class="test--content--title">Arguments</div>
@@ -295,7 +300,7 @@
                   in:fade|global={{ duration: 100 }}
                 >
                   <div class="test--content--list">
-                    {#each $inputValues[selectedTest] as args, index}
+                    {#each instruction.args as args, index}
                       <div class="argument">
                         {args.name}
                         <span class="arg--type"
@@ -306,24 +311,22 @@
                       </div>
                       <input
                         class="input--primary"
-                        value={`${$inputValues[selectedTest][index].value}`}
+                        value={`${$inputValues[index]}`}
                         placeholder="Value"
                         on:input={(event) => {
                           if (args.type === "Bytes") {
                             const hexRegex = /^0x([0-9A-Fa-f]+)$/;
                             if (hexRegex.test(event.target.value)) {
-                              $inputValues[selectedTest][index].value =
-                                event.target.value;
+                              $inputValues[index] = event.target.value;
                             } else if (
                               isStringArrayInRange(event.target.value)
                             ) {
-                              $inputValues[selectedTest][index].value =
-                                event.target.value;
+                              $inputValues[index] = event.target.value;
                             }
                           } else {
-                            $inputValues[selectedTest][index].value =
-                              event.target.value;
+                            $inputValues[index] = event.target.value;
                           }
+                          saveTest();
                         }}
                         type={getInputTypes(args.type)}
                       />
@@ -338,15 +341,10 @@
                   ))?.instructions[0].args)} {value} on:submit={submit} /-->
                   </div>
                 </div>
-                {#if selectedTest !== -1}
-                <div style="margin-top:50px;">
-                  <button class="btn btn--lava" type="submit">Save</button>
-                </div>
-                {/if}
               </div>
             {/if}
           </div>
-      </form>
+        </form>
       {/if}
     </div>
   </div>

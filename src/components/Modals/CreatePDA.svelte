@@ -179,7 +179,6 @@
       ? seeds.every((seed, index) => formData[index]?.length > 1) &&
         invalid_fields.length == 0
       : true;
-  $:console.log(selectedProgram)
 </script>
 
 <h1 class="modal--title">{editingPda === -1 ? "Create PDA" : "Edit PDA"}</h1>

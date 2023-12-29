@@ -253,7 +253,6 @@
         return getColorByAccountType(account.kind, index);
       });
 
-      $:console.log($workspaces[$selectedWorkspace]?.accounts)
   </script>
 
   <svelte:head>

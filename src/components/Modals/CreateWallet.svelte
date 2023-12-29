@@ -38,7 +38,6 @@
 
   function handleInputTouch(field: string) {
     formTouched[field] = true;
-    console.log(formTouched);
   }
 
   function onEditWallet() {
