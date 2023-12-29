@@ -176,7 +176,7 @@
 
   $: validSeeds =
     editingPda === -1
-      ? seeds.every((seed, index) => formData[index]?.length > 1) &&
+      ? seeds.every((seed, index) => formData[index]?.length > 0) &&
         invalid_fields.length == 0
       : true;
 </script>
