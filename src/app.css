@@ -438,7 +438,7 @@ a {
 }
 
 .export--grid {
-  @apply mt-4 grid grid-cols-2 gap-4;
+  @apply mt-4 grid grid-cols-3 gap-4;
 }
 
 .font-black {

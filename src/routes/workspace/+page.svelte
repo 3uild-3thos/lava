@@ -223,6 +223,7 @@
         <title>
           {`⬡ Lava - Workspace`}
         </title>
+        <link href="https://unpkg.com/prism-themes@1.9.0/themes/prism-duotone-dark.min.css" rel="stylesheet" />
       </svelte:head>
 
       {#if ready}
@@ -257,7 +258,7 @@
 
                     <!-- Export Modal -->
                     <Modal
-                      width={300}
+                      width={500}
                       bind:isOpen={isExportModalOpen}
                       on:close={() => (isExportModalOpen = false)}
                     >
