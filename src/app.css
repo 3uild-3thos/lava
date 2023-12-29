@@ -920,11 +920,11 @@ body {
 }
 
 .test--content--title {
-  @apply mb-1 font-sans text-lg font-medium text-[#FE6054];
+  @apply mb-1 font-sans text-lg font-medium text-[#54FE98];
 }
 
 .test--form {
-  @apply mx-auto w-1/2;
+  @apply mx-auto px-4;
 }
 
 .test--form--item {

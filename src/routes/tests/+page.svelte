@@ -14,7 +14,7 @@
   import { fade, slide } from "svelte/transition";
   import DeleteTest from "../../components/Modals/DeleteTest.svelte";
   import Select from "svelte-select/no-styles/Select.svelte";
-  import { writable } from "svelte/store";
+  import { readonly, writable } from "svelte/store";
   import type { Idl } from "@coral-xyz/anchor";
   import { SubmitForm } from "@restspace/svelte-schema-form";
   import getInputTypes from "../../helpers/getInputTypes";
@@ -50,6 +50,7 @@
       $workspaces[$selectedWorkspace].tests = [];
     }
     ready = true;
+    console.log($workspaces[$selectedWorkspace].tests)
   });
 
   let selectedTest: number = -1;
@@ -115,7 +116,6 @@
         $inputAccounts[selectedTest];
       $workspaces[$selectedWorkspace].tests[selectedTest].args =
         $inputValues[selectedTest];
-      alert("Test saved");
     }
   };
 </script>
@@ -237,13 +237,21 @@
                       {/if}
                     </div>
                     {#if account.name === "systemProgram"}
-                      <input
-                        class="input--primary"
-                        type="text"
-                        readonly
-                        name={`${index}`}
-                        value="systemProgram"
-                      />
+                    <Select
+                    disabled
+                    value={`systemProgram`}>
+                    </Select>
+
+                    {:else if account.name === "associatedTokenProgram"}
+                    <Select
+                    disabled
+                    value={`associatedTokenProgram`}/>
+                    {:else if account.name === "tokenProgram"}
+                    <Select
+                    items={["tokenProgram", "tokenProgram2022"]}
+                    value={$inputAccounts[index]?.name ?? "tokenProgram"}
+                    on:change={(e) => {$inputAccounts[index] = {name: e.detail.value}, console.log($inputAccounts[index])}}
+                    />
                     {:else}
                       <Select
                         items={$workspaces[$selectedWorkspace]?.accounts.map(
@@ -330,10 +338,12 @@
                   ))?.instructions[0].args)} {value} on:submit={submit} /-->
                   </div>
                 </div>
+                {#if selectedTest !== -1}
+                <div style="margin-top:50px;">
+                  <button class="btn btn--lava" type="submit">Save</button>
+                </div>
+                {/if}
               </div>
-            {/if}
-            {#if selectedTest !== -1}
-              <button type="submit">Save</button>
             {/if}
           </div>
       </form>

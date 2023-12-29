@@ -13,7 +13,7 @@
   const dispatch = createEventDispatcher();
 
    $: if(editingPda !== -1) {
-     selectedProgram = $workspaces[$selectedWorkspace]?.accounts[editingPda].seeds.find((seed) => seed?.kind === "Program")?.value;
+     selectedProgram = $workspaces[$selectedWorkspace]?.accounts[editingPda].program;
      formData =
       editingPda !== -1
         ? seeds.filter((s) =>s?.kind != "Program")?.map((s) => s?.value)
@@ -103,7 +103,7 @@
         kind: seed,
       };
     });
-    pdaSeeds = [...pdaSeeds, { value: selectedProgram, kind: "Program" }];
+    pdaSeeds = [...pdaSeeds];
     if ($workspaces[$selectedWorkspace].accounts === undefined) {
       $workspaces[$selectedWorkspace].accounts = [];
     }
@@ -113,6 +113,7 @@
         name: pdaName,
         seeds: pdaSeeds,
         kind: "pda",
+        program: selectedProgram,
       },
     ];
     dispatch("closePDAModal");
@@ -145,7 +146,7 @@
       };
     });
 
-    pdaSeeds = [...pdaSeeds, { value: selectedProgram, kind: "Program" }];
+    pdaSeeds = [...pdaSeeds];
     if ($workspaces[$selectedWorkspace].accounts === undefined) {
       $workspaces[$selectedWorkspace].accounts = [];
     }
@@ -154,6 +155,7 @@
         name: pdaName,
         seeds: pdaSeeds,
         kind: "pda",
+        program: selectedProgram,
       };
       dispatch("closePDAModal");
     }
@@ -177,6 +179,7 @@
       ? seeds.every((seed, index) => formData[index]?.length > 1) &&
         invalid_fields.length == 0
       : true;
+  $:console.log(selectedProgram)
 </script>
 
 <h1 class="modal--title">{editingPda === -1 ? "Create PDA" : "Edit PDA"}</h1>
@@ -290,6 +293,7 @@
       .map((p) => p.name)}
     placeholder="Select program"
     on:change={(e) => (selectedProgram = e.detail.value)}
+    on:clear={() => (selectedProgram = "")}
   />
 
   {#if pdaAlreadyExists}

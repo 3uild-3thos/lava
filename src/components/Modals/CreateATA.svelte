@@ -7,16 +7,19 @@
   import Icon from "../avatars/index.svelte";
   let amount = 1000000000;
   let accountAssigned = "";
+  let name = "";
   let formSubmitted = false;
   let ataAlreadyExists = false;
   const dispatch = createEventDispatcher();
 
   let valid = {
     token_amount: false,
+    name: false,
   };
 
   let formTouched = {
     token_amount: false,
+    name: false,
   };
 
   function updateAccount(event) {
@@ -39,7 +42,7 @@
         ...$workspaces[$selectedWorkspace].accounts,
         {
             amount: amount,
-            name: accountAssigned.value + $workspaces[$selectedWorkspace].accounts[assigningMint.index].symbol,
+            name: name,
             authority: accountAssigned.value,
             mint: $workspaces[$selectedWorkspace].accounts[assigningMint.index].symbol,
             kind: "ata",
@@ -50,15 +53,26 @@
 
   $: formTouched = {
     token_amount: amount >= 0 || formSubmitted,
+    name: name.length > 0 || formSubmitted,
   };
 
   $: valid = {
     token_amount: amount >= 0 && amount <= 1000000000000000,
+    name: name.length > 0 && name.length <= 32,
   };
 </script>
 
 <h1 class="modal--title">Create ATA</h1>
 <div class="modal--form">
+  <div class="modal--form-title">Name</div>
+  <input
+  class="input--primary {!valid.name && formTouched.name
+    ? 'input--invalid'
+    : ''}"
+  placeholder="My ATA"
+  type="text"
+  bind:value={name}
+/>
   <div class="modal--form-title">Account</div>
   <Select
   items={$workspaces[$selectedWorkspace]?.accounts

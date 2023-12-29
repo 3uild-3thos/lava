@@ -252,6 +252,8 @@
       ?.map((account, index) => {
         return getColorByAccountType(account.kind, index);
       });
+
+      $:console.log($workspaces[$selectedWorkspace]?.accounts)
   </script>
 
   <svelte:head>
@@ -432,7 +434,7 @@
               on:editProgram={(event) => editProgram(event.detail.index)}
               on:deleteATA={(event) => deleteATA(event.detail.index)}
               on:openCreatePda={(event) => (
-                (programCreate = event.detail.data), (isCreatePDAModalOpen = true)
+                (programCreate = event.detail.data, (selectedPda = -1)), (isCreatePDAModalOpen = true)
               )}
               {searchTerm}
               {sortType}
