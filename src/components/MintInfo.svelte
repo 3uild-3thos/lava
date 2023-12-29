@@ -78,7 +78,7 @@
       {account.decimals}
     </div>
     <div
-      style="margin-left:auto;">
+      style="margin-left:auto;" class="token--assign">
     Create ATA 
     <button
       class="tokens-button"

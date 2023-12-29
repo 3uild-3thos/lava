@@ -1223,6 +1223,10 @@ html {
   @apply brightness-120 w-full truncate font-mono text-[16px] font-medium filter;
 }
 
+.token--assign {
+  @apply font-mono
+}
+
 .token--supply--modal {
   color: var(--supply);
   @apply brightness-120 w-full truncate font-mono text-[14px] font-medium filter;

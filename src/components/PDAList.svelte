@@ -28,3 +28,9 @@
   </button
   >
 </div>
+
+<style lang="scss">
+  .ata--assign {
+    @apply absolute right-4 bottom-5
+  }
+</style>

@@ -49,11 +49,11 @@
   }
 
   $: formTouched = {
-    token_amount: amount > 0 || formSubmitted,
+    token_amount: amount >= 0 || formSubmitted,
   };
 
   $: valid = {
-    token_amount: amount > 0 && amount <= 1000000000000000,
+    token_amount: amount >= 0 && amount <= 1000000000000000,
   };
 </script>
 

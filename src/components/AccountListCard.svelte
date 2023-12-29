@@ -360,18 +360,12 @@
         />
       </div>
       <div slot="footer">
-        {#if account.kind === "wallet" || account.kind === "pda"}
+        {#if account.kind === "wallet" || account.kind === "pda" || account.kind === "Program"}
           <AtaList
             accounts={accounts}
             accountIndex={account.originalIndex}
             walletTokenColors={colors}
             {hoveredCard}
-          />
-        {:else if account.kind === "Program"}
-          <PdaList
-            {hoveredCard}
-            {account}
-            on:openCreatePda={(event) => onCreatePda(event.detail.index)}
           />
         {:else if account.kind === "mint"}
           <MintInfo
@@ -387,7 +381,13 @@
             <AtaRelationship {colors} {accounts}
             ata={account}/>
         {/if}
-
+        {#if account.kind === "Program"}
+        <PdaList
+          {hoveredCard}
+          {account}
+          on:openCreatePda={(event) => onCreatePda(event.detail.index)}
+        />
+        {/if}
       </div>
     </Card>
   {/key}
