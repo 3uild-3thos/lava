@@ -866,6 +866,9 @@ body {
   @apply absolute left-3.5 top-[50%] w-[80%] -translate-y-[50%] transform overflow-hidden truncate text-sm font-medium leading-none;
 }
 
+.svelte-select.disabled .value-container:after {
+  @apply hidden
+}
 .svelte-select .value-container:after {
   background-image: url("./chevron.svg");
   background-size: cover;
@@ -1014,6 +1017,14 @@ body {
 
 .tests--list--item--card {
   @apply border-lava-mute bg-lava-bg relative box-border flex h-auto w-full flex-shrink-0 cursor-pointer flex-col items-start justify-start rounded-xl border border-solid border-opacity-10 p-3 transition duration-200 hover:border-opacity-20;
+}
+
+.tests--list--item:hover .auto--save {
+  opacity:0;
+}
+
+.auto--save {
+  @apply text-lava-success text-sm absolute right-4 transition ease-in
 }
 
 .tests--list--item:hover .edit-icon {
@@ -1810,3 +1821,4 @@ html {
 .wrapper {
   @apply flex w-full overflow-hidden;
 }
+

@@ -60,6 +60,15 @@
 
   let instruction;
 
+  let showAutoSave = $workspaces[$selectedWorkspace].tests.map(() => false);
+
+  function testUpdated(index: number) {
+    showAutoSave[index] = true;
+    setTimeout(() => {
+      showAutoSave[index] = false;
+    }, 2000);
+  }
+
   $: {
     if (selectedTest !== -1) {
       instruction =
@@ -119,17 +128,6 @@
     }
   }
 
-  function beforeUnload() {
-    if (selectedTest !== -1) {
-      // Cancel the event as stated by the standard.
-      event.preventDefault();
-      // Chrome requires returnValue to be set.
-      event.returnValue = "";
-      // more compatibility
-      return "...";
-    }
-  }
-
   let selectedProgram: Idl | String = "";
 
   const updateSelectedProgram = (e) => {
@@ -137,6 +135,7 @@
   };
 
   const saveTest = () => {
+    testUpdated(selectedTest);
     $workspaces[$selectedWorkspace].tests[selectedTest].accounts =
       $inputAccounts;
     $workspaces[$selectedWorkspace].tests[selectedTest].args = $inputValues;
@@ -150,7 +149,6 @@
   </title>
 </svelte:head>
 
-<svelte:window on:beforeunload={beforeUnload} />
 
 {#if ready}
   <!-- Create Test Modal -->
@@ -161,11 +159,8 @@
   >
     <CreateTest
       {selectedTest}
-      {selectedProgram}
       on:closeModal={() => (isCreateTestModalOpen = false)}
-      on:updateSelectedProgram={updateSelectedProgram}
-      on:updateSelectedTest={() =>
-        (selectedTest = $workspaces[$selectedWorkspace].tests.length - 1)}
+      on:updateSelectedTest={() => (selectedTest = $workspaces[$selectedWorkspace].tests.length - 1)}
     />
   </Modal>
 
@@ -175,7 +170,7 @@
     bind:isOpen={isDeleteTestModalOpen}
     on:close={() => (isDeleteTestModalOpen = false)}
   >
-    <DeleteTest on:cancelDelete={() => (isDeleteTestModalOpen = false)} />
+    <DeleteTest on:cancelDelete={() => (isDeleteTestModalOpen = false)} on:updateSelectedTest={() => selectedTest = $workspaces[$selectedWorkspace].tests.length - 1} {selectedTest} />
   </Modal>
 
   <div class="tests" in:fade|global>
@@ -202,13 +197,19 @@
               type={"test"}
             >
               <div slot="content" class="test--slot">
+                {#if showAutoSave[index]}
+                  <div class="auto--save" transition:fade={{duration:500}}>
+                    Test Saved
+                  </div>
+                {/if}
                 <div
-                  class="edit-icon always--shown"
-                  on:click={() => (isCreateTestModalOpen = true)}
+                  style="left:0;top:0;position:relative;"
+                  class="edit-icon"
+                  on:click={() => (selectedTest = index, isCreateTestModalOpen = true)}
                 />
                 <div
-                  class="trash-icon always--shown"
-                  on:click={() => (isDeleteTestModalOpen = true)}
+                  class="trash-icon"
+                  on:click={() => (selectedTest = index, isDeleteTestModalOpen = true)}
                 />
               </div>
             </TestItem>
@@ -235,7 +236,7 @@
             Select a test to get started
           </div>
         </div>
-      {:else if $workspaces[$selectedWorkspace].tests?.length > 0}
+      {:else if selectedTest !== -1 && $workspaces[$selectedWorkspace].tests?.length > 0 && instruction}
         <form on:submit|preventDefault={saveTest} class="modal--form">
           <!-- Accounts -->
           <div class="test--content">
@@ -244,7 +245,7 @@
                 <div class="test--content--title">Accounts</div>
               </div>
               <div class="instruction--list" in:fade|global={{ duration: 100 }}>
-                {#each instruction.accounts as account, index}
+                {#each instruction?.accounts as account, index}
                   <div class="test--form--item">
                     <div class="instruction--list--value">
                       {account.name}

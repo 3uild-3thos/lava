@@ -1,6 +1,15 @@
 <script>
+  import { workspaces, selectedWorkspace } from "../../stores/store";
   import { createEventDispatcher } from "svelte";
   const dispatch = createEventDispatcher();
+  export let selectedTest = -1;
+
+  const deleteTest = (index) => {
+    $workspaces[$selectedWorkspace].tests = $workspaces[
+      $selectedWorkspace
+    ].tests.filter((token, i) => i !== index);
+    dispatch("updateSelectedTest");
+  };
 </script>
 
 <h1 class="modal--title">Delete Test</h1>
@@ -19,7 +28,8 @@
     <button
       class="btn btn--lava"
       on:click={() => {
-        dispatch("deleteTest");
+        deleteTest(selectedTest);
+        dispatch("cancelDelete");
       }}>Confirm</button
     >
   </div>
