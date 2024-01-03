@@ -88,7 +88,7 @@
       title: "Import IDL",
       subtitle: "An IDL is a JSON file that describes a program's interface.",
       completed: $workspaces[$selectedWorkspace]?.accounts.filter(
-                                      (account) => account.kind === "programs"
+                                      (account) => account.kind === "Program"
       )?.length > 0,
       buttonText: "Import",
       graphic: "/import-idl.svg",
@@ -449,9 +449,9 @@
                               {#each gettingStarted as step, index}
                                 <div
                                   class="workspace--getting-started--card"
+                                  on:click={(e) => onClickStep(e, index)}
                                   on:mouseover={() => (hoveredStep = index)}
                                   on:mouseout={() => (hoveredStep = -1)}
-                                  on:click={() => onClickStep(index)}
                                   style={`--color: ${step.color}; opacity: ${
                                     hoveredStep !== -1 && hoveredStep !== index ? 0.2 : 1
                                   }`}
