@@ -36,7 +36,7 @@
         {
           name: testName,
           programId: selectedProgram?.metadata?.address ?? selectedProgram.name,
-          instruction: selectedInstruction.name,
+          instruction: selectedInstruction?.name,
           accounts: [],
           args: [],
         },
