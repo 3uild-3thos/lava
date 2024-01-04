@@ -32,6 +32,7 @@
   let ataMint = -1;
   let isCreateATAModalOpen = false;
   let deleteATAModal = false;
+  let selectedATA = -1;
 
 
   function deleteWallet(index: number) {
@@ -106,6 +107,11 @@
 
   function openCreateATAModal(index: any) {
     ataMint = index;
+    isCreateATAModalOpen = true;
+  }
+
+  function onEditATA(index: number) {
+    selectedATA = index;
     isCreateATAModalOpen = true;
   }
 
@@ -185,6 +191,7 @@
   <CreateAta
   on:closeAtaModal={() => (isCreateATAModalOpen = false)}
   assigningMint={ataMint}
+  {selectedATA}
   tokenColors={colors}
   />
 </Modal>
@@ -320,7 +327,6 @@
       balance={account.sol_balance}
     >
       <div slot="options">
-        {#if account.kind !== "ata"}
         <div
           class="edit-icon"
           on:click={(event) => {
@@ -335,10 +341,11 @@
               editPda(account.originalIndex);
             } else if (account.kind === "Program") {
               onEditProgram(account.originalIndex);
+            } else if (account.kind === "ata") {
+              onEditATA(account.originalIndex);
             }
           }}
         />
-        {/if}
         <div
           class="trash-icon"
           on:click={(event) => {

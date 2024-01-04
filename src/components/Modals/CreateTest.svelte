@@ -4,13 +4,16 @@
   import { workspaces, selectedWorkspace } from "../../stores/store";
   import type { Idl } from "@coral-xyz/anchor";
   import { createEventDispatcher } from "svelte";
-  import filter from "svelte-select/filter";
   const dispatch = createEventDispatcher();
 
+  let nameAlreadyExists = false;
   export let selectedTest: number = -1;
-  export let selectedProgram: Idl;
 
-  let testName: string = "";
+  $:console.log($workspaces[$selectedWorkspace].tests)
+
+  $:console.log(selectedTest)
+
+  let testName = $workspaces[$selectedWorkspace]?.tests[selectedTest]?.name ?? "";
 
   let formTouched: any = { name: false };
   let valid: any = { name: false };
@@ -27,10 +30,26 @@
     formTouched[field] = true;
   }
 
-  let selectedInstruction;
+  const updateTest = () => {
+    const testNameExists = $workspaces[$selectedWorkspace].tests.some(test => test.name === testName);
+    if (valid.name && !testNameExists) {
+      $workspaces[$selectedWorkspace].tests[selectedTest] = {
+        name: testName,
+        programId: selectedProgram?.metadata?.address ?? selectedProgram.name,
+        instruction: selectedInstruction.name,
+        accounts: [],
+        args: [],
+      };
+      dispatch("closeModal");
+      dispatch("updateSelectedTest");
+    } else {
+      nameAlreadyExists = true;
+    }
+  };
 
   const createTest = () => {
-    if (valid.name) {
+    const testNameExists = $workspaces[$selectedWorkspace].tests.some(test => test.name === testName);
+    if (valid.name && !testNameExists) {
       $workspaces[$selectedWorkspace].tests = [
         ...$workspaces[$selectedWorkspace].tests,
         {
@@ -41,10 +60,17 @@
           args: [],
         },
       ];
+      dispatch("closeModal");
+      dispatch("updateSelectedTest");
+    } else {
+      nameAlreadyExists = true;
     }
-    dispatch("closeModal");
-    dispatch("updateSelectedTest");
   };
+
+  $: selectedProgram = 
+  $workspaces[$selectedWorkspace]?.accounts?.find(test => $workspaces[$selectedWorkspace]?.tests[selectedTest]?.programId == test.name) ?? "";
+  $: selectedInstruction = 
+  $workspaces[$selectedWorkspace]?.idls?.find(idl => idl.name == selectedProgram.name)?.instructions?.find(instruction => instruction.name == $workspaces[$selectedWorkspace]?.tests[selectedTest]?.instruction) ?? "";
 </script>
 
 <h1 class="modal--title">
@@ -75,10 +101,15 @@
   <Select
     items={$workspaces[$selectedWorkspace]?.accounts.filter(
       (account) => account.kind === "Program"
+    ).map(
+      (program, index) => ({
+        ...program,
+        value: index
+      })
     ) ?? []}
+    value={selectedProgram}
     placeholder="Select a Program"
     on:change={(e) => {
-      dispatch("updateSelectedProgram", e.detail);
       selectedProgram = e.detail;
     }}
   >
@@ -106,9 +137,17 @@
 
   <div class="modal--form-title">Instructions</div>
   <Select
-    items={($workspaces[$selectedWorkspace]?.idls?.find((idl)=>idl.name == selectedProgram.name)?.instructions ?? [])}
+    items={($workspaces[$selectedWorkspace]?.idls?.find((idl)=>idl.name == selectedProgram.name)?.instructions.map(
+      (instruction, index) => ({
+        ...instruction,
+        value: index
+      })
+    ) ?? [])}
     placeholder="Select an Instruction"
-    bind:value={selectedInstruction}
+    value={selectedInstruction}
+    on:change={(e) => {
+      selectedInstruction = e.detail;
+    }}
     on:clear={() => (selectedInstruction = [])}
   >
     <div slot="selection" class="select--option" let:selection>
@@ -134,6 +173,15 @@
   </Select>
 </div>
 
+{#if nameAlreadyExists}
+  <div class="already--exists">
+    A test with this name already exists
+  </div>
+{/if}
 <div class="btns--modal">
-  <button class="btn btn--lava" on:click={createTest}>Create</button>
+  <button class="btn btn--lava {!valid.name || !selectedProgram || !selectedInstruction ? 'btn--disabled' : ''}" 
+  disabled={!selectedProgram || !selectedInstruction || !testName || testName?.length > 32}
+  on:click={selectedTest === -1 ? createTest : updateTest}>
+  {selectedTest === -1 ? 'Create' : 'Update'}
+</button>
 </div>

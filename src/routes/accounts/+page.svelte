@@ -435,6 +435,7 @@
               on:openCreatePda={(event) => (
                 (programCreate = event.detail.data, (selectedPda = -1)), (isCreatePDAModalOpen = true)
               )}
+
               {searchTerm}
               {sortType}
             />
