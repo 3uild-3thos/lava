@@ -482,7 +482,6 @@
                                     </div>
                                     <button
                                       class="btn btn--primary btn--fit getting-started--btn"
-                                      on:click={(e) => onClickStep(e, index)}
                                       ><img
                                         style="width:16px;height:16px;margin-right:5px;"
                                         src={step.buttonIcon}
