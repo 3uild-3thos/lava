@@ -56,7 +56,7 @@
 
   let inputValues = writable<[]>([]);
 
-  let inputAccounts = writable<[]>([]);
+  let inputAccounts = writable<{}>({});
 
   let instruction;
 
@@ -110,9 +110,12 @@
         return values;
       });
       inputAccounts.update((accounts) => {
-        if (!accounts?.length > 0) {
-          accounts = instruction?.accounts?.map((account) =>
-            [
+        if (!(Object.keys(accounts)?.length > 0)) {
+          accounts = instruction?.accounts?.reduce((prev,account) =>{
+            if (account.name === "systemProgram") {
+              return {...prev,[account.name]:account.name}
+            }
+            return {...prev,[account.name]:[
               "systemProgram",
               "associatedTokenProgram",
               "tokenProgram",
@@ -120,8 +123,8 @@
               "tokenProgram2022",
             ].includes(account.name)
               ? account.name
-              : "",
-          );
+              : "",}
+          },{});
         }
         return accounts;
       });
@@ -160,7 +163,11 @@
     <CreateTest
       {selectedTest}
       on:closeModal={() => (isCreateTestModalOpen = false)}
-      on:updateSelectedTest={() => (selectedTest = $workspaces[$selectedWorkspace].tests.length - 1)}
+      on:updateSelectedProgram={updateSelectedProgram}
+      on:updateSelectedTest={() =>{
+        selectedTest = $workspaces[$selectedWorkspace].tests.length - 1
+        $inputAccounts={}}
+      }
     />
   </Modal>
 
@@ -263,9 +270,9 @@
                     {:else if account.name === "tokenProgram"}
                       <Select
                         items={["tokenProgram", "tokenProgram2022"]}
-                        value={$inputAccounts[index] ?? "tokenProgram"}
+                        value={$inputAccounts[account.name] ?? "tokenProgram"}
                         on:change={(e) => {
-                          ($inputAccounts[index] = e.detail.value),
+                          ($inputAccounts[account.name] = e.detail.value),
                           saveTest();
                         }}
                       />
@@ -276,11 +283,9 @@
                         )}
                         id={`${index}`}
                         placeholder="Select wallet"
-                        value={$workspaces[$selectedWorkspace]?.tests[
-                          selectedTest
-                        ]?.accounts[index] ?? ""}
+                        value={$inputAccounts[account.name] ?? ""}
                         on:change={(event) => {
-                          $inputAccounts[index] = event.detail.value;
+                          $inputAccounts[account.name] = event.detail.value;
                           saveTest();
                         }}
                       />
