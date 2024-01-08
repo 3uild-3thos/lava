@@ -5,7 +5,7 @@
     import Avatar from "./avatars/index.svelte";
     import Popover from "./Popover.svelte";
 
-    $: mintIndex = accounts.findIndex((account) => account.kind === "mint" && account.symbol === ata.mint);
+    $: mintIndex = accounts.findIndex((account) => account.kind === "mint" && account.name === ata.mint);
     $: authorityIndex = accounts.findIndex((account) => account.name === ata.authority);
     let mintPopOverOpened = false;
     let authorityPopOverOpened = false;

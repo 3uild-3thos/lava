@@ -59,11 +59,10 @@
         );
 
         const ataAccounts = $workspaces[$selectedWorkspace].accounts.filter(
-        (account) => account.kind === "ata" && account.mint === $workspaces[$selectedWorkspace].accounts[index].symbol
+        (account) => account.kind === "ata" && account.mint === $workspaces[$selectedWorkspace].accounts[index].name
           );
           ataAccounts.forEach((account) => {;
-            account.name = account.authority + symbol
-            account.mint = symbol.toUpperCase()
+            account.mint = name
         });
 
         if (index !== -1) {

@@ -20,7 +20,7 @@
   );
 
   $: originalIndexes = atasOwned.map((ownedToken) => {
-    return accounts.findIndex((account) => account.kind === "mint" && account.symbol === ownedToken.mint);
+    return accounts.findIndex((account) => account.kind === "mint" && account.name === ownedToken.mint);
   });
 
 </script>

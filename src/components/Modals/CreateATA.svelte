@@ -48,7 +48,7 @@
             amount: amount ? amount : 0,
             name: name,
             authority: accountAssigned.value,
-            mint: $workspaces[$selectedWorkspace].accounts[assigningMint.index].symbol,
+            mint: $workspaces[$selectedWorkspace].accounts[assigningMint.index].name,
             kind: "ata",
         },
         ];
