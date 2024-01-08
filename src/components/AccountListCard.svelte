@@ -324,7 +324,7 @@
       kind={account.kind}
       ticker={account.symbol ? account.symbol : ""}
       cardPosition={index}
-      balance={account.sol_balance}
+      balance={account.balance}
     >
       <div slot="options">
         <div
@@ -339,7 +339,7 @@
               account.kind === "pda"
             ) {
               editPda(account.originalIndex);
-            } else if (account.kind === "Program") {
+            } else if (account.kind === "program") {
               onEditProgram(account.originalIndex);
             } else if (account.kind === "ata") {
               onEditATA(account.originalIndex);
@@ -358,7 +358,7 @@
               account.kind === "pda"
             ) {
               onDeletePda(account.originalIndex);
-            } else if (account.kind === "Program") {
+            } else if (account.kind === "program") {
               onDeleteProgram(account.originalIndex);
             } else if (account.kind === "ata") {
               onDeleteATA(account.originalIndex);
@@ -367,7 +367,7 @@
         />
       </div>
       <div slot="footer">
-        {#if account.kind === "wallet" || account.kind === "pda" || account.kind === "Program"}
+        {#if account.kind === "wallet" || account.kind === "pda" || account.kind === "program"}
           <AtaList
             accounts={accounts}
             accountIndex={account.originalIndex}
@@ -390,7 +390,7 @@
             <AtaRelationship {colors} {accounts}
             ata={account}/>
         {/if}
-        {#if account.kind === "Program"}
+        {#if account.kind === "program"}
         <PdaList
           {hoveredCard}
           {account}

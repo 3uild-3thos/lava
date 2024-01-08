@@ -33,7 +33,7 @@
     let walletName = "";
     let walletAddress = "";
     let pdaAddress = "";
-    let sol_balance = 10;
+    let balance = 10;
     let selectedPda = -1;
     let selectedPdaName = "";
     let selectedPdaSeeds = [];
@@ -82,7 +82,7 @@
     editingWallet = index;
     walletName = $workspaces[$selectedWorkspace].accounts[index].name;
     walletAddress = $workspaces[$selectedWorkspace].accounts[index].address;
-    sol_balance = $workspaces[$selectedWorkspace].accounts[index].sol_balance;
+    balance = $workspaces[$selectedWorkspace].accounts[index].balance;
     isCreateWalletModalOpen = true;
     };
 
@@ -177,7 +177,7 @@
       $workspaces[$selectedWorkspace].accounts = $workspaces[$selectedWorkspace].accounts.map((account, index) => {
         if (index === event.index) {
           account.name = event.name;
-          account.metadata = {address: event?.address};
+          account.address= event?.address?.trim()?.length > 0 ? event.address : undefined;
         }
         return account;
       });
@@ -239,7 +239,7 @@
         return getTokenColor($workspaces[$selectedWorkspace]?.accounts[originalIndex]?.symbol);
       case "wallet":
         return "#8A54FE";
-      case "Program":
+      case "program":
         return "#FE6054";
       case "ata":
         return "#A0A0AB";
@@ -328,7 +328,7 @@
       <CreateWallet
         {editingWallet}
         {walletName}
-        {sol_balance}
+        {balance}
         {walletAddress}
         on:closeModal={() => (isCreateWalletModalOpen = false)}
       />
@@ -380,7 +380,7 @@
         pdaName={selectedPdaName}
         selectedProgram={programCreate === -1 ? $workspaces[$selectedWorkspace].accounts[selectedPda]?.seeds?.find(
           (seed) => {
-            return seed?.kind === "Program"}
+            return seed?.kind === "program"}
         )?.value: $workspaces[$selectedWorkspace].accounts[programCreate]?.name}
         seeds={selectedPdaSeeds}
       />

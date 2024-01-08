@@ -42,14 +42,14 @@
       $workspaces[$selectedWorkspace].accounts = [
         ...$workspaces[$selectedWorkspace].accounts,
           {
-          kind: "Program",
+          kind: "program",
           name: programName,
           }
       ];
 
       $workspaces[$selectedWorkspace].idls = [
         ...$workspaces[$selectedWorkspace].idls,
-        {...idlToAdd, name: programName, metadata: {address: programId}},
+        {...idlToAdd, name: programName, metadata: programId?.trim()?.length > 0 ? {address:  programId }: undefined},
       ];
 
       dispatch("closeProgramModal");
@@ -66,10 +66,9 @@
         ...$workspaces[$selectedWorkspace].accounts,
         {
           name: programName,
-          metadata: {
-            address: programId ? programId : undefined,
-          },
-          kind: "Program",
+          address: programId ? programId : undefined,
+
+          kind: "program",
         }
       ];
       dispatch("closeProgramModal");
