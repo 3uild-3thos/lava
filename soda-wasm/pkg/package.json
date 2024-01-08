@@ -1,0 +1,1 @@
+{"name":"soda-wasm","version":"0.1.0","files":["soda_wasm_bg.wasm","soda_wasm.js","soda_wasm.d.ts"],"module":"soda_wasm.js","types":"soda_wasm.d.ts","sideEffects":["./snippets/*"],"type":"module"}
