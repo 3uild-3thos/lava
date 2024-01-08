@@ -16,7 +16,7 @@
      selectedProgram = $workspaces[$selectedWorkspace]?.accounts[editingPda].program;
      formData =
       editingPda !== -1
-        ? seeds.filter((s) =>s?.kind != "Program")?.map((s) => s?.value)
+        ? seeds.filter((s) =>s?.kind != "program")?.map((s) => s?.value)
         : [];
     }
 
@@ -28,11 +28,11 @@
 
   let formData =
     editingPda !== -1
-      ? seeds.filter((s) => s?.kind != "Program")?.map((s) => s?.value)
+      ? seeds.filter((s) => s?.kind != "program")?.map((s) => s?.value)
       : [];
   let pdaSeeds =
     editingPda !== -1
-      ? seeds.filter((s) => s?.kind != "Program").map((s) => s?.kind)
+      ? seeds.filter((s) => s?.kind != "program").map((s) => s?.kind)
       : [];
   let formTouched = { pdaName: false };
   let valid = { pdaName: false };
@@ -139,7 +139,7 @@
         account.authority = pdaName;
         account.name = account.authority + account.mint;
       });
-      pdaSeeds = seeds?.filter((s)=>s.kind != "Program").map((seed, index) => {
+      pdaSeeds = seeds?.filter((s)=>s.kind != "program").map((seed, index) => {
       return {
         value: formData[index],
         kind: seed.kind,
@@ -207,7 +207,7 @@
 
   <div class="modal--form-title">Seeds</div>
 
-  {#each seeds.filter((s) => s?.kind != "Program") as seed, index}
+  {#each seeds.filter((s) => s?.kind != "program") as seed, index}
     <div
       class="modal--form-seed"
       style="display: flex; position:relative; justify-content: space-between; align-items: center; margin-bottom:0.5rem;"
@@ -288,7 +288,7 @@
     class="modal--form-select"
     value={selectedProgram}
     items={$workspaces[$selectedWorkspace]?.accounts
-      ?.filter((a) => a.kind === "Program")
+      ?.filter((a) => a.kind === "program")
       .map((p) => p.name)}
     placeholder="Select program"
     on:change={(e) => (selectedProgram = e.detail.value)}

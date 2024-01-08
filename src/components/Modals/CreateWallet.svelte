@@ -2,7 +2,7 @@
   import { PublicKey } from "@solana/web3.js";
   export let editingWallet: number;
   export let walletName: string;
-  export let sol_balance: number;
+  export let balance: number;
   export let walletAddress: string;
   import { workspaces, selectedWorkspace } from "../../stores/store";
   import { createEventDispatcher } from "svelte";
@@ -25,15 +25,15 @@
   $: if (editingWallet === -1) {
     walletName = "";
     walletAddress = "";
-    sol_balance = 10;
+    balance = 10;
   }
 
-  let formTouched = { name: false, sol_balance: false };
-  let valid = { name: false, sol_balance: false };
+  let formTouched = { name: false, balance: false };
+  let valid = { name: false, balance: false };
 
   $: valid = {
     name: walletName.length > 0 && walletName.length <= 32,
-    sol_balance: sol_balance > 0 && sol_balance <= 1000000000,
+    balance: balance > 0 && balance <= 1000000000,
   };
 
   function handleInputTouch(field: string) {
@@ -75,21 +75,21 @@
       });
       $workspaces[$selectedWorkspace].accounts[editingWallet] = {
         name: walletName,
-        address: walletAddress,
-        sol_balance,
+        address: walletAddress.trim().length > 0 ? walletAddress : undefined,
+        balance,
         kind: "wallet",
       };
 
       walletName = "";
       walletAddress = "";
-      sol_balance = 0;
+      balance = 0;
       editingWallet = -1;
       dispatch("closeModal");
     }
   }
 
   function addWallet() {
-    if (valid.name && valid.sol_balance) {
+    if (valid.name && valid.balance) {
       // Check if wallet name already exists
       const accounts = $workspaces[$selectedWorkspace].accounts;
       const accountIndex = accounts.findIndex(
@@ -104,8 +104,8 @@
         ...$workspaces[$selectedWorkspace].accounts,
         {
           name: walletName,
-          address: walletAddress,
-          sol_balance,
+          address: walletAddress.trim().length > 0 ? walletAddress : undefined,
+          balance,
           kind: "wallet",
         },
       ];
@@ -140,10 +140,10 @@
 </div>
 <div class="modal--form-title">SOL Balance</div>
 <input
-  class="input--primary {!valid.sol_balance ? 'input--invalid' : ''}"
+  class="input--primary {!valid.balance ? 'input--invalid' : ''}"
   type="number"
   placeholder="10"
-  bind:value={sol_balance}
+  bind:value={balance}
 />
 
 {#if walletAlreadyExists}
@@ -153,16 +153,16 @@
 <div class="btns--modal">
   <button
     class={`btn btn--lava${
-      isValidAddress(walletAddress) && valid.name && valid.sol_balance
+      isValidAddress(walletAddress) && valid.name && valid.balance
         ? ""
         : " btn--disabled"
     }`}
     disabled={!isValidAddress(walletAddress) ||
       !valid.name ||
-      !valid.sol_balance}
+      !valid.balance}
     on:click={() => {
       handleInputTouch("name");
-      handleInputTouch("sol_balance");
+      handleInputTouch("balance");
       editingWallet == -1 ? addWallet() : onEditWallet();
     }}>{editingWallet == -1 ? "Create Wallet" : "Update Wallet"}</button
   >

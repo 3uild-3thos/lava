@@ -88,7 +88,7 @@
       title: "Import IDL",
       subtitle: "An IDL is a JSON file that describes a program's interface.",
       completed: $workspaces[$selectedWorkspace]?.accounts.filter(
-                                      (account) => account.kind === "Program"
+                                      (account) => account.kind === "program"
       )?.length > 0,
       buttonText: "Import",
       graphic: "/import-idl.svg",
@@ -162,7 +162,7 @@
         let editingWallet = -1;
         let walletName = "";
         let walletAddress = "";
-        let sol_balance = 10;
+        let balance = 10;
         let customProgramId = "";
         let customProgramName = "";
 
@@ -196,7 +196,7 @@
               ...$workspaces[$selectedWorkspace].accounts,
               {
                 name: customProgramName,
-                kind: "Program"
+                kind: "program"
               },
             ];
 
@@ -205,10 +205,9 @@
               {
                 ...idlToAdd,
                 name: customProgramName,
-                metadata: {
-                  ...idlToAdd.metadata,
-                  address: customProgramId?.length === 0 ? undefined : customProgramId,
-                },
+                metadata: customProgramId?.trim()?.length > 0 ? {
+                  address: customProgramId,
+                }: undefined,
               },
             ];
 
@@ -236,7 +235,7 @@
           <CreateWallet
             {editingWallet}
             {walletName}
-            {sol_balance}
+            {balance}
             {walletAddress}
                         on:closeModal={() => (isCreateWalletModalOpen = false)}
                       />
@@ -416,7 +415,7 @@
                                 <div class="workspace--stat--value">
                                   {
                                     $workspaces[$selectedWorkspace]?.accounts.filter(
-                                      (account) => account.kind === "Program"
+                                      (account) => account.kind === "program"
                                     )?.length
                                   }
                                 </div>

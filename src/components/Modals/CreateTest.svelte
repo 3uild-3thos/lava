@@ -96,7 +96,7 @@
   <div class="modal--form-title">Program</div>
   <Select
     items={$workspaces[$selectedWorkspace]?.accounts.filter(
-      (account) => account.kind === "Program"
+      (account) => account.kind === "program"
     ).map(
       (program, index) => ({
         ...program,
