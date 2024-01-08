@@ -25,7 +25,7 @@
         class="create--account--card"
         on:click={() => dispatch("exportWorkspace")}
       >
-        <img src="./existing-workspace.svg" />
+        <img src="/existing-workspace.svg" />
       </div>
       Workspace
     </div>
@@ -34,7 +34,7 @@
         class="create--account--card"
         on:click={() => dispatch("exportMocha")}
       >
-        <img src="./mocha.svg" />
+        <img src="/mocha.svg" />
       </div>
       Mocha Tests
     </div>

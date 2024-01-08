@@ -237,7 +237,7 @@
         style={isAssignedButtonDisabled ? "opacity:0.2" : "opacity:1"}
         on:click={() => addWallet()}
       >
-        <img src="./add.svg" class="assign--button--image" />
+        <img src="/add.svg" class="assign--button--image" />
       </button>
     </div>
 
@@ -268,7 +268,7 @@
               style="padding:0.25rem"
               on:click={() => removeWallet(index)}
             >
-              <img src="./remove.svg" style="width:14px;height:14px" />
+              <img src="/remove.svg" style="width:14px;height:14px" />
             </button>
           </div>
         {/each}

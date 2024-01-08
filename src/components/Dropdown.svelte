@@ -35,7 +35,7 @@
     class="btn btn--dropdown {isOpen ? 'btn--dropdown-open' : ''}"
     on:click={() => (isOpen = !isOpen)}
     >{title}
-    <img src="./dropdown.svg" style="width:16px;height:16px;margin-left:auto" />
+    <img src="/dropdown.svg" style="width:16px;height:16px;margin-left:auto" />
   </button>
   {#if isOpen}
     <div class="dropdown--content" transition:slide={{ duration: 200 }}>

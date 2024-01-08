@@ -378,6 +378,7 @@
           <MintInfo
             on:openAssign={(event) => {
               openCreateATAModal(event.detail.index);
+              selectedATA = -1;
             }}
             hovered={hoveredCard}
             {index}

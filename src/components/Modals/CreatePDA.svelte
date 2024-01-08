@@ -270,7 +270,7 @@
           seeds = seeds.filter((s, i) => i != index);
         }}
       >
-        <img src="./remove.svg" alt="Remove" />
+        <img src="/remove.svg" alt="Remove" />
       </div>
     </div>
   {/each}

@@ -19,10 +19,10 @@
               <div class="instruction--list--value">
                 {account.name}
                 {#if account.isMut}
-                  <img src="./modify.svg" alt="Mut Icon" />
+                  <img src="/modify.svg" alt="Mut Icon" />
                 {/if}
                 {#if account.isSigner}
-                  <img src="./signer.svg" alt="Signer Icon" />
+                  <img src="/signer.svg" alt="Signer Icon" />
                 {/if}
               </div>
               <Select />

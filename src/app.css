@@ -488,7 +488,7 @@ a {
 
 .input--search--icon {
   background-color: #131316;
-  background-image: url("./search.svg");
+  background-image: url("/search.svg");
   background-size: cover;
   z-index: 999;
   @apply absolute left-2.5 h-[20px] w-[20px] cursor-pointer;
@@ -528,7 +528,7 @@ a {
 }
 
 .modal--close {
-  background-image: url("./close.svg");
+  background-image: url("/close.svg");
   background-size: cover;
   @apply absolute right-4 top-5 h-[20px] w-[20px] cursor-pointer;
 }
@@ -870,7 +870,7 @@ body {
   @apply hidden
 }
 .svelte-select .value-container:after {
-  background-image: url("./chevron.svg");
+  background-image: url("/chevron.svg");
   background-size: cover;
   content: "";
   @apply absolute right-3 top-1/2 h-[16px] w-[16px] -translate-y-1/2 transform;

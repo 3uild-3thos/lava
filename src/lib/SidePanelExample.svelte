@@ -9,7 +9,7 @@
 </div>
 <div class="contracts--sidebar--search">
     <div class="contracts--search--icon">
-    <img src="./search.svg" alt="Search Icon">
+    <img src="/search.svg" alt="Search Icon">
     </div>
     <input class="contracts--sidebar--input" type="text" placeholder="Search your contracts">
 </div>

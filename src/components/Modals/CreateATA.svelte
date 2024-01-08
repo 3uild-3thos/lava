@@ -12,7 +12,7 @@
   let name = "";
   let formSubmitted = false;
   let ataAlreadyExists = false;
-  let initialiseATA = false;
+  let initialiseATA = true;
   let mint = ""
   const dispatch = createEventDispatcher();
 
@@ -69,6 +69,7 @@
       name: name,
       authority: accountAssigned.value ? accountAssigned.value : accountAssigned,
       mint: mint,
+      init: amount > 0 ? true : initialiseATA,
       kind: "ata",
     };
     dispatch("closeAtaModal");
@@ -93,7 +94,6 @@
     name: name.length > 0 && name.length <= 32,
   };
 
-  $:console.log($workspaces[$selectedWorkspace].accounts[selectedATA])
 </script>
 
 <h1 class="modal--title">{selectedATA === -1 ? 'Create ATA' : 'Edit ATA'}</h1>
@@ -160,7 +160,7 @@
         />
         <div class="checkmark" />
       </label>
-      Are you sure you want to initialise this ATA with zero tokens?
+      Do you want to initialise this ATA?
     </div>
     {/if}
 
@@ -172,10 +172,10 @@
 <!-- Form Submit -->
 <div class="btns--modal">
   <button
-    class="btn btn--lava {!valid.token_amount || accountAssigned.length === 0 || !valid.name || !amount && initialiseATA === false
+    class="btn btn--lava {accountAssigned.length === 0 || !valid.name
       ? 'btn--disabled'
       : ''}"
-    disabled={!valid.token_amount || accountAssigned.length === 0 || !valid.name || !amount && initialiseATA === false}
+    disabled={accountAssigned.length === 0 || !valid.name}
     on:click={selectedATA === - 1 ? createATA : updateATA}>{selectedATA === -1 ? 'Create' : 'Update'}</button
   >
 </div>

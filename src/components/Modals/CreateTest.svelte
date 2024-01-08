@@ -9,10 +9,6 @@
   let nameAlreadyExists = false;
   export let selectedTest: number = -1;
 
-  $:console.log($workspaces[$selectedWorkspace].tests)
-
-  $:console.log(selectedTest)
-
   let testName = $workspaces[$selectedWorkspace]?.tests[selectedTest]?.name ?? "";
 
   let formTouched: any = { name: false };
