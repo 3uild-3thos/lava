@@ -1826,3 +1826,6 @@ html {
   @apply flex w-full overflow-hidden;
 }
 
+.use_soda--view {
+  @apply relative flex w-full  gap-2;
+}

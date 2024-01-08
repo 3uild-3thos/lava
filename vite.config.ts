@@ -1,10 +1,11 @@
 import { defineConfig } from "vite";
 import { sveltekit } from "@sveltejs/kit/vite";
 import WindiCSS from 'vite-plugin-windicss'
+import wasmPack from "vite-plugin-wasm-pack";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [sveltekit(), WindiCSS()],
+  plugins: [sveltekit(), WindiCSS(), wasmPack("./soda-wasm")],
   ssr: {
     noExternal: ['buffer', 'svelte-select']
   },
