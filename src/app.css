@@ -1829,3 +1829,11 @@ html {
 .use_soda--view {
   @apply relative flex w-full  gap-2;
 }
+
+.soda-select {
+  @apply relative absolute h-16;
+}
+
+.soda-select .modal--form-select {
+  @apply m-3;
+}
