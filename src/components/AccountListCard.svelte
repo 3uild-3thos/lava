@@ -386,6 +386,7 @@
             color={colors[account.originalIndex]}
           />
         {:else if account.kind === "ata"}
+            <div class="ata--amount">{account.amount.toLocaleString()} <span style={`color: ${colors[accounts.findIndex(a => a.name === account.mint)]}`}>${accounts.find(a => a.name === account.mint)?.symbol}</span></div>
             <AtaRelationship {colors} {accounts}
             ata={account}/>
         {/if}

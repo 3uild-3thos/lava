@@ -130,6 +130,10 @@ a {
   @apply text-lava-mute font-mono text-sm tracking-wider;
 }
 
+.ata--amount {
+  @apply font-mono mb-3
+}
+
 .back--button {
   @apply cursor-pointer transition duration-200 hover:-translate-x-2 hover:transform;
 }
