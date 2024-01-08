@@ -81,6 +81,7 @@
         amount = $workspaces[$selectedWorkspace].accounts[selectedATA]?.amount;
         name = $workspaces[$selectedWorkspace].accounts[selectedATA].name;
         accountAssigned = $workspaces[$selectedWorkspace].accounts[selectedATA]?.authority;
+        initialiseATA = $workspaces[$selectedWorkspace].accounts[selectedATA]?.init;
     }
   })
 
