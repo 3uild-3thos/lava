@@ -2,7 +2,7 @@
   import { workspaces, selectedWorkspace } from "../../stores/store";
   import { onMount } from "svelte";
   import Select from "svelte-select/no-styles/Select.svelte";
-
+  import Export from "../../components/Modals/Export.svelte";
   import JSZip from "jszip";
   import init, { get_templates, get_project_files } from "soda-wasm";
 
@@ -16,6 +16,20 @@
     });
     ready = true;
   });
+
+  function exportWorkspace() {
+    const data = JSON.stringify(workspace);
+    const blob = new Blob([data], { type: "text/plain" });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.setAttribute("hidden", "");
+    a.setAttribute("href", url);
+    a.setAttribute("download", `${workspace.name}.json`);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }
 </script>
 
 <svelte:head>
@@ -40,7 +54,11 @@
       </div>
     </div>
   {:else}
-    <div class="common--wrapper">
+  
+    <div class="export--wrapper">
+      <Export on:exportWorkspace={() => exportWorkspace()} />
+
+
       <div class="soda-select">
         <Select
           class="modal--form-select"

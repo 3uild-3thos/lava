@@ -1837,3 +1837,7 @@ html {
 .soda-select .modal--form-select {
   @apply m-3;
 }
+
+.export--wrapper {
+  @apply p-8;
+}
