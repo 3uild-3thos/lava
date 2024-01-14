@@ -441,8 +441,16 @@ a {
   @apply text-lava-primary mb-4 text-xl font-semibold;
 }
 
+.export--page--grid {
+  @apply grid grid-cols-5 gap-8 w-full h-full ;
+}
+
 .export--grid {
   @apply mt-4 grid grid-cols-3 gap-4;
+}
+
+.export--page {
+  @apply flex flex-col
 }
 
 .font-black {
@@ -1824,18 +1832,6 @@ html {
 
 .wrapper {
   @apply flex w-full overflow-hidden;
-}
-
-.use_soda--view {
-  @apply relative flex w-full  gap-2;
-}
-
-.soda-select {
-  @apply relative absolute h-16;
-}
-
-.soda-select .modal--form-select {
-  @apply m-3;
 }
 
 .export--wrapper {
