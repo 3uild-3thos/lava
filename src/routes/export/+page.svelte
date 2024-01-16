@@ -37,6 +37,8 @@
     document.body.removeChild(a);
     window.URL.revokeObjectURL(url);
   }
+
+  let exportColors = ["#1371DA", "#FF858B", "#535353", "#61DAFB", "#03569B"];
 </script>
 
 <svelte:head>
@@ -104,57 +106,73 @@
           </Select>
 
           <div class="use_soda--view">
-            {#each templates as template, index}
-              <button
-                class="btn btn--primary workspace--btn btn--fit no-shrink {selectedProgramIndex ==
-                -1
-                  ? 'btn--disabled'
+            {#each templates.sort( (a, b) => a.name.localeCompare(b.name), ) as template, index}
+              <div
+                style={`--export: ${exportColors[index]};`}
+                class="export--card {selectedProgramIndex === -1
+                  ? 'card--disabled'
                   : ''}"
-                disabled={selectedProgramIndex == -1 ||
-                  $workspaces[$selectedWorkspace].idls[selectedProgramIndex]
-                    .name == ""}
-                on:click={() => {
-                  const files = get_project_files(
-                    index,
-                    JSON.stringify(
-                      $workspaces[$selectedWorkspace].idls[
-                        selectedProgramIndex
-                      ],
-                    ),
-                  );
-                  const zip = new JSZip();
-                  files.Ok.forEach((file) => {
-                    const { path, content } = file;
-                    const folders = path.split("/");
-                    const fileName = folders.pop();
-                    let folder = zip;
-                    folders.forEach((folderName) => {
-                      folder = folder.folder(folderName);
+              >
+                <div class="export--card--title">
+                  <img
+                    src={`/${template.name.substring(2).replace(/\s/g, "").toLowerCase()}.svg`}
+                    class="export--card--icon"
+                  />
+                  <span>{template.name.substring(2)}</span>
+                </div>
+                <button
+                  style="z-index:10000"
+                  class="btn btn--primary workspace--btn btn--fit {selectedProgramIndex ==
+                  -1
+                    ? 'btn--disabled'
+                    : ''}"
+                  disabled={selectedProgramIndex == -1 ||
+                    $workspaces[$selectedWorkspace].idls[selectedProgramIndex]
+                      .name == ""}
+                  on:click={() => {
+                    const files = get_project_files(
+                      index,
+                      JSON.stringify(
+                        $workspaces[$selectedWorkspace].idls[
+                          selectedProgramIndex
+                        ],
+                      ),
+                    );
+                    const zip = new JSZip();
+                    files.Ok.forEach((file) => {
+                      const { path, content } = file;
+                      const folders = path.split("/");
+                      const fileName = folders.pop();
+                      let folder = zip;
+                      folders.forEach((folderName) => {
+                        folder = folder.folder(folderName);
+                      });
+
+                      if (typeof content.String != "undefined") {
+                        folder.file(fileName, content.String);
+                      } else {
+                        folder.file(fileName, content.Vec);
+                      }
                     });
 
-                    if (typeof content.String != "undefined") {
-                      folder.file(fileName, content.String);
-                    } else {
-                      folder.file(fileName, content.Vec);
-                    }
-                  });
+                    zip.generateAsync({ type: "blob" }).then((blob) => {
+                      const url = URL.createObjectURL(blob);
+                      const downloadLink = document.createElement("a");
+                      downloadLink.href = url;
+                      downloadLink.download = `${
+                        $workspaces[$selectedWorkspace].idls[
+                          selectedProgramIndex
+                        ].name || " "
+                      }.zip`;
+                      downloadLink.click();
 
-                  zip.generateAsync({ type: "blob" }).then((blob) => {
-                    const url = URL.createObjectURL(blob);
-                    const downloadLink = document.createElement("a");
-                    downloadLink.href = url;
-                    downloadLink.download = `${
-                      $workspaces[$selectedWorkspace].idls[selectedProgramIndex]
-                        .name || " "
-                    }.zip`;
-                    downloadLink.click();
-
-                    URL.revokeObjectURL(url);
-                  });
-                }}
-              >
-                {template.name}
-              </button>
+                      URL.revokeObjectURL(url);
+                    });
+                  }}
+                >
+                  Export
+                </button>
+              </div>
             {/each}
           </div>
         </div>
@@ -169,41 +187,55 @@
   }
 
   .export--code {
-    @apply col-span-3 box-border flex w-full flex-col gap-y-4;
+    @apply col-span-7 box-border flex w-full flex-col gap-y-4;
+  }
+
+  .export--card--icon {
+    @apply h-5 w-5;
   }
 
   .export--code--card {
     @apply bg-lava-card border-lava-mute relative box-border w-full flex-shrink-0 rounded-lg border border-solid border-opacity-10 p-4;
   }
 
+  .export--card--title {
+    @apply text-lava-secondary z-10 flex items-center space-x-2 font-medium;
+  }
+
   .export--code--box {
     overflow: scroll;
     position: relative;
-    @apply box-border max-h-[70vh] w-full;
+    @apply box-border max-h-[77.5vh] w-full;
   }
+
   .copy--code--btn {
     @apply absolute right-12 top-4;
     z-index: 100;
   }
+
   .export--code--btn {
     @apply absolute right-4 top-4;
     z-index: 100;
   }
+
   .icon {
     @apply h-5 w-5 cursor-pointer;
   }
+
   .code {
     white-space: pre-wrap;
   }
+
   pre {
     @apply mt-0;
   }
+
   .use_soda--view {
-    @apply relative flex w-full flex-wrap gap-2;
+    @apply relative flex h-[70vh] w-full flex-col gap-2;
   }
 
   .soda-select {
-    @apply relative col-span-2 flex w-full flex-col gap-y-4;
+    @apply relative col-span-3 flex w-full flex-col gap-y-4;
   }
 
   .soda-select--title {
@@ -218,8 +250,8 @@
     @apply absolute left-0;
   }
 
-  .no-shrink {
-    @apply flex-shrink-0;
-    flex: 1 0 auto;
+  .card--disabled {
+    @apply opacity-50;
+    cursor: default !important;
   }
 </style>

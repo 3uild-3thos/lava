@@ -442,7 +442,7 @@ a {
 }
 
 .export--page--grid {
-  @apply grid grid-cols-5 gap-8 w-full h-full ;
+  @apply grid grid-cols-10 gap-8 w-full h-full ;
 }
 
 .export--grid {
@@ -450,7 +450,43 @@ a {
 }
 
 .export--page {
-  @apply flex flex-col
+  @apply flex flex-col w-full
+}
+
+.export--card {
+  @apply bg-lava-bg h-24 relative box-border flex w-full cursor-pointer items-center justify-center rounded-xl p-3 px-5 transition duration-200 hover:border-opacity-20;
+}
+
+.export--card::before {
+  background: linear-gradient(180deg, #383A41, transparent 100%);
+  border-radius: inherit;
+  content: "";
+  inset: 0;
+  -webkit-mask:
+    linear-gradient(black 0 0) content-box,
+    linear-gradient(black 0 0);
+  mask:
+    linear-gradient(black 0 0) content-box,
+    linear-gradient(black 0 0);
+  mask-composite: xor;
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0.4;
+  padding: 1.25px;
+  pointer-events: none;
+  position: absolute;
+}
+
+.export--card::after {
+  content: "";
+  background: linear-gradient(90deg, var(--export), transparent 75%);
+  border-radius: inherit;
+  width: 100%;
+  right:0;
+  top:0;
+  position: absolute;
+  height:100%;
+  opacity:0.1;
 }
 
 .font-black {
