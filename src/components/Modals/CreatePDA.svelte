@@ -69,15 +69,15 @@
         invalid_fields = [...invalid_fields, name];
       }
     } else if (seeds[name] == "u8") {
-      formData[name] = value as number;
+      formData[name] = parseInt(value) as number;
     } else if (seeds[name] == "u16") {
-      formData[name] = value as number;
+      formData[name] = parseInt(value) as number;
     } else if (seeds[name] == "u32") {
-      formData[name] = value as number;
+      formData[name] = parseInt(value) as number;
     } else if (seeds[name] == "u64") {
-      formData[name] = value as number;
+      formData[name] = parseInt(value) as number;
     } else if (seeds[name] == "u128") {
-      formData[name] = value as number;
+      formData[name] = parseInt(value) as number;
     } else{
       formData[name] = value as string;
     }
@@ -176,7 +176,7 @@
 
   $: validSeeds =
     editingPda === -1
-      ? seeds.every((seed, index) => formData[index]?.length > 0) &&
+      ? seeds.every((seed, index) => !!formData[index]) &&
         invalid_fields.length == 0
       : true;
 </script>
@@ -217,7 +217,7 @@
           class="modal--form-select block"
           items={$workspaces[$selectedWorkspace]?.accounts
             ?.filter((a) => a.kind === "wallet")
-            .map((w) => (w?.address.length > 0 ? w?.address : w.name))}
+            .map((w) => w.name)}
           id={`${index}`}
           on:change={(e) => handleSelect(e, index)}
           placeholder="Select wallet"
