@@ -10,7 +10,7 @@
   let walletAlreadyExists = false;
 
   const isValidAddress = (address: string) => {
-    if (address.trim() === "") {
+    if (address?.trim() === "") {
       return true;
     } else {
       try {
