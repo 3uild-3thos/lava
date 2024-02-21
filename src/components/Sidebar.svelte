@@ -23,6 +23,11 @@
       link: "/tests",
       icon: "tests.svg",
     },
+    {
+      title: "Export",
+      link: "/export",
+      icon: "export.svg",
+    },
   ];
 
   let m = { x: 0, y: 0 };
