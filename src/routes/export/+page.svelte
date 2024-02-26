@@ -4,6 +4,7 @@
   import Select from "svelte-select/no-styles/Select.svelte";
   import JSZip from "jszip";
   import init, { get_templates, get_project_files } from "soda-wasm";
+  import initSync, {LavaConfig, json_to_mocka} from "lava-core";
   import { fly } from "svelte/transition";
 
   import { createEventDispatcher } from "svelte";
@@ -22,6 +23,7 @@
       templates = get_templates();
     });
     ready = true;
+    initSync();
   });
 
   function exportWorkspace() {
@@ -61,7 +63,23 @@
       >
         Export
       </h1>
-
+      <button
+      on:click={() => {
+       let mocka = json_to_mocka(JSON.stringify($workspaces[$selectedWorkspace]));
+        // create a test.mocha.ts file
+        const blob = new Blob([mocka], { type: "text/plain" });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.setAttribute("hidden", "");
+        a.setAttribute("href", url);
+        a.setAttribute("download", `test.mocka.ts`);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        
+      
+    }}>to mocka</button>
       <div class="export--page--grid">
         <div class="export--code">
           <div class="export--title">Export Workspace</div>
@@ -176,6 +194,7 @@
             {/each}
           </div>
         </div>
+        
       </div>
     </div>
   </div>
