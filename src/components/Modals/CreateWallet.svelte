@@ -45,31 +45,42 @@
       // Check if wallet name already exists
       const accounts = $workspaces[$selectedWorkspace].accounts;
       const accountIndex = accounts.findIndex(
-        (account) => account.name === walletName
+        (account) => account.name === walletName,
       );
       if (accountIndex !== -1) {
         walletAlreadyExists = true;
         return;
       }
       const ataAccounts = $workspaces[$selectedWorkspace].accounts.filter(
-        (account) => account.kind === "ata" && account.authority === $workspaces[$selectedWorkspace].accounts[editingWallet].name
+        (account) =>
+          account.kind === "ata" &&
+          account.authority ===
+            $workspaces[$selectedWorkspace].accounts[editingWallet].name,
       );
       ataAccounts.forEach((account) => {
         account.authority = walletName;
-        account.name = account.authority + account.mint
+        account.name = account.authority + account.mint;
       });
 
       const mintAccounts = $workspaces[$selectedWorkspace].accounts.filter(
         (account) =>
           account.kind === "mint" &&
-          (account.freezeAuthority === $workspaces[$selectedWorkspace].accounts[editingWallet].name ||
-            account.mintAuthority === $workspaces[$selectedWorkspace].accounts[editingWallet].name)
+          (account.freezeAuthority ===
+            $workspaces[$selectedWorkspace].accounts[editingWallet].name ||
+            account.mintAuthority ===
+              $workspaces[$selectedWorkspace].accounts[editingWallet].name),
       );
       mintAccounts.forEach((account) => {
-        if (account.freezeAuthority === $workspaces[$selectedWorkspace].accounts[editingWallet].name) {
+        if (
+          account.freezeAuthority ===
+          $workspaces[$selectedWorkspace].accounts[editingWallet].name
+        ) {
           account.freezeAuthority = walletName;
         }
-        if (account.mintAuthority === $workspaces[$selectedWorkspace].accounts[editingWallet].name) {
+        if (
+          account.mintAuthority ===
+          $workspaces[$selectedWorkspace].accounts[editingWallet].name
+        ) {
           account.mintAuthority = walletName;
         }
       });
@@ -93,7 +104,7 @@
       // Check if wallet name already exists
       const accounts = $workspaces[$selectedWorkspace].accounts;
       const accountIndex = accounts.findIndex(
-        (account) => account.name === walletName
+        (account) => account.name === walletName,
       );
       if (accountIndex !== -1) {
         walletAlreadyExists = true;
@@ -153,13 +164,9 @@
 <div class="btns--modal">
   <button
     class={`btn btn--lava${
-      isValidAddress(walletAddress) && valid.name && valid.balance
-        ? ""
-        : " btn--disabled"
+      valid.name && valid.balance ? "" : " btn--disabled"
     }`}
-    disabled={!isValidAddress(walletAddress) ||
-      !valid.name ||
-      !valid.balance}
+    disabled={!valid.name || !valid.balance}
     on:click={() => {
       handleInputTouch("name");
       handleInputTouch("balance");
@@ -167,3 +174,5 @@
     }}>{editingWallet == -1 ? "Create Wallet" : "Update Wallet"}</button
   >
 </div>
+
+<!-- !isValidAddress(walletAddress) add later -->

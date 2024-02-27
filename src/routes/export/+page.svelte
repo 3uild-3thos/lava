@@ -4,7 +4,7 @@
   import Select from "svelte-select/no-styles/Select.svelte";
   import JSZip from "jszip";
   import init, { get_templates, get_project_files } from "soda-wasm";
-  import initSync, {LavaConfig, json_to_mocka} from "lava-core";
+  import initSync, { LavaConfig, json_to_mocka } from "lava-core";
   import { fly } from "svelte/transition";
 
   import { createEventDispatcher } from "svelte";
@@ -56,33 +56,43 @@
 {#if ready}
   <div class="common--wrapper">
     <div class="export--page">
-      <h1
-        class="common--title"
-        style="margin-bottom:0"
-        in:fly={{ delay: 100, duration: 100, y: -10 }}
-      >
-        Export
-      </h1>
-      <button
-      on:click={() => {
-       let mocka = json_to_mocka(JSON.stringify($workspaces[$selectedWorkspace]));
-        // create a test.mocha.ts file
-        const blob = new Blob([mocka], { type: "text/plain" });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.setAttribute("hidden", "");
-        a.setAttribute("href", url);
-        a.setAttribute("download", `test.mocka.ts`);
-        document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
-        window.URL.revokeObjectURL(url);
-        
-      
-    }}>to mocka</button>
+      <div class="common--header">
+        <h1
+          class="common--title"
+          style="margin-bottom:0"
+          in:fly={{ delay: 100, duration: 100, y: -10 }}
+        >
+          Export
+        </h1>
+      </div>
       <div class="export--page--grid">
         <div class="export--code">
-          <div class="export--title">Export Workspace</div>
+          <div class="export--header">
+            <div class="export--title">Export Workspace</div>
+            <button
+              class="btn btn--primary btn--fit btn--end"
+              on:click={() => {
+                let mocka = json_to_mocka(
+                  JSON.stringify($workspaces[$selectedWorkspace]),
+                );
+                // create a test.mocha.ts file
+                const blob = new Blob([mocka], { type: "text/plain" });
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement("a");
+                a.setAttribute("hidden", "");
+                a.setAttribute("href", url);
+                a.setAttribute("download", `test.mocka.ts`);
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                window.URL.revokeObjectURL(url);
+              }}
+            >
+              <img src="/mocha-glyph.svg" class="icon" /><span
+                class="export--button--text">Export Tests to Mocha</span
+              ></button
+            >
+          </div>
           <div class="export--code--card">
             <div class="copy--code--btn" use:copy={code}>
               <img src="/copy.svg" class="icon" />
@@ -194,7 +204,6 @@
             {/each}
           </div>
         </div>
-        
       </div>
     </div>
   </div>
@@ -203,6 +212,10 @@
 <style lang="scss">
   .export--title {
     @apply text-lava-secondary mt-5 text-lg font-medium;
+  }
+
+  .export--header {
+    @apply flex items-center justify-between;
   }
 
   .export--code {
@@ -224,7 +237,7 @@
   .export--code--box {
     overflow: scroll;
     position: relative;
-    @apply box-border max-h-[77.5vh] w-full;
+    @apply box-border max-h-[70vh] w-full;
   }
 
   .copy--code--btn {

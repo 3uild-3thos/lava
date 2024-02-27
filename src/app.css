@@ -457,6 +457,10 @@ a {
   @apply bg-lava-bg h-24 relative box-border flex w-full cursor-pointer items-center justify-center rounded-xl p-3 px-5 transition duration-200 hover:border-opacity-20;
 }
 
+.export--button--text {
+  @apply ml-2
+}
+
 .export--card::before {
   background: linear-gradient(180deg, #383A41, transparent 100%);
   border-radius: inherit;
