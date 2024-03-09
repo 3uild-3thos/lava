@@ -4,29 +4,29 @@
   import Select from "svelte-select/no-styles/Select.svelte";
   import JSZip from "jszip";
   import init, { get_templates, get_project_files } from "soda-wasm";
-  import initSync, { LavaConfig, json_to_mocka } from "lava-core";
+  import initSync, { json_to_mocka } from "lava-core";
   import { fly } from "svelte/transition";
 
   import { createEventDispatcher } from "svelte";
-  const dispatch = createEventDispatcher();
   import Prism from "prismjs";
   import "prismjs/components/prism-json";
   let code = JSON.stringify($workspaces[$selectedWorkspace], null, 2);
   import { copy } from "svelte-copy";
-    import { goto } from "$app/navigation";
 
   let workspace = $workspaces[$selectedWorkspace];
   let selectedProgramIndex = -1;
   let ready = false;
   let templates = [];
   onMount(async () => {
-    init().then(() => {
+    setInterval(async () => {
+      await init().then(() => {
       templates = get_templates();
     }).catch((e) => {
       console.log(e)
     })
+    await initSync();
     ready = true;
-    initSync();
+    },1000);
   });
 
   function exportWorkspace() {
