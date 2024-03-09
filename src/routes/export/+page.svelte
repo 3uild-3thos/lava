@@ -23,11 +23,7 @@
     init().then(() => {
       templates = get_templates();
     }).catch((e) => {
-      console.warn("will refresh becouse htis",e);
-      const thisPage = window.location.pathname;
-      goto('/').then(
-            () => goto(thisPage)
-        );
+      console.log(e)
     })
     ready = true;
     initSync();
