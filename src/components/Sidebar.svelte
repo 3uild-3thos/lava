@@ -25,7 +25,7 @@
     },
     {
       title: "Export",
-      link: "/export",
+      link: "https://lava.web3builders.dev/export",
       icon: "export.svg",
     },
   ];

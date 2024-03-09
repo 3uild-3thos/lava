@@ -18,15 +18,13 @@
   let ready = false;
   let templates = [];
   onMount(async () => {
-    setInterval(async () => {
-      await init().then(() => {
+    await init().then(() => {
       templates = get_templates();
     }).catch((e) => {
       console.log(e)
     })
-    await initSync();
     ready = true;
-    },1000);
+    await initSync();
   });
 
   function exportWorkspace() {
