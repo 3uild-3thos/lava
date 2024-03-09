@@ -13,6 +13,7 @@
   import "prismjs/components/prism-json";
   let code = JSON.stringify($workspaces[$selectedWorkspace], null, 2);
   import { copy } from "svelte-copy";
+    import { goto } from "$app/navigation";
 
   let workspace = $workspaces[$selectedWorkspace];
   let selectedProgramIndex = -1;
@@ -21,7 +22,9 @@
   onMount(async () => {
     init().then(() => {
       templates = get_templates();
-    });
+    }).catch((e) => {
+      goto(window.location.pathname);
+    })
     ready = true;
     initSync();
   });
