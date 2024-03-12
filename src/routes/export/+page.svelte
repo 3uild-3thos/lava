@@ -56,7 +56,7 @@
       const a = document.createElement("a");
       a.setAttribute("hidden", "");
       a.setAttribute("href", url);
-      a.setAttribute("download", `${workspace.name}.js`);
+      a.setAttribute("download", `${workspace.name}.ts`);
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
