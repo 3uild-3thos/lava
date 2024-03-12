@@ -5,7 +5,7 @@ import wasmPack from "vite-plugin-wasm-pack";
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [sveltekit(), WindiCSS(), wasmPack("./static/soda-wasm"), wasmPack("./static/lava-core")],
+  plugins: [sveltekit(), WindiCSS(), wasmPack("./soda-wasm"), wasmPack("./lava-core")],
   ssr: {
     noExternal: ['buffer', 'svelte-select']
   },

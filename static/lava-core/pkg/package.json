@@ -1,1 +1,0 @@
-{"name":"lava_core","version":"0.1.0","files":["lava_core_bg.wasm","lava_core.js","lava_core.d.ts"],"module":"lava_core.js","types":"lava_core.d.ts","sideEffects":["./snippets/*"],"type":"module"}

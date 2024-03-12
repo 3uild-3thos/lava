@@ -12,6 +12,8 @@
   import "prismjs/components/prism-json";
   let code = JSON.stringify($workspaces[$selectedWorkspace], null, 2);
   import { copy } from "svelte-copy";
+    import ErrorModal from "../../components/Modals/ErrorModal.svelte";
+    import Modal from "../../components/Modal.svelte";
 
   let workspace = $workspaces[$selectedWorkspace];
   let selectedProgramIndex = -1;
@@ -42,6 +44,28 @@
   }
 
   let exportColors = ["#1371DA", "#FF858B", "#535353", "#61DAFB", "#03569B"];
+
+  let showErrorModal = false;
+
+  let error = "";
+  function createTestFile() {
+    try {
+      const data = json_to_mocka(JSON.stringify(workspace));
+      const blob = new Blob([data], { type: "text/plain" });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.setAttribute("hidden", "");
+      a.setAttribute("href", url);
+      a.setAttribute("download", `${workspace.name}.js`);
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    } catch (e) {
+      error = e;
+      showErrorModal = true;
+    }
+  }
 </script>
 
 <svelte:head>
@@ -53,7 +77,6 @@
     rel="stylesheet"
   />
 </svelte:head>
-
 {#if ready}
   <div class="common--wrapper">
     <div class="export--page">
@@ -67,28 +90,24 @@
         </h1>
       </div>
       <div class="export--page--grid">
+        {#if showErrorModal}
+        <Modal
+        width={300}
+        bind:isOpen={showErrorModal}
+        on:close={() => (showErrorModal = false)}
+      >
+          <ErrorModal err={error}/>
+        </Modal>
+        {/if}
         <div class="export--code">
           <div class="export--header">
             <div class="export--title">Export Workspace</div>
             <button
               class="btn btn--primary btn--fit btn--end"
               on:click={() => {
-                let mocka = json_to_mocka(
-                  JSON.stringify($workspaces[$selectedWorkspace]),
-                );
-                // create a test.mocha.ts file
-                const blob = new Blob([mocka], { type: "text/plain" });
-                const url = window.URL.createObjectURL(blob);
-                const a = document.createElement("a");
-                a.setAttribute("hidden", "");
-                a.setAttribute("href", url);
-                a.setAttribute("download", `test.mocka.ts`);
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                window.URL.revokeObjectURL(url);
-              }}
-            >
+                createTestFile();
+               }
+              }>
               <img src="/mocha-glyph.svg" class="icon" /><span
                 class="export--button--text">Export Tests to Mocha</span
               ></button
