@@ -154,7 +154,7 @@
           </Select>
 
           <div class="use_soda--view">
-            {#each templates.sort( (a, b) => a.name.localeCompare(b.name), ) as template, index}
+            {#each templates as template, index}
               <div
                 style={`--export: ${exportColors[index]};`}
                 class="export--card {selectedProgramIndex === -1
