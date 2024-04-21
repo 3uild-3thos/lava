@@ -13527,3 +13527,18 @@ const auctioneer = "neer8g6yJq2mQM6KbnViEDAD4gr3gRZyMMf4F2p3MEh";
 const fixed_price_sale = "SaLeTjyUa5wXHnGuewUSyJ5JWZaHwz3TxqUntCE9czo"
 const nft_packs = "packFeFNZzMfD9aVWL7QbGz1WcU7R9zpf6pvNsw2BLu"
 */
+
+const metaplexPrograms = [
+  auction_house,
+  bubblegum,
+  spl_account_compression,
+  spl_noop,
+  candy_guard,
+  candy_machine_core,
+  candy_machine,
+  gumdrop,
+  hydra,
+  token_entangler,
+]
+
+export default metaplexPrograms;

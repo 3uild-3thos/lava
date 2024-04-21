@@ -2,8 +2,11 @@
   import { PublicKey } from "@solana/web3.js";
   import { workspaces, selectedWorkspace } from "../../stores/store";
   import { createEventDispatcher } from "svelte";
-  const dispatch = createEventDispatcher();
+  import metaplexPrograms from "../../helpers/metaplex";
+  import Select from "svelte-select/no-styles/Select.svelte";
 
+  const dispatch = createEventDispatcher();
+  let selectedProgram = null;
   let editingProgram = -1;
   let programId = "";
   let programName = "";
@@ -119,6 +122,25 @@
     {#if idlToAdd}
       <img src="/check.svg" alt="Check Icon" style="width:16px;height:16px;" />
     {/if}
+    <Select
+    items={metaplexPrograms}
+    value={selectedProgram}
+    placeholder="Select a Metaplex Program"
+    on:change={(e) => {
+      selectedProgram = e.detail;
+      programName = selectedProgram.name;
+      programId = selectedProgram.metadata?.address ?? "";
+      idlToAdd = selectedProgram;
+    }}
+  >
+  <div slot="selection" class="select--option" let:selection>
+    <div class="select--text">{selection.name}</div>
+  </div>
+  <div slot="item" class="select--option" let:item>
+    <div class="select--text">{item.name}</div>
+  </div>
+</Select>
+
   </div>
 
   <div class="modal--form-inline">

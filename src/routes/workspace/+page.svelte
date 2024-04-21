@@ -10,11 +10,13 @@
   import CreateWallet from "../../components/Modals/CreateWallet.svelte";
   import CreateToken from "../../components/Modals/CreateToken.svelte";
   import { PublicKey } from "@solana/web3.js";
+  import CreateProgram from "../../components/Modals/CreateProgram.svelte";
 
   let workspace = $workspaces[$selectedWorkspace];
   let programAlreadyExists = false;
   let workspaceAlreadyExists = false;
   let programExists = false;
+  let isCreateProgramModalOpen = false;
 
   let ready = false;
   onMount(() => {
@@ -128,7 +130,7 @@
         isCreateTokenModalOpen = true;
         break;
       case 2:
-        addIDL(e);
+        isCreateProgramModalOpen = true;
         break;
       case 3:
         goto("/tests");
@@ -234,7 +236,17 @@
 </svelte:head>
 
 {#if ready}
-  <!-- Create Walllet -->
+    <!-- Create Program Modal -->
+    <Modal
+      width={350}
+      bind:isOpen={isCreateProgramModalOpen}
+      on:close={() => (isCreateProgramModalOpen = false)}
+    >
+      <CreateProgram
+        on:closeProgramModal={() => (isCreateProgramModalOpen = false)}
+      />
+    </Modal>
+  <!-- Create Wallet -->
   <Modal
     width={300}
     bind:isOpen={isCreateWalletModalOpen}
