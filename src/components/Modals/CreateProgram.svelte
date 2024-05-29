@@ -25,8 +25,8 @@
       reader.onload = (readerEvent) => {
         const content = readerEvent.target.result;
         idlToAdd = JSON.parse(content);
-        programName = idlToAdd.name;
-        programId = idlToAdd.metadata?.address ?? "";
+        programName = idlToAdd.name ?? idlToAdd.metadata?.name ?? "";
+        programId = idlToAdd.metadata?.address ?? idlToAdd.address ?? "";
       };
     };
     input.click();
@@ -100,7 +100,7 @@
 
   $: valid = {
     id: programId?.length > 0,
-    name: programName.length > 0 && programName.length <= 32,
+    name: programName?.length > 0 && programName?.length <= 32,
   };
 
   function handleInputTouch(field: string) {
@@ -147,10 +147,10 @@
     <div class="modal--form-title">Program Name</div>
     <div
       class={`modal--form--label-end ${
-        programName.length > 32 ? " text-lava-error" : ""
+        programName?.length > 32 ? " text-lava-error" : ""
       }`}
     >
-      {programName.length}/32
+      {programName?.length}/32
     </div>
   </div>
   <input
